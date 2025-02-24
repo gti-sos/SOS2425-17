@@ -1,0 +1,30 @@
+{
+<<<<<<< HEAD
+  "dependencies": {
+    "cool-ascii-faces": "^1.3.4"
+  },
+  "name": "sos2425-17",
+  "version": "1.0.0",
+  "description": ".....",
+  "main": "index.js",
+  "devDependencies": {},
+=======
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "- **Team**   - [Javier Guerrero Pérez](https://github.com/Javiigp)   - [Alejandro Gaona Penco](https://github.com/alegp2003)   - [Pablo Aguza Barragan](https://github.com/aguzajr)",
+  "main": "index-AGP.js",
+>>>>>>> c2de11c6220df8c8009389ac3b059c6f8ac51a18
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gti-sos/SOS2425-17.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gti-sos/SOS2425-17/issues"
+  },
+  "homepage": "https://github.com/gti-sos/SOS2425-17#readme"
+}
