@@ -1,23 +1,26 @@
-// Datos de ejemplo (cada objeto representa una fila con datos geográficos y valores numéricos)
-const dataset = [
-    { region: "Norte", valor: 10 },
-    { region: "Norte", valor: 20 },
-    { region: "Norte", valor: 30 },
-    { region: "Sur", valor: 25 },
-    { region: "Sur", valor: 35 },
-    { region: "Sur", valor: 45 },
-    { region: "Este", valor: 50 },
-    { region: "Este", valor: 60 },
-    { region: "Oeste", valor: 40 }
+// index-YYY.js
+
+// Datos actualizados basados en la tabla académica
+const datos = [
+    { ciudad: "Almendralejo", grado: "Educación Infantil", valor: 5.75 },
+    { ciudad: "Almendralejo", grado: "Educación Primaria", valor: 5.08 },
+    { ciudad: "Mérida", grado: "Enfermería", valor: 7.6 },
+    { ciudad: "Badajoz", grado: "Educación Infantil", valor: 6.1 },
+    { ciudad: "Badajoz", grado: "Educación Primaria", valor: 5.01 },
+    { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", valor: 7.7 },
+    { ciudad: "Plasencia", grado: "Enfermería", valor: 6.45 },
+    { ciudad: "", grado: "Administración y Dirección de Empresas", valor: 6 },
+    { ciudad: "", grado: "Medicina", valor: 6.5 }
 ];
 
-// Región a filtrar
-const regionFiltrada = "Norte";
+// Ciudad a filtrar
+const ciudadFiltrada = "Badajoz";
 
-// Filtrar los datos por la región seleccionada
-const datosFiltrados = dataset.filter(d => d.region === regionFiltrada);
+// Filtrar los datos por la ciudad específica
+const datosFiltrados = datos.filter(dato => dato.ciudad === ciudadFiltrada);
 
-// Calcular la media de los valores numéricos
+// Calcular la media del campo numérico
 const media = datosFiltrados.reduce((acc, curr) => acc + curr.valor, 0) / datosFiltrados.length;
 
-console.log(`La media de los valores en la región "${regionFiltrada}" es: ${media.toFixed(2)}`);
+// Mostrar el resultado
+console.log(`La media de los valores para ${ciudadFiltrada} es: ${media.toFixed(2)}`);
