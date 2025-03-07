@@ -18,6 +18,19 @@ const datosJGP = [
     { ciudad: "", grado: "Medicina", general: 6.5 }
 ];
 
+const dataAGP = [
+    { satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 9.00, sat_estudiantes: null, satisfaccion_pdi: 4.59, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 8.55, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: null, carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 4.57, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58, carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO" },
+    { satisfaccion_total: 8.28, sat_estudiantes: null, satisfaccion_pdi: 4.58, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
+    { satisfaccion_total: 8.27, sat_estudiantes: 7.41, satisfaccion_pdi: 3.89, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
+    { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
+    { satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ" }
+];
+
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
@@ -45,6 +58,14 @@ app.get("/samples/JGP", (req, res) => {
     const media = datosFiltrados.reduce((acc, curr) => acc + (curr.general || 0), 0) / datosFiltrados.length;
     
     res.json({ ciudad: ciudadFiltrada, mediaGeneral: media.toFixed(2) });
+});
+
+app.get("/samples/AGP", (req, res) => {
+const carreraFiltro = "GRADO EN EDUCACIÓN INFANTIL";
+const datosFiltrados = dataAGP.filter(d => d.carrera === carreraFiltro);
+const mediaSatisfaccion = datosFiltrados.reduce((acc, d) => acc + d.satisfaccion_total, 0) / datosFiltrados.length;
+
+console.log(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toFixed(2)}`);
 });
 
 app.listen(Port,()=>{
