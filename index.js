@@ -8,7 +8,9 @@ const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la p
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
-app.use("/",express.static("./public")); //Esto es para que ponga el html  ya que coje la carpeta static 
+app.use("/",express.static("./public/index.html")); //Esto es para que ponga el html  ya que coje la carpeta static 
+
+app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static 
 
 app.get("/", (request,response)=>{
     response.send("Hello from the server");
