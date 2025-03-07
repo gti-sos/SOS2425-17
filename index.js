@@ -65,7 +65,7 @@ const carreraFiltro = "GRADO EN EDUCACIÓN INFANTIL";
 const datosFiltrados = dataAGP.filter(d => d.carrera === carreraFiltro);
 const mediaSatisfaccion = datosFiltrados.reduce((acc, d) => acc + d.satisfaccion_total, 0) / datosFiltrados.length;
 
-console.log(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toFixed(2)}`);
+res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toFixed(2)}`);
 });
 
 app.listen(Port,()=>{
