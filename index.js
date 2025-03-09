@@ -144,7 +144,7 @@ res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toF
 
 app.get("/samples/PAB", (req, res) => {
     const categoriaFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-    const datosFiltrados = datos.filter(item => item.degree === categoriaFiltro);
+    const datosFiltrados = datosPAB.filter(item => item.degree === categoriaFiltro);
 
     const sumaEficiencia = datosFiltrados.reduce((acumulador, item) => acumulador + item.efficiencyRate, 0);
     const mediaEficiencia = datosFiltrados.length > 0 ? sumaEficiencia / datosFiltrados.length : 0;
