@@ -121,9 +121,6 @@ app.get("/cool", (request,response)=>{
     response.send(cool());
 }) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
-app.get("/", (request,response)=>{
-    response.send("Hello from the server, the sos2425-17 team greets you ");
-}) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
 app.get("/samples/JGP", (req, res) => {
     const ciudadFiltrada = "Badajoz";
