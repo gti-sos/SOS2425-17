@@ -114,7 +114,7 @@ app.use("/about",express.static("./public/Readme.html")); //Esto es para que pon
 app.use("/samples/JGP",express.static("./samples/JGP.js")); //Esto es para que ponga el html  ya que coje la carpeta static
 
 app.get("/", (request,response)=>{
-    response.send("Hello from the server");
+    response.send("Hello from the server, the sos2425-17 team greets you");
 }) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
 app.get("/cool", (request,response)=>{
