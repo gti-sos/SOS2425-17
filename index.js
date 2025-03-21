@@ -160,6 +160,17 @@ app.listen(Port,()=>{
 
 //API JAVIER 
 
+// https://sos2425-XX.onrender.com/api/v1/FFFFF
+
+app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+    //para que sea /api/v1/contacts
+        console.log("New get to /university-demands")
+        response.send(JSON.stringify(university_demands,null,2)); //Te responde con los contactos convertidos a JSON
+        //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
+
+
+    });
+
 //API ALEJANDRO 
 
 //API PABLO
