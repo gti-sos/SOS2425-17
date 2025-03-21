@@ -91,7 +91,7 @@ const datosPAB = [
         { ciudad: "Badajoz", grado: "Medicina", over45: 33, menFirstCourse: 7, foreigners: 82, womenFirstCourse: 34, menFirst: 82, womenFirst: 9.1, graduated: 113, spanishFirst: 8, athletes: 12, general: 6.5, over25: null, over40: 8, disabledAccess: null, academicYear: "2016-2017" }
     ];
 
-const dataAGP = [
+const students_satisfaction = [
     { satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
     { satisfaccion_total: 9.00, sat_estudiantes: null, satisfaccion_pdi: 4.59, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
     { satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
@@ -132,7 +132,7 @@ app.get("/samples/JGP", (req, res) => {
 
 app.get("/samples/AGP", (req, res) => {
 const carreraFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-const datosFiltrados = dataAGP.filter(d => d.carrera === carreraFiltro);
+const datosFiltrados = students_satisfaction.filter(d => d.carrera === carreraFiltro);
 const mediaSatisfaccion = datosFiltrados.reduce((acc, d) => acc + d.satisfaccion_total, 0) / datosFiltrados.length;
 
 res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toFixed(2)}`);
