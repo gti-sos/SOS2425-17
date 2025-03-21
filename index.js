@@ -7,6 +7,8 @@ const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
 //que si se ejecuta en local coja el segundo 
 
+app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
+
 const datosPAB = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
     { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "ALMENDRALEJO", dropoutSecondCourse: 1.43, efficiencyRate: 97.79, dropoutThirdCourse: 4.76, successRate: 98.03, dropoutFirstCourse: 9.52, dropoutsThirdCourse: 1, progressNormalized: 1.0, dropoutsFirstCourse: 2, performanceRate: 95.47, cohortStudents: 21, dropoutsSecondCourse: 3, dropoutRate: 31.58, graduationRate: 47.37, academicYear: "2016-2017" },
@@ -167,6 +169,16 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
 
     });
+
+let myNullArray=[]
+app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
+        if (myNullArray.length ===0){
+            myNullArray.push(...university_demands) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+        }
+            
+            response.send(JSON.stringify(myNullArray));
+    
+})
 
 //API ALEJANDRO 
 
