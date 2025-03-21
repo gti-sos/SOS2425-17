@@ -170,10 +170,44 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
 //API ALEJANDRO 
 
-app.get(BASE_API+"/students_satisfaction", (request,response)=>{
+pp.get(BASE_API+"/students_satisfaction", (request,response)=>{
     console.log("New GET to /students_satisfaction");
     response.send(JSON.stringify(students_satisfaction))
 });
 
+let myNullArray=[]
+app.get(BASE_API+"/students_satisfaction/loadInitialData",(request,response)=>{
+    if (myNullArray.length ===0){
+        myNullArray.push(...students_satisfaction) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+    }
+        
+        response.send(JSON.stringify(myNullArray));
+
+})
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//POST
+
+app.post(BASE_API+"/students_satisfaction",(request,response)=>{ //Para hacer un post necesitamos postman
+
+    console.log("POST to /students_satisfaction");
+    console.log(`<${request.body}>`);
+
+    let newstudents_satisfaction = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
+    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
+    const body = request.body;
+
+    if (!body.satisfaccion_total || !body.sat_estudiantes|| !body.satisfaccion_pdi || !body.carrera || !body.ciudad ) {
+        return response.status(400).json({ error: "Missing required fields" });
+    }
+    if (students_satisfaction.find(d => d.satisfaccion_total === body.satisfaccion_total && d.carrera === body.carrera && d.ciudad==body.ciudad)) {
+        return response.status(409).json({ error: "Record already exists" });
+    }
+
+    students_satisfaction.push(newstudents_satisfaction); //Para enviar los datos 
+
+    response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
+});
 //API PABLO
 
