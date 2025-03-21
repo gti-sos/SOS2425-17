@@ -1,4 +1,5 @@
 console.log("Init script");
+const BASE_API = "/api/v1";
 
 const express = require("express");
 const cool = require("cool-ascii-faces");
