@@ -270,7 +270,7 @@ app.delete(BASE_API + "/university-demands/:academicYear/:ciudad/:grado", (req, 
 
 //API ALEJANDRO 
 
-pp.get(BASE_API+"/students_satisfaction", (request,response)=>{
+app.get(BASE_API+"/students_satisfaction", (request,response)=>{
     console.log("New GET to /students_satisfaction");
     response.send(JSON.stringify(students_satisfaction))
 });
