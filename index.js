@@ -153,17 +153,7 @@ app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
 }); //Esto es para usar el framework en ese puerto (poner un puerto alto)
 
-//Alejandro
-app.get(BASE_API+"/students_satisfaction", (request,response)=>{
-    console.log("New GET to /students_satisfaction");
-    response.send(JSON.stringify(IOM))
-});
-
         
-    
-
-
-
 //API JAVIER 
 
 // https://sos2425-XX.onrender.com/api/v1/FFFFF
@@ -178,6 +168,11 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
     });
 
 //API ALEJANDRO 
+
+app.get(BASE_API+"/students_satisfaction", (request,response)=>{
+    console.log("New GET to /students_satisfaction");
+    response.send(JSON.stringify(IOM))
+});
 
 //API PABLO
 
