@@ -82,17 +82,24 @@ const datosPAB = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 5.00, efficiencyRate: 86.07, dropoutSecondCourse: 1.25, successRate: 82.90, dropoutThirdCourse: 13.75, dropoutsThirdCourse: 1, progressNormalized: 1.00, dropoutsFirstCourse: 11, performanceRate: 72.60, cohortStudents: 80, dropoutsSecondCourse: 4, dropoutRate: 32.88, graduationRate: 27.40, academicYear: "2018-2019" }
     ];
 
-    const university_demands = [
-        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, menFirstCourse: 8, foreigners: 1, womenFirstCourse: 8, menFirst: 8, womenFirst: 9, graduated: 5, spanishFirst: 5, athletes: null, general: 5.75, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, menFirstCourse: 14, foreigners: 7, womenFirstCourse: 14, menFirst: 5, womenFirst: 21, graduated: 5, spanishFirst: 5, athletes: null, general: 5.08, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Mérida", grado: "Enfermería", over45: 5, menFirstCourse: 9, foreigners: null, womenFirstCourse: 45, menFirst: 9, womenFirst: 48, graduated: 8, spanishFirst: 57, athletes: null, general: 7.6, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, menFirstCourse: 121, foreigners: 13, womenFirstCourse: 125, menFirst: null, womenFirst: 138, graduated: 5, spanishFirst: 5, athletes: null, general: 6.1, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, menFirstCourse: 3, foreigners: 158, womenFirstCourse: 120, menFirst: 180, womenFirst: 7, graduated: 297, spanishFirst: 5.01, athletes: null, general: 5, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, menFirstCourse: 2, foreigners: 9, womenFirstCourse: 58, menFirst: 9, womenFirst: null, graduated: 65, spanishFirst: 5, athletes: null, general: 7.7, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, menFirstCourse: 22, foreigners: null, womenFirstCourse: 73, menFirst: 20, womenFirst: 78, graduated: 7.8, spanishFirst: 98, athletes: null, general: 6.45, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, menFirstCourse: 51, foreigners: 78, womenFirstCourse: 60, menFirst: 8, womenFirst: 138, graduated: 5, spanishFirst: 6, athletes: 6, general: null, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Medicina", over45: 33, menFirstCourse: 7, foreigners: 82, womenFirstCourse: 34, menFirst: 82, womenFirst: 9.1, graduated: 113, spanishFirst: 8, athletes: 12, general: 6.5, over25: null, over40: 8, disabledAccess: null, academicYear: "2016-2017" }
+    const university_demands = [ 
+        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
+        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
+        { ciudad: "Mérida", grado: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
+        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
+        { ciudad: "Cáceres", grado: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
+        { ciudad: "Plasencia", grado: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Grado en Educación Infantil", over45: 15, spanishFirst: 6, foreigners: 123, graduated: 137, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
     ];
+    
 
 const students_satisfaction = [
     { satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
@@ -169,6 +176,7 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
 
     });
+    
 
 let myNullArray=[]
 app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
@@ -179,6 +187,86 @@ app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
             response.send(JSON.stringify(myNullArray));
     
 })
+
+//POST JAVIER 
+
+//El post es para meter nuevos datos a la api 
+app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un post necesitamos postman
+    
+    console.log("POST to /university-demands");
+    console.log(`<${request.body}>`);
+
+    const body = request.body
+
+    let newUniversityDemand = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
+    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
+
+    //ciudad,grado,over45,spanishFirst,foreigners,graduated,academicYear
+
+    //Si existe algun campo que no se ha rellenado , mostrar error 
+    if (!body.ciudad || !body.grado || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
+        return response.status(400).json({ error: "Missing required fields" });
+    }
+
+    //Si esos campos son iguales que los nuevos que pones sale error 
+    if (university_demands.find(d => d.academicYear === body.academicYear && d.ciudad === body.ciudad && d.grado === body.grado)) {
+        return response.status(409).json({ error: "Record already exists" });
+    }
+    
+    university_demands.push(newUniversityDemand); //Para enviar los datos 
+
+    response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
+});
+
+// Actualizar un registro existente
+app.put(BASE_API + "/university-demands/:academicYear/:ciudad/:grado", (req, res) => {
+    const academicYear = req.params.academicYear;
+    const ciudad = req.params.ciudad;
+    const grado = req.params.grado;
+
+    const index = university_demands.findIndex(d => 
+        d.academicYear === academicYear && d.ciudad === ciudad && d.grado === grado
+    );
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Record not found" });
+    }
+
+    // Validar que los datos en el cuerpo coincidan con los parámetros de la URL
+    if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad || req.body.grado !== grado) {
+        return res.status(400).json({ error: "Academic year, city, and degree in body must match URL parameters" });
+    }
+
+    // Validar que el cuerpo contenga los campos esperados
+    const { over45, spanishFirst, foreigners, graduated } = req.body;
+    if (over45 === undefined || spanishFirst === undefined || foreigners === undefined || graduated === undefined) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Actualizar los datos
+    university_demands[index] = { ...university_demands[index], ...req.body };
+
+    res.status(200).json({ message: "Record updated successfully" });
+});
+
+// Eliminar un registro existente
+app.delete(BASE_API + "/university-demands/:academicYear/:ciudad/:grado", (req, res) => {
+    const academicYear = req.params.academicYear;
+    const ciudad = req.params.ciudad;
+    const grado = req.params.grado;
+
+    const index = university_demands.findIndex(d => 
+        d.academicYear === academicYear && d.ciudad === ciudad && d.grado === grado
+    );
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Record not found" });
+    }
+
+    university_demands.splice(index, 1);
+    res.status(200).json({ message: "Record deleted successfully" });
+});
+
 
 //API ALEJANDRO 
 
