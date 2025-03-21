@@ -171,7 +171,7 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
 app.get(BASE_API+"/students_satisfaction", (request,response)=>{
     console.log("New GET to /students_satisfaction");
-    response.send(JSON.stringify(IOM))
+    response.send(JSON.stringify(students_satisfaction))
 });
 
 //API PABLO
