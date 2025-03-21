@@ -80,7 +80,7 @@ const datosPAB = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 5.00, efficiencyRate: 86.07, dropoutSecondCourse: 1.25, successRate: 82.90, dropoutThirdCourse: 13.75, dropoutsThirdCourse: 1, progressNormalized: 1.00, dropoutsFirstCourse: 11, performanceRate: 72.60, cohortStudents: 80, dropoutsSecondCourse: 4, dropoutRate: 32.88, graduationRate: 27.40, academicYear: "2018-2019" }
     ];
 
-    const datosJGP = [
+    const university_demands = [
         { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, menFirstCourse: 8, foreigners: 1, womenFirstCourse: 8, menFirst: 8, womenFirst: 9, graduated: 5, spanishFirst: 5, athletes: null, general: 5.75, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
         { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, menFirstCourse: 14, foreigners: 7, womenFirstCourse: 14, menFirst: 5, womenFirst: 21, graduated: 5, spanishFirst: 5, athletes: null, general: 5.08, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
         { ciudad: "Mérida", grado: "Enfermería", over45: 5, menFirstCourse: 9, foreigners: null, womenFirstCourse: 45, menFirst: 9, womenFirst: 48, graduated: 8, spanishFirst: 57, athletes: null, general: 7.6, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
@@ -125,7 +125,7 @@ app.get("/cool", (request,response)=>{
 
 app.get("/samples/JGP", (req, res) => {
     const ciudadFiltrada = "Badajoz";
-    const datosFiltrados = datosJGP.filter(dato => dato.ciudad === ciudadFiltrada);
+    const datosFiltrados = university_demands.filter(dato => dato.ciudad === ciudadFiltrada);
     const media = datosFiltrados.reduce((acc, curr) => acc + (curr.general || 0), 0) / datosFiltrados.length;
     
     res.json({ ciudad: ciudadFiltrada, mediaGeneral: media.toFixed(2) });
