@@ -1,13 +1,10 @@
 console.log("Init script");
-const BASE_API = "/api/v1";
 
 const express = require("express");
 const cool = require("cool-ascii-faces");
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
 //que si se ejecuta en local coja el segundo 
-
-app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
 
 const datosPAB = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
@@ -82,17 +79,17 @@ const datosPAB = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 5.00, efficiencyRate: 86.07, dropoutSecondCourse: 1.25, successRate: 82.90, dropoutThirdCourse: 13.75, dropoutsThirdCourse: 1, progressNormalized: 1.00, dropoutsFirstCourse: 11, performanceRate: 72.60, cohortStudents: 80, dropoutsSecondCourse: 4, dropoutRate: 32.88, graduationRate: 27.40, academicYear: "2018-2019" }
     ];
 
-const university_demands = [
-    { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, menFirstCourse: 8, foreigners: 1, womenFirstCourse: 8, menFirst: 8, womenFirst: 9, graduated: 5, spanishFirst: 5, athletes: null, general: 5.75, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, menFirstCourse: 14, foreigners: 7, womenFirstCourse: 14, menFirst: 5, womenFirst: 21, graduated: 5, spanishFirst: 5, athletes: null, general: 5.08, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Mérida", grado: "Enfermería", over45: 5, menFirstCourse: 9, foreigners: null, womenFirstCourse: 45, menFirst: 9, womenFirst: 48, graduated: 8, spanishFirst: 57, athletes: null, general: 7.6, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, menFirstCourse: 121, foreigners: 13, womenFirstCourse: 125, menFirst: null, womenFirst: 138, graduated: 5, spanishFirst: 5, athletes: null, general: 6.1, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, menFirstCourse: 3, foreigners: 158, womenFirstCourse: 120, menFirst: 180, womenFirst: 7, graduated: 297, spanishFirst: 5.01, athletes: null, general: 5, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, menFirstCourse: 2, foreigners: 9, womenFirstCourse: 58, menFirst: 9, womenFirst: null, graduated: 65, spanishFirst: 5, athletes: null, general: 7.7, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, menFirstCourse: 22, foreigners: null, womenFirstCourse: 73, menFirst: 20, womenFirst: 78, graduated: 7.8, spanishFirst: 98, athletes: null, general: 6.45, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, menFirstCourse: 51, foreigners: 78, womenFirstCourse: 60, menFirst: 8, womenFirst: 138, graduated: 5, spanishFirst: 6, athletes: 6, general: null, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
-    { ciudad: "Badajoz", grado: "Medicina", over45: 33, menFirstCourse: 7, foreigners: 82, womenFirstCourse: 34, menFirst: 82, womenFirst: 9.1, graduated: 113, spanishFirst: 8, athletes: 12, general: 6.5, over25: null, over40: 8, disabledAccess: null, academicYear: "2016-2017" }
-];
+    const datosJGP = [
+        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, menFirstCourse: 8, foreigners: 1, womenFirstCourse: 8, menFirst: 8, womenFirst: 9, graduated: 5, spanishFirst: 5, athletes: null, general: 5.75, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, menFirstCourse: 14, foreigners: 7, womenFirstCourse: 14, menFirst: 5, womenFirst: 21, graduated: 5, spanishFirst: 5, athletes: null, general: 5.08, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Mérida", grado: "Enfermería", over45: 5, menFirstCourse: 9, foreigners: null, womenFirstCourse: 45, menFirst: 9, womenFirst: 48, graduated: 8, spanishFirst: 57, athletes: null, general: 7.6, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, menFirstCourse: 121, foreigners: 13, womenFirstCourse: 125, menFirst: null, womenFirst: 138, graduated: 5, spanishFirst: 5, athletes: null, general: 6.1, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, menFirstCourse: 3, foreigners: 158, womenFirstCourse: 120, menFirst: 180, womenFirst: 7, graduated: 297, spanishFirst: 5.01, athletes: null, general: 5, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, menFirstCourse: 2, foreigners: 9, womenFirstCourse: 58, menFirst: 9, womenFirst: null, graduated: 65, spanishFirst: 5, athletes: null, general: 7.7, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, menFirstCourse: 22, foreigners: null, womenFirstCourse: 73, menFirst: 20, womenFirst: 78, graduated: 7.8, spanishFirst: 98, athletes: null, general: 6.45, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, menFirstCourse: 51, foreigners: 78, womenFirstCourse: 60, menFirst: 8, womenFirst: 138, graduated: 5, spanishFirst: 6, athletes: 6, general: null, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Medicina", over45: 33, menFirstCourse: 7, foreigners: 82, womenFirstCourse: 34, menFirst: 82, womenFirst: 9.1, graduated: 113, spanishFirst: 8, athletes: 12, general: 6.5, over25: null, over40: 8, disabledAccess: null, academicYear: "2016-2017" }
+    ];
 
 const students_satisfaction = [
     { satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
@@ -106,7 +103,6 @@ const students_satisfaction = [
     { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
     { satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ" }
 ];
-
 
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
@@ -128,7 +124,7 @@ app.get("/cool", (request,response)=>{
 
 app.get("/samples/JGP", (req, res) => {
     const ciudadFiltrada = "Badajoz";
-    const datosFiltrados = university_demands.filter(dato => dato.ciudad === ciudadFiltrada);
+    const datosFiltrados = datosJGP.filter(dato => dato.ciudad === ciudadFiltrada);
     const media = datosFiltrados.reduce((acc, curr) => acc + (curr.general || 0), 0) / datosFiltrados.length;
     
     res.json({ ciudad: ciudadFiltrada, mediaGeneral: media.toFixed(2) });
@@ -157,10 +153,14 @@ app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
 }); //Esto es para usar el framework en ese puerto (poner un puerto alto)
 
+//Alejandro
+app.get(BASE_API+"/students_satisfaction", (request,response)=>{
+    console.log("New GET to /students_satisfaction");
+    response.send(JSON.stringify(IOM))
+});
 
-//API JAVIER 
+        
+    
 
-//API ALEJANDRO 
 
-//API PABLO
 
