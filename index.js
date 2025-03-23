@@ -9,7 +9,7 @@ const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la p
 
 app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
 
-const datosPAB = [
+const university_cohort_stats = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
     { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "ALMENDRALEJO", dropoutSecondCourse: 1.43, efficiencyRate: 97.79, dropoutThirdCourse: 4.76, successRate: 98.03, dropoutFirstCourse: 9.52, dropoutsThirdCourse: 1, progressNormalized: 1.0, dropoutsFirstCourse: 2, performanceRate: 95.47, cohortStudents: 21, dropoutsSecondCourse: 3, dropoutRate: 31.58, graduationRate: 47.37, academicYear: "2016-2017" },
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 99.29, dropoutThirdCourse: 0.0, successRate: 96.55, dropoutFirstCourse: 7.14, dropoutsThirdCourse: 0, progressNormalized: 0.99, dropoutsFirstCourse: 1, performanceRate: 95.73, cohortStudents: 14, dropoutsSecondCourse: 0, dropoutRate: 13.33, graduationRate: 66.67, academicYear: "2017-2018" },
@@ -151,7 +151,7 @@ res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toF
 
 app.get("/samples/PAB", (req, res) => {
     const categoriaFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-    const datosFiltrados = datosPAB.filter(item => item.degree === categoriaFiltro);
+    const datosFiltrados = university_cohort_stats.filter(item => item.degree === categoriaFiltro);
 
     const sumaEficiencia = datosFiltrados.reduce((acumulador, item) => acumulador + item.efficiencyRate, 0);
     const mediaEficiencia = datosFiltrados.length > 0 ? sumaEficiencia / datosFiltrados.length : 0;
@@ -289,4 +289,27 @@ app.post(BASE_API+"/students_satisfaction",(request,response)=>{ //Para hacer un
     response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
 });
 //API PABLO
+
+
+app.get(BASE_API + "/university_cohort_stats", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+    //para que sea /api/v1/contacts
+        console.log("New get to /university_cohort_stats")
+        response.send(JSON.stringify(university_cohort_stats,null,2)); //Te responde con los contactos convertidos a JSON
+        //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
+
+
+    });
+    
+
+let myNullArrayUniversityCohortStats=[]
+app.get(BASE_API+"/university_cohort_stats/loadInitialData",(request,response)=>{
+        if (myNullArrayUniversityCohortStats.length ===0){
+            myNullArrayUniversityCohortStats.push(...university_cohort_stats) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+        }
+            
+            response.send(JSON.stringify(myNullArrayUniversityCohortStats));
+
+            response.sendStatus(201);
+    
+})
 
