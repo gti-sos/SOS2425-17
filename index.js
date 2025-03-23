@@ -218,52 +218,31 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
     response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
 });
 
-// Actualizar un registro existente
-app.put(BASE_API + "/university-demands/:academicYear/:ciudad/:grado", (req, res) => {
-    const academicYear = req.params.academicYear;
+// Modificar un registro existente
+app.put(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
+    const academicYear = parseInt(req.params.academicYear);
     const ciudad = req.params.ciudad;
-    const grado = req.params.grado;
-
-    const index = university_demands.findIndex(d => 
-        d.academicYear === academicYear && d.ciudad === ciudad && d.grado === grado
-    );
-
-    if (index === -1) {
-        return res.status(404).json({ error: "Record not found" });
+    const index = d.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+    if (index === -1) return res.status(404).json({ error: "Record not found" });
+    if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad) {
+        return res.status(400).json({ error: "AcademicYear and city in body must match URL parameters" });
     }
-
-    // Validar que los datos en el cuerpo coincidan con los parámetros de la URL
-    if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad || req.body.grado !== grado) {
-        return res.status(400).json({ error: "Academic year, city, and degree in body must match URL parameters" });
-    }
-
-    // Validar que el cuerpo contenga los campos esperados
-    const { over45, spanishFirst, foreigners, graduated } = req.body;
-    if (over45 === undefined || spanishFirst === undefined || foreigners === undefined || graduated === undefined) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    // Actualizar los datos
-    university_demands[index] = { ...university_demands[index], ...req.body };
-
+    d[index] = { ...d[index], ...req.body };
     res.status(200).json({ message: "Record updated successfully" });
+});
+//FALLO DE PUT a todos los datos
+app.put(BASE_API + "/university-demands/:ciudad",(req,res)=>{    
+    
+    res.sendStatus(405);
 });
 
 // Eliminar un registro existente
-app.delete(BASE_API + "/university-demands/:academicYear/:ciudad/:grado", (req, res) => {
-    const academicYear = req.params.academicYear;
+app.delete(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
+    const academicYear = parseInt(req.params.academicYear);
     const ciudad = req.params.ciudad;
-    const grado = req.params.grado;
-
-    const index = university_demands.findIndex(d => 
-        d.academicYear === academicYear && d.ciudad === ciudad && d.grado === grado
-    );
-
-    if (index === -1) {
-        return res.status(404).json({ error: "Record not found" });
-    }
-
-    university_demands.splice(index, 1);
+    const index = registrationsData.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+    if (index === -1) return res.status(404).json({ error: "Record not found" });
+    registrationsData.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
 });
 
