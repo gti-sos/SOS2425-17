@@ -412,9 +412,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
     const body = request.body
 
     let newUniversityAcademicPerformance = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
-
-    //ciudad,grado,over45,spanishFirst,foreigners,graduated,academicYear
+    //en postman se escribe en body y haces request.body para que te coja el codigo de body de postman
     
     //Si existe algun campo que no se ha rellenado , mostrar error 
     if (!body.degree || !body.location || !body.dropoutFirstCourse || !body.efficiencyRate || !body.dropoutSecondCourse || !body.successRate || !body.dropoutThirdCourse || !body.dropoutsThirdCourse || !body.progressNormalized || !body.dropoutsFirstCourse || !body.performanceRate || !body.cohortStudents || !body.dropoutsSecondCourse || !body.dropoutRate || !body.graduationRate || !body.academicYear) {        
@@ -460,13 +458,7 @@ app.put(BASE_API + "/university-academic-performance",(req,res)=>{
 
 // Eliminar todos los registros
 app.delete(BASE_API + "/university-academic-performance", (req, res) => {
-    console.log("DELETE request received");
-    // Comprobar si hay datos en el array
-    if (registrationsData.length === 0) {
-        return res.status(404).json({ error: "No records found to delete" });
-    }
-    
-    // Vaciar el array de datos
+    console.log("DELETE request received");  
     registrationsData = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
