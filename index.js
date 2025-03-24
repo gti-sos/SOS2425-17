@@ -312,34 +312,17 @@ app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,res
 
         response.sendStatus(201);
 
+
+
+
+
+
+
+
+
+
+
 })
-
-
-
-
-
-
-app.get(BASE_API+"//university-academic-performance/:degree/:location/:academicYear",(request,response)=>{
-         // Obtener los parámetros desde la URL
-    const degree = request.params.degree;         // Carrera o grado
-    const location = request.params.location;     // Ciudad o ubicación
-    const academicYear = request.params.academicYear; // Año académico
-
-    // Filtrar los registros que coincidan con los parámetros
-    const filteredRecords = d.filter(record => 
-        record.degree === degree &&
-        record.location === location &&
-        record.academicYear === academicYear
-    );
-
-    // Si no se encuentra ningún registro que coincida, devolver un error 404
-    if (filteredRecords.length === 0) {
-        return response.status(404).json({ error: "No records found for the specified criteria" });
-    }
-
-    // Si se encuentra uno o más registros, devolver los registros filtrados con un estado 200
-    return response.status(200).json(filteredRecords);
-});
 
 //POST PABLO
 
@@ -395,6 +378,21 @@ app.put(BASE_API + "//university-academic-performance/:degree/:location/:academi
     
     res.sendStatus(405);
 });
+
+
+// Eliminar todos los registros
+app.delete(BASE_API + "//university-academic-performance", (req, res) => {
+    // Comprobar si hay datos en el array
+    if (registrationsData.length === 0) {
+        return res.status(404).json({ error: "No records found to delete" });
+    }
+    
+    // Vaciar el array de datos
+    registrationsData = [];
+    
+    res.status(200).json({ message: "All records deleted successfully" });
+});
+
 
 
 
