@@ -302,12 +302,14 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
 
     app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/contacts
+            print("aqui llega")
             console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
             
     // Filtramos los datos según los parámetros recibidos
         const filteredData = university_academic_performance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
 
     if (filteredData.length === 0) {
+        print( filteredData)
         return response.status(404).json({ error: "No data found for the given parameters" });
     }
 
