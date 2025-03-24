@@ -302,16 +302,44 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
     
 
 let  myNullArrayUniversityAcademicPerformance=[]
-app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
-        if (myNullArrayUniversityAcademicPerformance.length ===0){
-            myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
-        }
-            
-            response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
 
-            response.sendStatus(201);
-    
+app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
+    if (myNullArrayUniversityAcademicPerformance.length ===0){
+        myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+    }
+        
+        response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
+
+        response.sendStatus(201);
+
 })
+
+
+
+
+
+
+app.get(BASE_API+"//university-academic-performance/:degree/:location/:academicYear",(request,response)=>{
+         // Obtener los parámetros desde la URL
+    const degree = request.params.degree;         // Carrera o grado
+    const location = request.params.location;     // Ciudad o ubicación
+    const academicYear = request.params.academicYear; // Año académico
+
+    // Filtrar los registros que coincidan con los parámetros
+    const filteredRecords = d.filter(record => 
+        record.degree === degree &&
+        record.location === location &&
+        record.academicYear === academicYear
+    );
+
+    // Si no se encuentra ningún registro que coincida, devolver un error 404
+    if (filteredRecords.length === 0) {
+        return response.status(404).json({ error: "No records found for the specified criteria" });
+    }
+
+    // Si se encuentra uno o más registros, devolver los registros filtrados con un estado 200
+    return response.status(200).json(filteredRecords);
+});
 
 //POST PABLO
 
