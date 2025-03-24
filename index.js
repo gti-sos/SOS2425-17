@@ -468,7 +468,7 @@ app.put(BASE_API + "/university-academic-performance",(req,res)=>{
 app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     console.log("DELETE request received");
 
-    registrationsData = [];
+    myNullArrayUniversityAcademicPerformance = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
 });
@@ -483,9 +483,9 @@ app.delete(BASE_API + "/university-academic-performance/:degree/:location/:acade
     const academicYear = req.params.academicYear
 
 
-    const index = registrationsData.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
+    const index =  myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
-    registrationsData.splice(index, 1);
+    myNullArrayUniversityAcademicPerformance.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
 });
 
