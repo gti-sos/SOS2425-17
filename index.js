@@ -350,7 +350,7 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
     res.status(200).json({ message: "Registro eliminado correctamente" });
 })
 //API PABLO
-
+let  myNullArrayUniversityAcademicPerformance=[]
 
 
 
@@ -359,7 +359,7 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
 app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
         console.log("New get to /university-academic-performance")
-        response.send(JSON.stringify(university_academic_performance,null,2)); //Te responde con los contactos convertidos a JSON
+        response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance)); //Te responde con los contactos convertidos a JSON
         //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
 
 
@@ -382,9 +382,7 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
     response.send(JSON.stringify(filteredData))
     
         });
-    
 
-let  myNullArrayUniversityAcademicPerformance=[]
 
 
 
