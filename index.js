@@ -352,6 +352,22 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
 
 
     });
+
+    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+        //para que sea /api/v1/contacts
+            console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
+            
+    // Filtramos los datos según los parámetros recibidos
+        const filteredData = university_academic_performance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
+
+    if (filteredData.length === 0) {
+        return response.status(404).json({ error: "No data found for the given parameters" });
+    }
+
+    // Enviamos los datos filtrados en formato JSON
+    response.send(JSON.stringify(filteredData))
+    
+        });
     
 
 let  myNullArrayUniversityAcademicPerformance=[]
@@ -407,7 +423,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
 });
 
 // Modificar un registro existente
-app.put(BASE_API + "//university-academic-performance/:degree/:location/:academicYear", (req, res) => {
+app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
     const academicYear = parseInt(req.params.academicYear);
@@ -427,14 +443,14 @@ app.put(BASE_API + "//university-academic-performance/:degree/:location/:academi
 
 
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "//university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
+app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
     
     res.sendStatus(405);
 });
 
 
 // Eliminar todos los registros
-app.delete(BASE_API + "//university-academic-performance", (req, res) => {
+app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     console.log("DELETE request received");
     // Comprobar si hay datos en el array
     if (registrationsData.length === 0) {
@@ -451,7 +467,7 @@ app.delete(BASE_API + "//university-academic-performance", (req, res) => {
 
 
 // Eliminar un registro existente
-app.delete(BASE_API + "//university-academic-performance/:degree/:location/:academicYear", (req, res) => {
+app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
     const academicYear = parseInt(req.params.academicYear);
