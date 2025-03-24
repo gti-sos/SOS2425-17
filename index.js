@@ -1,16 +1,4 @@
 console.log("Init script");
-app.options('*', (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.sendStatus(200);
-});
-
-
-
-
-
-
 const BASE_API = "/api/v1";
 
 const express = require("express");
@@ -20,6 +8,14 @@ const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la p
 //que si se ejecuta en local coja el segundo 
 
 app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
+
+
+app.options('*', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(200);
+});
 
 const university_academic_performance = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
@@ -471,6 +467,7 @@ app.put(BASE_API + "/university-academic-performance",(req,res)=>{
 // Eliminar todos los registros
 app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     console.log("DELETE request received");
+
     registrationsData = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
