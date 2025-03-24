@@ -381,7 +381,7 @@ app.put(BASE_API + "//university-academic-performance/:degree/:location/:academi
 
 
 // Eliminar todos los registros
-app.delete(BASE_API + "//university-academic-performance", (req, res) => {
+app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     // Comprobar si hay datos en el array
     if (registrationsData.length === 0) {
         return res.status(404).json({ error: "No records found to delete" });
