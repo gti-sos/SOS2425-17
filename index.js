@@ -434,7 +434,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
 app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
-    const academicYear = parseInt(req.params.academicYear);
+    const academicYear = req.params.academicYear;
     
     
     const index = d.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
@@ -451,7 +451,7 @@ app.put(BASE_API + "/university-academic-performance/:degree/:location/:academic
 
 
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
+app.put(BASE_API + "/university-academic-performance",(req,res)=>{    
     
     res.sendStatus(405);
 });
@@ -478,7 +478,7 @@ app.delete(BASE_API + "/university-academic-performance", (req, res) => {
 app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
-    const academicYear = parseInt(req.params.academicYear);
+    const academicYear = req.params.academicYear
 
 
     const index = registrationsData.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
