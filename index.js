@@ -466,7 +466,7 @@ app.put(BASE_API + "/university-academic-performance",(req,res)=>{
 app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     console.log("DELETE request received");
 
-    registrationsData = [];
+    myNullArrayUniversityAcademicPerformance = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
 });
