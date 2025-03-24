@@ -1,15 +1,9 @@
 console.log("Init script");
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); // Permitir cualquier origen
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE"); // Métodos permitidos
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Headers permitidos
-    
-    // Manejar preflight requests de CORS
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
-    }
-
-    next();
+app.options('*', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(200);
 });
 
 
