@@ -208,22 +208,24 @@ app.get(BASE_API + "/university-demands", (req, res) => {
 
 
 
-// Obtener registros por año y provincia
-app.get(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad.toLowerCase();
+// Obtener registros por año y ciudad
+app.get(BASE_API + "/university-demands/:grado/:ciudad/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+    //para que sea /api/v1/contacts
+        console.log("New get to /university-demands/:grado/:ciudad/:academicYear")
+        const grado= req.params.grado
+        const ciudad = req.params.ciudad;
+        const academicYear = req.params.academicYear
+// Filtramos los datos según los parámetros recibidos
+    const filteredData = university_demands.filter(item =>item.grado === grado &&item.ciudad === ciudad &&item.academicYear === academicYear);
 
-    const normalizeciudad = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+if (filteredData.length === 0) {
+    return response.status(404).json({ error: "No data found for the given parameters" });
+}
 
-    const data = university_demands.filter(x =>
-        x.academicYear === academicYear && normalizeciudad(x.ciudad) === normalizeciudad(ciudad)
-    );
+// Enviamos los datos filtrados en formato JSON
+response.send(JSON.stringify(filteredData))
 
-    if (data.length === 0) {
-        return res.status(404).json({ error: "No data found for the given academicYear and ciudad" });
-    }
-    res.status(200).json(data);
-});
+    });
     
 
 //Cargar datos iniciales
