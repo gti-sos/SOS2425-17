@@ -9,6 +9,14 @@ const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la p
 
 app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
 
+
+app.options('*', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(200);
+});
+
 const university_academic_performance = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
     { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "ALMENDRALEJO", dropoutSecondCourse: 1.43, efficiencyRate: 97.79, dropoutThirdCourse: 4.76, successRate: 98.03, dropoutFirstCourse: 9.52, dropoutsThirdCourse: 1, progressNormalized: 1.0, dropoutsFirstCourse: 2, performanceRate: 95.47, cohortStudents: 21, dropoutsSecondCourse: 3, dropoutRate: 31.58, graduationRate: 47.37, academicYear: "2016-2017" },
@@ -364,6 +372,10 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
 //API PABLO
 
 
+
+
+
+
 app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
         console.log("New get to /university-academic-performance")
@@ -373,10 +385,12 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
 
     });
 
-    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/contacts
             console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
-            
+            const degree= req.params.degree
+            const location = req.params.location;
+            const academicYear = req.params.academicYear
     // Filtramos los datos según los parámetros recibidos
         const filteredData = university_academic_performance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
 
@@ -391,6 +405,9 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
     
 
 let  myNullArrayUniversityAcademicPerformance=[]
+
+
+
 
 app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
     if (myNullArrayUniversityAcademicPerformance.length ===0){
@@ -423,9 +440,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
     const body = request.body
 
     let newUniversityAcademicPerformance = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
-
-    //ciudad,grado,over45,spanishFirst,foreigners,graduated,academicYear
+    //en postman se escribe en body y haces request.body para que te coja el codigo de body de postman
     
     //Si existe algun campo que no se ha rellenado , mostrar error 
     if (!body.degree || !body.location || !body.dropoutFirstCourse || !body.efficiencyRate || !body.dropoutSecondCourse || !body.successRate || !body.dropoutThirdCourse || !body.dropoutsThirdCourse || !body.progressNormalized || !body.dropoutsFirstCourse || !body.performanceRate || !body.cohortStudents || !body.dropoutsSecondCourse || !body.dropoutRate || !body.graduationRate || !body.academicYear) {        
@@ -446,7 +461,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
 app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
-    const academicYear = parseInt(req.params.academicYear);
+    const academicYear = req.params.academicYear;
     
     
     const index = d.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
@@ -463,7 +478,7 @@ app.put(BASE_API + "/university-academic-performance/:degree/:location/:academic
 
 
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
+app.put(BASE_API + "/university-academic-performance",(req,res)=>{    
     
     res.sendStatus(405);
 });
@@ -472,12 +487,7 @@ app.put(BASE_API + "/university-academic-performance/:degree/:location/:academic
 // Eliminar todos los registros
 app.delete(BASE_API + "/university-academic-performance", (req, res) => {
     console.log("DELETE request received");
-    // Comprobar si hay datos en el array
-    if (registrationsData.length === 0) {
-        return res.status(404).json({ error: "No records found to delete" });
-    }
-    
-    // Vaciar el array de datos
+
     registrationsData = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
@@ -490,7 +500,7 @@ app.delete(BASE_API + "/university-academic-performance", (req, res) => {
 app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
-    const academicYear = parseInt(req.params.academicYear);
+    const academicYear = req.params.academicYear
 
 
     const index = registrationsData.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
