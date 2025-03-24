@@ -168,6 +168,8 @@ app.listen(Port,()=>{
 
 // https://sos2425-XX.onrender.com/api/v1/FFFFF
 
+//Obtener todos los registros con filtros
+
 app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/university-demands
         console.log("New get to /university-demands")
@@ -176,8 +178,27 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
 
     });
+
+
+// Obtener registros por año y provincia
+app.get(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
+    const academicYear = parseInt(req.params.academicYear);
+    const ciudad = req.params.ciudad.toLowerCase();
+
+    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+
+    const data = d.filter(x =>
+        x.academicYear === academicYear && normalizeProvince(x.ciudad) === normalizeProvince(ciudad)
+    );
+
+    if (data.length === 0) {
+        return res.status(404).json({ error: "No data found for the given academicYear and ciudad" });
+    }
+    res.status(200).json(data);
+});
     
 
+//Cargar datos iniciales
 let myNullArray1=[]
 app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
         if (myNullArray1.length ===0){
@@ -288,6 +309,38 @@ app.post(BASE_API+"/students_satisfaction",(request,response)=>{ //Para hacer un
 
     response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
 });
+app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
+    const { carrera, ciudad } = req.params;
+    const index = students_satisfaction.findIndex(d => d.carrera === carrera && d.ciudad === ciudad);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Registro no encontrado" });
+    }
+
+    // Validar que carrera y ciudad en el body coincidan con los de la URL
+    if (req.body.carrera !== carrera || req.body.ciudad !== ciudad) {
+        return res.status(400).json({ error: "Carrera y ciudad en el body deben coincidir con los parámetros de la URL" });
+    }
+
+    // Actualizar datos del registro
+    students_satisfaction[index] = { ...students_satisfaction[index], ...req.body };
+
+    res.status(200).json({ message: "Registro actualizado correctamente" });
+});
+
+
+app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
+    const { carrera, ciudad } = req.params;
+    const index = students_satisfaction.findIndex(d => d.carrera === carrera && d.ciudad === ciudad);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Registro no encontrado" });
+    }
+
+    students_satisfaction.splice(index, 1);
+
+    res.status(200).json({ message: "Registro eliminado correctamente" });
+})
 //API PABLO
 
 
