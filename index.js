@@ -344,6 +344,10 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
 //API PABLO
 
 
+
+
+
+
 app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
         console.log("New get to /university-academic-performance")
@@ -353,16 +357,16 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
 
     });
 
-    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/contacts
-            print("aqui llega")
             console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
-            
+            const degree= req.params.degree
+            const location = req.params.location;
+            const academicYear = req.params.academicYear
     // Filtramos los datos según los parámetros recibidos
         const filteredData = university_academic_performance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
 
     if (filteredData.length === 0) {
-        print( filteredData)
         return response.status(404).json({ error: "No data found for the given parameters" });
     }
 
@@ -373,6 +377,9 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
     
 
 let  myNullArrayUniversityAcademicPerformance=[]
+
+
+
 
 app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
     if (myNullArrayUniversityAcademicPerformance.length ===0){
