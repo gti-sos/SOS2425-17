@@ -1,4 +1,17 @@
 console.log("Init script");
+const cors = require("cors");
+
+// Habilitar CORS para permitir DELETE y PUT
+app.use(cors({
+    origin: "*", // Permitir cualquier origen (puedes restringirlo a tu dominio)
+    methods: ["GET", "POST", "PUT", "DELETE"] // Métodos permitidos
+}));
+
+
+
+
+
+
 const BASE_API = "/api/v1";
 
 const express = require("express");
