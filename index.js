@@ -6,7 +6,6 @@ const cool = require("cool-ascii-faces");
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
 //que si se ejecuta en local coja el segundo 
-
 app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
 
 const university_academic_performance = [
@@ -79,27 +78,20 @@ const university_academic_performance = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", location: "MÉRIDA", dropoutFirstCourse: 15.07, efficiencyRate: 87.57, dropoutSecondCourse: 5.48, successRate: 65.20, dropoutThirdCourse: 35.62, dropoutsThirdCourse: 4, progressNormalized: 1.00, dropoutsFirstCourse: 26, performanceRate: 50.72, cohortStudents: 73, dropoutsSecondCourse: 11, dropoutRate: 64.10, graduationRate: 12.82, academicYear: "2016-2017" },
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 10.26, efficiencyRate: 84.62, dropoutSecondCourse: 6.41, successRate: 79.95, dropoutThirdCourse: 20.51, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 16, performanceRate: 68.53, cohortStudents: 78, dropoutsSecondCourse: 8, dropoutRate: 36.49, graduationRate: 33.78, academicYear: "2016-2017" },
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", location: "MÉRIDA", dropoutFirstCourse: 15.38, efficiencyRate: 76.76, dropoutSecondCourse: 6.41, successRate: 66.34, dropoutThirdCourse: 46.15, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 36, performanceRate: 48.12, cohortStudents: 78, dropoutsSecondCourse: 12, dropoutRate: 61.84, graduationRate: 92.11, academicYear: "2018-2019" },
-        
+    { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 5.00, efficiencyRate: 86.07, dropoutSecondCourse: 1.25, successRate: 82.90, dropoutThirdCourse: 13.75, dropoutsThirdCourse: 1, progressNormalized: 1.00, dropoutsFirstCourse: 11, performanceRate: 72.60, cohortStudents: 80, dropoutsSecondCourse: 4, dropoutRate: 32.88, graduationRate: 27.40, academicYear: "2018-2019" }
     ];
 
-    const university_demands = [ 
-        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Mérida", grado: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
-        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
-        { ciudad: "Cáceres", grado: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
-        { ciudad: "Plasencia", grado: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Infantil", over45: 15, spanishFirst: 6, foreigners: 123, graduated: 137, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
+    const university_demands = [
+        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, menFirstCourse: 8, foreigners: 1, womenFirstCourse: 8, menFirst: 8, womenFirst: 9, graduated: 5, spanishFirst: 5, athletes: null, general: 5.75, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, menFirstCourse: 14, foreigners: 7, womenFirstCourse: 14, menFirst: 5, womenFirst: 21, graduated: 5, spanishFirst: 5, athletes: null, general: 5.08, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Mérida", grado: "Enfermería", over45: 5, menFirstCourse: 9, foreigners: null, womenFirstCourse: 45, menFirst: 9, womenFirst: 48, graduated: 8, spanishFirst: 57, athletes: null, general: 7.6, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, menFirstCourse: 121, foreigners: 13, womenFirstCourse: 125, menFirst: null, womenFirst: 138, graduated: 5, spanishFirst: 5, athletes: null, general: 6.1, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, menFirstCourse: 3, foreigners: 158, womenFirstCourse: 120, menFirst: 180, womenFirst: 7, graduated: 297, spanishFirst: 5.01, athletes: null, general: 5, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, menFirstCourse: 2, foreigners: 9, womenFirstCourse: 58, menFirst: 9, womenFirst: null, graduated: 65, spanishFirst: 5, athletes: null, general: 7.7, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, menFirstCourse: 22, foreigners: null, womenFirstCourse: 73, menFirst: 20, womenFirst: 78, graduated: 7.8, spanishFirst: 98, athletes: null, general: 6.45, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, menFirstCourse: 51, foreigners: 78, womenFirstCourse: 60, menFirst: 8, womenFirst: 138, graduated: 5, spanishFirst: 6, athletes: 6, general: null, over25: null, over40: null, disabledAccess: null, academicYear: "2016-2017" },
+        { ciudad: "Badajoz", grado: "Medicina", over45: 33, menFirstCourse: 7, foreigners: 82, womenFirstCourse: 34, menFirst: 82, womenFirst: 9.1, graduated: 113, spanishFirst: 8, athletes: 12, general: 6.5, over25: null, over40: 8, disabledAccess: null, academicYear: "2016-2017" }
     ];
-    
 
 const students_satisfaction = [
     { satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO" },
@@ -151,7 +143,7 @@ res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toF
 
 app.get("/samples/PAB", (req, res) => {
     const categoriaFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-    const datosFiltrados = university_academic_performance.filter(item => item.degree === categoriaFiltro);
+    const datosFiltrados = datosPAB.filter(item => item.degree === categoriaFiltro);
 
     const sumaEficiencia = datosFiltrados.reduce((acumulador, item) => acumulador + item.efficiencyRate, 0);
     const mediaEficiencia = datosFiltrados.length > 0 ? sumaEficiencia / datosFiltrados.length : 0;
@@ -168,105 +160,14 @@ app.listen(Port,()=>{
 
 // https://sos2425-XX.onrender.com/api/v1/FFFFF
 
-//Obtener todos los registros con filtros
-
 app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-    //para que sea /api/v1/university-demands
+    //para que sea /api/v1/contacts
         console.log("New get to /university-demands")
         response.send(JSON.stringify(university_demands,null,2)); //Te responde con los contactos convertidos a JSON
         //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
 
 
     });
-
-
-// Obtener registros por año y provincia
-app.get(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad.toLowerCase();
-
-    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
-
-    const data = d.filter(x =>
-        x.academicYear === academicYear && normalizeProvince(x.ciudad) === normalizeProvince(ciudad)
-    );
-
-    if (data.length === 0) {
-        return res.status(404).json({ error: "No data found for the given academicYear and ciudad" });
-    }
-    res.status(200).json(data);
-});
-    
-
-//Cargar datos iniciales
-let myNullArray1=[]
-app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
-        if (myNullArray1.length ===0){
-            myNullArray1.push(...university_demands) // Los puntos suspensivos sirven para añadirlos de 1 en 1
-        }
-            
-            response.send(JSON.stringify(myNullArray1));
-    
-})
-
-//POST JAVIER 
-
-//El post es para meter nuevos datos a la api 
-app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un post necesitamos postman
-    
-    console.log("POST to /university-demands");
-    console.log(`<${request.body}>`);
-
-    const body = request.body
-
-    let newUniversityDemand = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
-
-    //ciudad,grado,over45,spanishFirst,foreigners,graduated,academicYear
-
-    //Si existe algun campo que no se ha rellenado , mostrar error 
-    if (!body.ciudad || !body.grado || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
-        return response.status(400).json({ error: "Missing required fields" });
-    }
-
-    //Si esos campos son iguales que los nuevos que pones sale error 
-    if (university_demands.find(d => d.academicYear === body.academicYear && d.ciudad === body.ciudad && d.grado === body.grado)) {
-        return response.status(409).json({ error: "Record already exists" });
-    }
-    
-    university_demands.push(newUniversityDemand); //Para enviar los datos 
-
-    response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
-});
-
-// Modificar un registro existente
-app.put(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad;
-    const index = d.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad) {
-        return res.status(400).json({ error: "AcademicYear and city in body must match URL parameters" });
-    }
-    d[index] = { ...d[index], ...req.body };
-    res.status(200).json({ message: "Record updated successfully" });
-});
-//FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-demands/:ciudad",(req,res)=>{    
-    
-    res.sendStatus(405);
-});
-
-// Eliminar un registro existente
-app.delete(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad;
-    const index = registrationsData.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    registrationsData.splice(index, 1);
-    res.status(200).json({ message: "Record deleted successfully" });
-});
-
 
 //API ALEJANDRO 
 
@@ -317,7 +218,7 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         return res.status(404).json({ error: "Registro no encontrado" });
     }
 
-    // Validar que carrera y ciudad en el body coincidan con los de la URL
+    // Validar que `carrera` y `ciudad` en el body coincidan con los de la URL
     if (req.body.carrera !== carrera || req.body.ciudad !== ciudad) {
         return res.status(400).json({ error: "Carrera y ciudad en el body deben coincidir con los parámetros de la URL" });
     }
@@ -340,11 +241,10 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
     students_satisfaction.splice(index, 1);
 
     res.status(200).json({ message: "Registro eliminado correctamente" });
-})
+});
+
+
 //API PABLO
-
-
-
 
 
 
