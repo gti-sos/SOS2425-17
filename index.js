@@ -291,9 +291,9 @@ app.post(BASE_API+"/students_satisfaction",(request,response)=>{ //Para hacer un
 //API PABLO
 
 
-app.get(BASE_API + "/university_academic_performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
-        console.log("New get to /university_academic_performance")
+        console.log("New get to /university-academic-performance")
         response.send(JSON.stringify(university_academic_performance,null,2)); //Te responde con los contactos convertidos a JSON
         //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
 
@@ -302,7 +302,7 @@ app.get(BASE_API + "/university_academic_performance", (request,response)=>{ //E
     
 
 let  myNullArrayUniversityAcademicPerformance=[]
-app.get(BASE_API+"/university_academic_performance/loadInitialData",(request,response)=>{
+app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
         if (myNullArrayUniversityAcademicPerformance.length ===0){
             myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
         }
@@ -315,9 +315,9 @@ app.get(BASE_API+"/university_academic_performance/loadInitialData",(request,res
 
 //POST PABLO
 
-app.post(BASE_API+"/university_academic_performance",(request,response)=>{
+app.post(BASE_API+"/university-academic-performance",(request,response)=>{
     
-    console.log("POST to /university-demands");
+    console.log("POST to /university-academic-performance");
     console.log(`<${request.body}>`);
 
     const body = request.body
@@ -343,7 +343,7 @@ app.post(BASE_API+"/university_academic_performance",(request,response)=>{
 });
 
 // Modificar un registro existente
-app.put(BASE_API + "//university_academic_performance/:degree/:location/:academicYear", (req, res) => {
+app.put(BASE_API + "//university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
     const academicYear = parseInt(req.params.academicYear);
@@ -363,7 +363,7 @@ app.put(BASE_API + "//university_academic_performance/:degree/:location/:academi
 
 
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "//university_academic_performance/:degree/:location/:academicYear",(req,res)=>{    
+app.put(BASE_API + "//university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
     
     res.sendStatus(405);
 });
@@ -371,7 +371,7 @@ app.put(BASE_API + "//university_academic_performance/:degree/:location/:academi
 
 
 // Eliminar un registro existente
-app.delete(BASE_API + "//university_academic_performance/:degree/:location/:academicYear", (req, res) => {
+app.delete(BASE_API + "//university-academic-performance/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
     const location = req.params.location;
     const academicYear = parseInt(req.params.academicYear);
