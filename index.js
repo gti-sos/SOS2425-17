@@ -187,27 +187,6 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
     });
 
-    //Filtrar por datos
-app.get(BASE_API + "/university-demands", (req, res) => {
-    let datosFiltrados = university_demands;
-    let { ciudad, grado } = req.query;
-    
-    // Filtrar solo si se pasa el parámetro 'ciudad'
-    if (ciudad) {
-        const normalizeCiudad = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
-        datosFiltrados = datosFiltrados.filter(stat => normalizeCiudad(stat.ciudad) === normalizeCiudad(ciudad));
-     }
-    
-    // Filtrar solo si se pasa el parámetro 'grado'
-    if (grado) {
-        datosFiltrados = datosFiltrados.filter(stat => stat.grado.toLowerCase().includes(grado.toLowerCase()));
-    }
-    
-    return res.status(200).json(datosFiltrados);
-});
-
-
-
 // Obtener registros por año y ciudad
 app.get(BASE_API + "/university-demands/:grado/:ciudad/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
