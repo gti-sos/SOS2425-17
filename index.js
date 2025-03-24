@@ -303,9 +303,16 @@ app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //E
     app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/contacts
             console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
-            response.send(JSON.stringify(university_academic_performance,null,2)); //Te responde con los contactos convertidos a JSON
-            //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
-    
+            
+    // Filtramos los datos según los parámetros recibidos
+        const filteredData = university_academic_performance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
+
+    if (filteredData.length === 0) {
+        return response.status(404).json({ error: "No data found for the given parameters" });
+    }
+
+    // Enviamos los datos filtrados en formato JSON
+    response.send(JSON.stringify(filteredData))
     
         });
     
