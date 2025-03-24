@@ -179,16 +179,36 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 
     });
 
+    //Filtrar por datos
+app.get(BASE_API + "/university-demands", (req, res) => {
+    let datosFiltrados = university_demands;
+    let { ciudad, grado } = req.query;
+    
+    // Filtrar solo si se pasa el parámetro 'ciudad'
+    if (ciudad) {
+        const normalizeCiudad = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+        datosFiltrados = datosFiltrados.filter(stat => normalizeCiudad(stat.ciudad) === normalizeCiudad(ciudad));
+     }
+    
+    // Filtrar solo si se pasa el parámetro 'grado'
+    if (grado) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.grado.toLowerCase().includes(grado.toLowerCase()));
+    }
+    
+    return res.status(200).json(datosFiltrados);
+});
+
+
 
 // Obtener registros por año y provincia
 app.get(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
     const academicYear = parseInt(req.params.academicYear);
     const ciudad = req.params.ciudad.toLowerCase();
 
-    const normalizeProvince = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+    const normalizeciudad = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
 
-    const data = d.filter(x =>
-        x.academicYear === academicYear && normalizeProvince(x.ciudad) === normalizeProvince(ciudad)
+    const data = university_demands.filter(x =>
+        x.academicYear === academicYear && normalizeciudad(x.ciudad) === normalizeciudad(ciudad)
     );
 
     if (data.length === 0) {
@@ -243,12 +263,12 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
 app.put(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
     const academicYear = parseInt(req.params.academicYear);
     const ciudad = req.params.ciudad;
-    const index = d.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+    const index = university_demands.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
     if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad) {
         return res.status(400).json({ error: "AcademicYear and city in body must match URL parameters" });
     }
-    d[index] = { ...d[index], ...req.body };
+    university_demands[index] = { ...university_demands[index], ...req.body };
     res.status(200).json({ message: "Record updated successfully" });
 });
 //FALLO DE PUT a todos los datos
@@ -261,7 +281,7 @@ app.put(BASE_API + "/university-demands/:ciudad",(req,res)=>{
 app.delete(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
     const academicYear = parseInt(req.params.academicYear);
     const ciudad = req.params.ciudad;
-    const index = registrationsData.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+    const index = university_demands.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
     registrationsData.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
