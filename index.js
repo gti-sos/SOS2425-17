@@ -429,7 +429,7 @@ app.post(BASE_API+"/university-academic-performance",(request,response)=>{
     //Si esos campos son iguales que los nuevos que pones sale error 
     // if (university_academic_performance.find(u => u.degree  === body.degree  && u.location === body.location && u.dropoutSecondCourse === body.dropoutSecondCourse && u.efficiencyRate=== body.efficiencyRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse  === body.dropoutsThirdCourse  && u.successRate === body.successRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse === body.dropoutsThirdCourse && u.progressNormalized === body.progressNormalized && u.dropoutsFirstCourse === body.dropoutsFirstCourse && u.performanceRate === body.performanceRate &&u.cohortStudents === body.cohortStudents && u.dropoutsSecondCourse === body.dropoutsSecondCourse &&u.dropoutRate === body.dropoutRate && u.graduationRate === body.graduationRate && u.academicYear === body.academicYear)) {
 
-    if (university_academic_performance.find(u => u.degree  === body.degree  &&  u.academicYear === body.academicYear)) {
+    if (university_academic_performance.find(u => u.degree  === body.degree  &&  u.academicYear === body.academicYear &&  u.location  === body.location)) {
         return response.status(409).json({ error: "Record already exists" });
     }
     
