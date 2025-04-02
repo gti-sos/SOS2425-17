@@ -461,7 +461,9 @@ app.put(BASE_API + "/university-academic-performance/:degree/:location/:academic
 });
 
 
-
+app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
+    res.sendStatus(405);
+});
 
 
 //FALLO DE PUT a todos los datos
