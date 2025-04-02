@@ -412,17 +412,6 @@ app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,res
         response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
 
         response.sendStatus(201);
-
-
-
-
-
-
-
-
-
-
-
 })
 
 //POST PABLO
