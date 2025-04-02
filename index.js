@@ -269,6 +269,29 @@ app.delete(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) =>
 
 
 //API ALEJANDRO 
+// Obtener todos los registros con filtros (GET con ?from=&to=&carrera=&ciudad=)
+// Obtener todos los registros con filtros (GET con ?ciudad=&carrera=)
+// Obtener todos los registros con filtros (GET con ?ciudad=&carrera=)
+app.get(BASE_API + "/students_satisfaction", (req, res) => {
+    let datosFiltrados = students_satisfaction;
+    let { ciudad, carrera } = req.query;
+
+    // Filtrar solo si se pasa el parámetro 'ciudad'
+    if (ciudad) {
+        const normalizeCiudad = (p) => p.toLowerCase().replace(/\s/g, "").replace(/\//g, "");
+        datosFiltrados = datosFiltrados.filter(stat => normalizeCiudad(stat.ciudad) === normalizeCiudad(ciudad));
+    }
+
+    // Filtrar solo si se pasa el parámetro 'carrera'
+    if (carrera) {
+        datosFiltrados = datosFiltrados.filter(stat => stat.carrera.toLowerCase().includes(carrera.toLowerCase()));
+    }
+
+    return res.status(200).json(datosFiltrados);
+});
+
+
+
 
 app.get(BASE_API+"/students_satisfaction", (request,response)=>{
     console.log("New GET to /students_satisfaction");
@@ -342,7 +365,7 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
     res.status(200).json({ message: "Registro eliminado correctamente" });
 });
 
-
+/** 
 //API PABLO
 
 
@@ -487,7 +510,7 @@ app.delete(BASE_API + "/university-academic-performance/:degree/:location/:acade
     res.status(200).json({ message: "Record deleted successfully" });
 });
 
-})
+})/*
 //API PABLO
 
 
@@ -627,4 +650,4 @@ app.delete(BASE_API + "/university-academic-performance/:degree/:location/:acade
     registrationsData.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
 });
-
+*/
