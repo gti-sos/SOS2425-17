@@ -129,43 +129,12 @@ app.use("/",express.static("./public/index.html")); //Esto es para que ponga el 
 
 app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
 
-app.use("/samples/JGP",express.static("./samples/JGP.js")); //Esto es para que ponga el html  ya que coje la carpeta static
 
 app.get("/", (request,response)=>{
     response.send("Hello from the server, the sos2425-17 team greets you");
 }) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
-app.get("/cool", (request,response)=>{
-    response.send(cool());
-}) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
-
-app.get("/samples/JGP", (req, res) => {
-    const ciudadFiltrada = "Badajoz";
-    const datosFiltrados = university_demands.filter(dato => dato.location === ciudadFiltrada);
-    const media = datosFiltrados.reduce((acc, curr) => acc + (curr.general || 0), 0) / datosFiltrados.length;
-    
-    res.json({ ciudad: ciudadFiltrada, mediaGeneral: media.toFixed(2) });
-});
-
-app.get("/samples/AGP", (req, res) => {
-const carreraFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-const datosFiltrados = students_satisfaction.filter(d => d.carrera === carreraFiltro);
-const mediaSatisfaccion = datosFiltrados.reduce((acc, d) => acc + d.satisfaccion_total, 0) / datosFiltrados.length;
-
-res.json(`La satisfacción media en ${carreraFiltro} es: ${mediaSatisfaccion.toFixed(2)}`);
-});
-
-
-app.get("/samples/PAB", (req, res) => {
-    const categoriaFiltro = "GRADO EN EDUCACIÓN INFANTIL";
-    const datosFiltrados = university_academic_performance.filter(item => item.degree === categoriaFiltro);
-
-    const sumaEficiencia = datosFiltrados.reduce((acumulador, item) => acumulador + item.efficiencyRate, 0);
-    const mediaEficiencia = datosFiltrados.length > 0 ? sumaEficiencia / datosFiltrados.length : 0;
-
-    res.json({ mensaje: `La media de eficiencia para la categoría '${categoriaFiltro}' es: ${mediaEficiencia.toFixed(2)}%` });
-});
 
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
