@@ -188,9 +188,9 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
     });
 
 // Obtener registros por año y ciudad
-app.get(BASE_API + "/university-demands/:grado/:ciudad/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
-        console.log("New get to /university-demands/:grado/:ciudad/:academicYear")
+        console.log("New get to /university-demands/:degree/:location/:academicYear")
         const degree= req.params.degree
         const location = req.params.location;
         const academicYear = req.params.academicYear
@@ -202,9 +202,8 @@ if (filteredData.length === 0) {
 }
 
 // Enviamos los datos filtrados en formato JSON
-response.send(JSON.stringify(filteredData))
-
-    });
+    response.send(JSON.stringify(filteredData))
+});
     
 
 //Cargar datos iniciales
@@ -218,7 +217,7 @@ app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
     
 })
 
-//POST JAVIER 
+//POST  
 
 //El post es para meter nuevos datos a la api 
 app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un post necesitamos postman
@@ -255,15 +254,14 @@ app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, 
     const academicYear = req.params.academicYear;
     
     
-    const index = d.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
+    const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
     if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
         return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
     }
-    d[index] = { ...d[index], ...req.body };
+    university_demands[index] = { ...university_demands[index], ...req.body };
     res.status(200).json({ message: "Record updated successfully" });
 });
-
 
 //FALLO DE PUT a todos los datos
 app.put(BASE_API + "/university-demands",(req,res)=>{    
@@ -276,7 +274,7 @@ app.put(BASE_API + "/university-demands",(req,res)=>{
 app.delete(BASE_API + "/university-demands", (req, res) => {
     console.log("DELETE request received");
 
-    registrationsData = [];
+    university_demands = [];
     
     res.status(200).json({ message: "All records deleted successfully" });
 });
@@ -289,12 +287,11 @@ app.delete(BASE_API + "/university-demands/:degree/:location/:academicYear", (re
     const academicYear = req.params.academicYear
 
 
-    const index = registrationsData.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
+    const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
-    registrationsData.splice(index, 1);
+    university_demands.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
 });
-
 
 
 //API ALEJANDRO 
