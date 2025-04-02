@@ -91,21 +91,21 @@ const university_academic_performance = [
     ];
 
     const university_demands = [ 
-        { ciudad: "Almendralejo", grado: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Almendralejo", grado: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Mérida", grado: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
-        { ciudad: "Plasencia", grado: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
-        { ciudad: "Cáceres", grado: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
-        { ciudad: "Badajoz", grado: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
-        { ciudad: "Plasencia", grado: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Infantil", over45: 15, spanishFirst: 6, foreigners: 123, graduated: 137, academicYear: "2016-2017" },
-        { ciudad: "Cáceres", grado: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
+        { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
+        { location: "Almendralejo", degree: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
+        { location: "Mérida", degree: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
+        { location: "Badajoz", degree: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
+        { location: "Badajoz", degree: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
+        { location: "Badajoz", degree: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
+        { location: "Plasencia", degree: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
+        { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
+        { location: "Badajoz", degree: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
+        { location: "Cáceres", degree: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
+        { location: "Cáceres", degree: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
+        { location: "Badajoz", degree: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
+        { location: "Plasencia", degree: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
+        { location: "Cáceres", degree: "Grado en Educación Infantil", over45: 15, spanishFirst: 6, foreigners: 123, graduated: 137, academicYear: "2016-2017" },
+        { location: "Cáceres", degree: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
     ];
     
 
@@ -142,7 +142,7 @@ app.get("/cool", (request,response)=>{
 
 app.get("/samples/JGP", (req, res) => {
     const ciudadFiltrada = "Badajoz";
-    const datosFiltrados = university_demands.filter(dato => dato.ciudad === ciudadFiltrada);
+    const datosFiltrados = university_demands.filter(dato => dato.location === ciudadFiltrada);
     const media = datosFiltrados.reduce((acc, curr) => acc + (curr.general || 0), 0) / datosFiltrados.length;
     
     res.json({ ciudad: ciudadFiltrada, mediaGeneral: media.toFixed(2) });
@@ -191,11 +191,11 @@ app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas
 app.get(BASE_API + "/university-demands/:grado/:ciudad/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
     //para que sea /api/v1/contacts
         console.log("New get to /university-demands/:grado/:ciudad/:academicYear")
-        const grado= req.params.grado
-        const ciudad = req.params.ciudad;
+        const degree= req.params.degree
+        const location = req.params.location;
         const academicYear = req.params.academicYear
 // Filtramos los datos según los parámetros recibidos
-    const filteredData = university_demands.filter(item =>item.grado === grado &&item.ciudad === ciudad &&item.academicYear === academicYear);
+    const filteredData = university_demands.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
 
 if (filteredData.length === 0) {
     return response.status(404).json({ error: "No data found for the given parameters" });
@@ -225,21 +225,21 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
     
     console.log("POST to /university-demands");
     console.log(`<${request.body}>`);
-
+//location,degree
     const body = request.body
 
     let newUniversityDemand = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
     //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
 
-    //ciudad,grado,over45,spanishFirst,foreigners,graduated,academicYear
+    //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 
     //Si existe algun campo que no se ha rellenado , mostrar error 
-    if (!body.ciudad || !body.grado || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
+    if (!body.location || !body.degree || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
         return response.status(400).json({ error: "Missing required fields" });
     }
 
     //Si esos campos son iguales que los nuevos que pones sale error 
-    if (university_demands.find(d => d.academicYear === body.academicYear && d.ciudad === body.ciudad && d.grado === body.grado)) {
+    if (university_demands.find(d => d.academicYear === body.academicYear && d.location === body.location && d.degree === body.degree)) {
         return response.status(409).json({ error: "Record already exists" });
     }
     
@@ -249,32 +249,52 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
 });
 
 // Modificar un registro existente
-app.put(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad;
-    const index = university_demands.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
+    const degree= req.params.degree
+    const location = req.params.location;
+    const academicYear = req.params.academicYear;
+    
+    
+    const index = d.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
-    if (req.body.academicYear !== academicYear || req.body.ciudad !== ciudad) {
-        return res.status(400).json({ error: "AcademicYear and city in body must match URL parameters" });
+    if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
+        return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
     }
-    university_demands[index] = { ...university_demands[index], ...req.body };
+    d[index] = { ...d[index], ...req.body };
     res.status(200).json({ message: "Record updated successfully" });
 });
+
+
 //FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-demands/:ciudad",(req,res)=>{    
+app.put(BASE_API + "/university-demands",(req,res)=>{    
     
     res.sendStatus(405);
 });
 
+
+// Eliminar todos los registros
+app.delete(BASE_API + "/university-demands", (req, res) => {
+    console.log("DELETE request received");
+
+    registrationsData = [];
+    
+    res.status(200).json({ message: "All records deleted successfully" });
+});
+
+
 // Eliminar un registro existente
-app.delete(BASE_API + "/university-demands/:academicYear/:ciudad", (req, res) => {
-    const academicYear = parseInt(req.params.academicYear);
-    const ciudad = req.params.ciudad;
-    const index = university_demands.findIndex(d => d.academicYear === academicYear && d.ciudad === ciudad);
+app.delete(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
+    const degree= req.params.degree
+    const location = req.params.location;
+    const academicYear = req.params.academicYear
+
+
+    const index = registrationsData.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
     if (index === -1) return res.status(404).json({ error: "Record not found" });
     registrationsData.splice(index, 1);
     res.status(200).json({ message: "Record deleted successfully" });
 });
+
 
 
 //API ALEJANDRO 
