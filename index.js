@@ -202,8 +202,8 @@ if (filteredData.length === 0) {
 }
 
 // Enviamos los datos filtrados en formato JSON
-    response.send(JSON.stringify(filteredData))
-});
+response.send(JSON.stringify(filteredData))
+    });
     
 
 //Cargar datos iniciales
