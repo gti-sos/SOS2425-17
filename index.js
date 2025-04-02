@@ -247,6 +247,13 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
     response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
 });
 
+//Post ERROR 405
+
+app.put(BASE_API + "/university-demands",(req,res)=>{    
+    
+    res.sendStatus(405);
+});
+
 // Modificar un registro existente
 app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
     const degree= req.params.degree
