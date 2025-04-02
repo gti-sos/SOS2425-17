@@ -249,8 +249,7 @@ app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un po
 
 //Post ERROR 405
 
-app.put(BASE_API + "/university-demands",(req,res)=>{    
-    
+app.post(BASE_API + "/university-demands/:degree/:location/:academicYear",(req,res)=>{    
     res.sendStatus(405);
 });
 
