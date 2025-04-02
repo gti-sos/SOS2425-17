@@ -504,4 +504,3 @@ app.delete(BASE_API + "/university-academic-performance/:degree/:location/:acade
     res.status(200).json({ message: "Record deleted successfully" });
 });
 
-
