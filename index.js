@@ -15,7 +15,7 @@ app.options('*', (req, res) => {
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.sendStatus(200);
 });
-import { loadBackendPablo } from "./src/backend/university-academic-performance";
+import { loadBackendPablo } from "./src/backend/university-academic-performance/index.js";
 import { loadBackendJavier } from "./src/backend/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 
 loadBackendPablo(app)
