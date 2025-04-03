@@ -21,16 +21,6 @@ const university_academic_performance = [
     { degree: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA (RAMA INDUSTRIAL)", location: "BADAJOZ", dropoutSecondCourse: 7.46, efficiencyRate: 80.39, dropoutThirdCourse: 1.49, successRate: 73.24, dropoutFirstCourse: 19.4, dropoutsThirdCourse: 1, progressNormalized: 0.79, dropoutsFirstCourse: 13, performanceRate: 63.01, cohortStudents: 67, dropoutsSecondCourse: 5, dropoutRate: 5.81, graduationRate: 12.5, academicYear: "2017-2018" },
     { degree: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA (RAMA INDUSTRIAL)", location: "BADAJOZ", dropoutSecondCourse: 7.41, efficiencyRate: 81.79, dropoutThirdCourse: 3.7, successRate: 72.16, dropoutFirstCourse: 2.78, dropoutsThirdCourse: 2, progressNormalized: 1.0, dropoutsFirstCourse: 15, performanceRate: 61.29, cohortStudents: 54, dropoutsSecondCourse: 4, dropoutRate: 6.11, graduationRate: 13.5, academicYear: "2018-2019" },
     { degree: "GRADO EN ENFERMERÍA", location: "PLASENCIA", dropoutSecondCourse: 4.0, efficiencyRate: 98.77, dropoutThirdCourse: 0.0, successRate: 97.48, dropoutFirstCourse: 2.0, dropoutsThirdCourse: 0, progressNormalized: 0.99, dropoutsFirstCourse: 2, performanceRate: 96.58, cohortStudents: 100, dropoutsSecondCourse: 4, dropoutRate: 7.22, graduationRate: 87.63, academicYear: "2017-2018" },
-    { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "BADAJOZ", dropoutSecondCourse: 2.29, efficiencyRate: 94.07, dropoutThirdCourse: 7.63, successRate: 95.34, dropoutFirstCourse: 10.69, dropoutsThirdCourse: 1, progressNormalized: 0.94, dropoutsFirstCourse: 14, performanceRate: 93.0, cohortStudents: 131, dropoutsSecondCourse: 3, dropoutRate: 14.81, graduationRate: 73.33, academicYear: "2017-2018" },
-    { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "BADAJOZ", dropoutSecondCourse: 4.03, efficiencyRate: 93.43, dropoutThirdCourse: 3.66, successRate: 91.1, dropoutFirstCourse: 5.86, dropoutsThirdCourse: 10, progressNormalized: 0.94, dropoutsFirstCourse: 16, performanceRate: 86.9, cohortStudents: 273, dropoutsSecondCourse: 11, dropoutRate: 12.04, graduationRate: 54.74, academicYear: "2017-2018" },
-    { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "BADAJOZ", dropoutSecondCourse: 1.49, efficiencyRate: 94.48, dropoutThirdCourse: 1.49, successRate: 95.24, dropoutFirstCourse: 6.72, dropoutsThirdCourse: 2, progressNormalized: 1.0, dropoutsFirstCourse: 9, performanceRate: 93.51, cohortStudents: 134, dropoutsSecondCourse: 2, dropoutRate: 14.49, graduationRate: 65.94, academicYear: "2016-2017" },
-    { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "BADAJOZ", dropoutSecondCourse: 2.91, efficiencyRate: 90.07, dropoutThirdCourse: 3.64, successRate: 90.46, dropoutFirstCourse: 13.09, dropoutsThirdCourse: 10, progressNormalized: 1.0, dropoutsFirstCourse: 36, performanceRate: 86.38, cohortStudents: 275, dropoutsSecondCourse: 8, dropoutRate: 21.05, graduationRate: 53.76, academicYear: "2016-2017" },
-    { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "BADAJOZ", dropoutSecondCourse: 0.0, efficiencyRate: 95.58, dropoutThirdCourse: 2.63, successRate: 95.52, dropoutFirstCourse: 3.51, dropoutsThirdCourse: 3, progressNormalized: 1.0, dropoutsFirstCourse: 4, performanceRate: 92.47, cohortStudents: 114, dropoutsSecondCourse: 0, dropoutRate: 7.52, graduationRate: 77.44, academicYear: "2018-2019" },
-    { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "BADAJOZ", dropoutSecondCourse: 4.59, efficiencyRate: 91.53, dropoutThirdCourse: 2.0, successRate: 90.03, dropoutFirstCourse: 9.62, dropoutsThirdCourse: 5, progressNormalized: 1.0, dropoutsFirstCourse: 24, performanceRate: 84.75, cohortStudents: 250, dropoutsSecondCourse: 7, dropoutRate: 14.81, graduationRate: 65.19, academicYear: "2018-2019" },
-    { degree: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA (RAMA INDUSTRIAL)", location: "BADAJOZ", dropoutSecondCourse: 1.52, efficiencyRate: 76.01, dropoutThirdCourse: 4.55, successRate: 73.87, dropoutFirstCourse: 3.48, dropoutsThirdCourse: 3, progressNormalized: 0.68, dropoutsFirstCourse: 23, performanceRate: 61.13, cohortStudents: 66, dropoutsSecondCourse: 1, dropoutRate: 4.81, graduationRate: 15.19, academicYear: "2016-2017" },
-    { degree: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA (RAMA INDUSTRIAL)", location: "BADAJOZ", dropoutSecondCourse: 7.46, efficiencyRate: 80.39, dropoutThirdCourse: 1.49, successRate: 73.24, dropoutFirstCourse: 19.4, dropoutsThirdCourse: 1, progressNormalized: 0.79, dropoutsFirstCourse: 13, performanceRate: 63.01, cohortStudents: 67, dropoutsSecondCourse: 5, dropoutRate: 5.81, graduationRate: 12.5, academicYear: "2017-2018" },
-    { degree: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA (RAMA INDUSTRIAL)", location: "BADAJOZ", dropoutSecondCourse: 7.41, efficiencyRate: 81.79, dropoutThirdCourse: 3.7, successRate: 72.16, dropoutFirstCourse: 2.78, dropoutsThirdCourse: 2, progressNormalized: 1.0, dropoutsFirstCourse: 15, performanceRate: 61.29, cohortStudents: 54, dropoutsSecondCourse: 4, dropoutRate: 6.11, graduationRate: 13.5, academicYear: "2018-2019" },
-    { degree: "GRADO EN ENFERMERÍA", location: "PLASENCIA", dropoutSecondCourse: 4.0, efficiencyRate: 98.77, dropoutThirdCourse: 0.0, successRate: 97.48, dropoutFirstCourse: 2.0, dropoutsThirdCourse: 0, progressNormalized: 0.99, dropoutsFirstCourse: 2, performanceRate: 96.58, cohortStudents: 100, dropoutsSecondCourse: 4, dropoutRate: 7.22, graduationRate: 87.63, academicYear: "2017-2018" },
     { degree: "GRADO EN ENFERMERÍA", location: "PLASENCIA", dropoutSecondCourse: 1.0, efficiencyRate: 97.51, dropoutThirdCourse: 0.0, successRate: 97.79, dropoutFirstCourse: 5.0, dropoutsThirdCourse: 0, progressNormalized: 0.98, dropoutsFirstCourse: 5, performanceRate: 97.15, cohortStudents: 100, dropoutsSecondCourse: 1, dropoutRate: 8.91, graduationRate: 90.1, academicYear: "2016-2017" },
     { degree: "GRADO EN ENFERMERÍA", location: "PLASENCIA", dropoutSecondCourse: 9.09, efficiencyRate: 97.51, dropoutThirdCourse: 1.01, successRate: 96.98, dropoutFirstCourse: 10.1, dropoutsThirdCourse: 1, progressNormalized: 1.0, dropoutsFirstCourse: 1, performanceRate: 96.06, cohortStudents: 99, dropoutsSecondCourse: 9, dropoutRate: 10.0, graduationRate: 88.0, academicYear: "2018-2019" },
     { degree: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", location: "CÁCERES", dropoutSecondCourse: 5.08, efficiencyRate: 100.0, dropoutThirdCourse: 3.39, successRate: 83.76, dropoutFirstCourse: 11.86, dropoutsThirdCourse: 4, progressNormalized: 0.6, dropoutsFirstCourse: 14, performanceRate: 76.54, cohortStudents: 118, dropoutsSecondCourse: 6, dropoutRate: 11.76, graduationRate: 58.82, academicYear: "2016-2017" },
@@ -71,6 +61,7 @@ const university_academic_performance = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", location: "MÉRIDA", dropoutFirstCourse: 15.07, efficiencyRate: 87.57, dropoutSecondCourse: 5.48, successRate: 65.20, dropoutThirdCourse: 35.62, dropoutsThirdCourse: 4, progressNormalized: 1.00, dropoutsFirstCourse: 26, performanceRate: 50.72, cohortStudents: 73, dropoutsSecondCourse: 11, dropoutRate: 64.10, graduationRate: 12.82, academicYear: "2016-2017" },
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 10.26, efficiencyRate: 84.62, dropoutSecondCourse: 6.41, successRate: 79.95, dropoutThirdCourse: 20.51, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 16, performanceRate: 68.53, cohortStudents: 78, dropoutsSecondCourse: 8, dropoutRate: 36.49, graduationRate: 33.78, academicYear: "2016-2017" },
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", location: "MÉRIDA", dropoutFirstCourse: 15.38, efficiencyRate: 76.76, dropoutSecondCourse: 6.41, successRate: 66.34, dropoutThirdCourse: 46.15, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 36, performanceRate: 48.12, cohortStudents: 78, dropoutsSecondCourse: 12, dropoutRate: 61.84, graduationRate: 92.11, academicYear: "2018-2019" },
+    { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 10.26, efficiencyRate: 84.62, dropoutSecondCourse: 6.41, successRate: 79.95, dropoutThirdCourse: 20.51, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 16, performanceRate: 68.53, cohortStudents: 78, dropoutsSecondCourse: 8, dropoutRate: 36.49, graduationRate: 33.78, academicYear: "2018-2019" },
         
     ];
 
@@ -81,17 +72,12 @@ const university_academic_performance = [
 
 
     const BASE_API = "/api/v1"; //Con esto lo que hago es crear la URL base de la api y digo que para encontrar la api pongas esa direccion 
-    let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
+    let university_academic_performance_db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
     import dataStore from "nedb"; //Esto es para importar la base de datos ndb que es un paquete que te descargas con node
     let  myNullArrayUniversityAcademicPerformance=[]
 
 
-    db.find({},(err,contacts)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
-        //El err esque te devolvera error y el contacts es lo que te va a devolver 
-        if (contacts.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
-            db.insert(university_academic_performance);
-        }
-    });
+  
 
 
 
@@ -105,127 +91,225 @@ const university_academic_performance = [
     function loadBackendPablo(app){
     
 
-        app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-            //para que sea /api/v1/contacts
-                console.log("New get to /university-academic-performance")
-                response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance,null,2)); //Te responde con los contactos convertidos a JSON
-                //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
+        app.get(BASE_API + "/university-academic-performance", (request, response) => {
+            console.log("New GET to /university-academic-performance");
         
-        
+            university_academic_performance_db.find({}, (err, docs) => {
+                if (err) {
+                    response.status(500).send({ error: "Database error" });
+                    return;
+                }
+                response.json(docs); // Enviar los documentos encontrados en formato JSON
             });
-        
-            app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-                //para que sea /api/v1/contacts
-                    console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
-                    const degree= req.params.degree
-                    const location = req.params.location;
-                    const academicYear = req.params.academicYear
-            // Filtramos los datos según los parámetros recibidos
-                const filteredData = myNullArrayUniversityAcademicPerformance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
-        
-            if (filteredData.length === 0) {
-                return response.status(404).json({ error: "No data found for the given parameters" });
-            }
-        
-            // Enviamos los datos filtrados en formato JSON
-            response.send(JSON.stringify(filteredData))
-            
-                });
+        });
+
+
+
+
+
+
+
+
+
+
         
         
-        
-        app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
-            if (myNullArrayUniversityAcademicPerformance.length ===0){
-                myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
-            }
-                
-                response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
-        
-                response.sendStatus(201);
+        app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, response) => {
+            console.log("New GET to /university-academic-performance/:degree/:location/:academicYear");
+
+            const degree= req.params.degree
+            const location = req.params.location;
+            const academicYear = req.params.academicYear
+
+            university_academic_performance_db.find({"degree": degree , "location": location , "academicYear": academicYear },(err,demands)=>{//Busco todo y el contacts es lo que devolveria 
+                if (err) {
+                    response.status(500).send("Internal Server Error");
+                    return;
+                }
+
+                if (demands.length >= 1) {
+                    response.status(200).json(demands.map((c) => {
+                        delete c._id;
+                        return c;
+                    }));
+                } else {
+                    response.sendStatus(404);
+                }
+            });
+
         })
+
+
+
+
+
+
+
+
+
+
+
         
+        
+        
+        
+        app.get(BASE_API + "/university-academic-performance/loadInitialData", (request, response) => {
+            console.log("Loading initial data into the database...");
+        
+            // Verificar si la base de datos ya tiene datos
+            university_academic_performance_db.count({}, (err, count) => {
+                if (err) {
+                    return response.status(500).json({ error: "Database error" });
+                }
+        
+                if (count === 0) {
+        
+                    // Insertar datos en la base de datos
+                    university_academic_performance_db.insert(university_academic_performance, (err, newDocs) => {
+                        if (err) {
+                            return response.status(500).json({ error: "Error inserting initial data" });
+                        }
+                        response.status(201).json("Datos insertados con éxito"); // Devuelve los datos insertados
+                    });
+                } else {
+                    response.status(200).json({ message: "Database already initialized" });
+                }
+            });
+        });
+        
+
+
+
+
+
+
+
         //POST PABLO
         /*degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017"*/
-        app.post(BASE_API+"/university-academic-performance",(request,response)=>{
-            
+        app.post(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("POST to /university-academic-performance");
-            console.log(`<${request.body}>`);
-        
-            const body = request.body
-        
-            let newUniversityAcademicPerformance = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-            //en postman se escribe en body y haces request.body para que te coja el codigo de body de postman
+            console.log(`<${JSON.stringify(request.body)}>`);
             
-            //Si existe algun campo que no se ha rellenado , mostrar error 
-            if ([body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, body.dropoutRate, body.graduationRate, body.academicYear]
-                .some(value => value === undefined || value === null || value === "")) {        
+            const body = request.body;
+        
+            // Verificar si algún campo obligatorio está vacío o no definido
+            if ([
+                body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
+                body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
+                body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, 
+                body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, 
+                body.dropoutRate, body.graduationRate, body.academicYear
+            ].some(value => value === undefined || value === null || value === "")) {
                 return response.status(400).json({ error: "Missing required fields" });
             }
         
-            //Si esos campos son iguales que los nuevos que pones sale error 
-            // if (university_academic_performance.find(u => u.degree  === body.degree  && u.location === body.location && u.dropoutSecondCourse === body.dropoutSecondCourse && u.efficiencyRate=== body.efficiencyRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse  === body.dropoutsThirdCourse  && u.successRate === body.successRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse === body.dropoutsThirdCourse && u.progressNormalized === body.progressNormalized && u.dropoutsFirstCourse === body.dropoutsFirstCourse && u.performanceRate === body.performanceRate &&u.cohortStudents === body.cohortStudents && u.dropoutsSecondCourse === body.dropoutsSecondCourse &&u.dropoutRate === body.dropoutRate && u.graduationRate === body.graduationRate && u.academicYear === body.academicYear)) {
+            // Verificar si el registro ya existe
+            university_academic_performance_db.findOne({ degree: body.degree, academicYear: body.academicYear, location: body.location }, (err, existingRecord) => {
+                if (err) {
+                    return response.status(500).json({ error: "Database error" });
+                }
         
-            if (myNullArrayUniversityAcademicPerformance.find(u => u.degree  === body.degree  &&  u.academicYear === body.academicYear &&  u.location  === body.location)) {
-                return response.status(409).json({ error: "Record already exists" });
-            }
-            
-            myNullArrayUniversityAcademicPerformance.push(newUniversityAcademicPerformance); //Para enviar los datos 
+                if (existingRecord) {
+                    return response.status(409).json({ error: "Record already exists" });
+                }
         
-            response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
+                // Insertar el nuevo registro en la base de datos
+                university_academic_performance_db.insert(body, (err, newDoc) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Error inserting data" });
+                    }
+                    response.status(201).json(newDoc);
+                });
+            });
+        });
+
+
+        app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {    
+            res.sendStatus(405); // Método no permitido
         });
         
-        // Modificar un registro existente
+
+
+        app.put(BASE_API + "/university-academic-performance", (req, res) => {    
+            res.sendStatus(405); // Método no permitido
+        });
+        
+
+
+
+
+
+        
         app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
-            const degree= req.params.degree
-            const location = req.params.location;
-            const academicYear = req.params.academicYear;
-            
-            
-            const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-            if (index === -1) return res.status(404).json({ error: "Record not found" });
-            if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
-                return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
+            const { degree, location, academicYear } = req.params;
+        
+            // Validar que los parámetros de la URL coincidan con el cuerpo de la solicitud
+            if (req.body.degree !== degree || req.body.location !== location || req.body.academicYear !== academicYear) {
+                return res.status(400).json({ error: "degree, location, and academicYear in body must match URL parameters" });
             }
-            myNullArrayUniversityAcademicPerformance[index] = { ...myNullArrayUniversityAcademicPerformance[index], ...req.body };
-            res.status(200).json({ message: "Record updated successfully" });
+        
+            // Buscar y actualizar el registro en la base de datos
+            university_academic_performance_db.update(
+                { degree, location, academicYear }, // Criterio de búsqueda
+                { $set: req.body }, // Nuevos valores
+                {}, // Opciones (vacío porque no queremos cambiar múltiples registros)
+                (err, numReplaced) => {
+                    if (err) {
+                        return res.status(500).json({ error: "Database error" });
+                    }
+                    if (numReplaced === 0) {
+                        return res.status(404).json({ error: "Record not found" });
+                    }
+                    res.status(200).json({ message: "Record updated successfully" });
+                }
+            );
         });
+
+
+
+
         
         
-        app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
-            res.sendStatus(405);
-        });
+        // Elimina todo
+        app.delete(BASE_API + "/university-academic-performance", (req, response) => {
+            console.log("DELETE request received - Removing all records");
         
-        
-        //FALLO DE PUT a todos los datos
-        app.put(BASE_API + "/university-academic-performance",(req,res)=>{    
-            
-            res.sendStatus(405);
-        });
-        
-        
-        // Eliminar todos los registros
-        app.delete(BASE_API + "/university-academic-performance", (req, res) => {
-            console.log("DELETE request received");
-        
-            myNullArrayUniversityAcademicPerformance = [];
-            
-            res.status(200).json({ message: "All records deleted successfully" });
+            university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
+                if (err) {
+                    return response.status(500).json({ error: "Database error (Code 01)" });
+                }
+                
+                if (numRemoved > 0) {
+                    return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
+                } else {
+                    return response.status(404).json({ error: "No records found to delete" });
+                }
+            });
         });
         
         
         
         
         // Eliminar un registro existente
-        app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
-            const degree= req.params.degree
+        app.delete(BASE_API+"/university-academic-performance/:degree/:location/:academicYear",(req,response)=>{
+
+            const degree= req.params.degree;
             const location = req.params.location;
-            const academicYear = req.params.academicYear
-        
-        
-            const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-            if (index === -1) return res.status(404).json({ error: "Record not found" });
-            myNullArrayUniversityAcademicPerformance.splice(index, 1);
-            res.status(200).json({ message: "Record deleted successfully" });
+            const academicYear = req.params.academicYear;
+    
+    
+            university_academic_performance_db.remove({"degree" : degree , "location" : location , "academicYear" : academicYear},{},(err,numRemoved)=>{
+                if(err){
+                    response.status(500).send("Error code 01");
+                }else{
+                    if(numRemoved >= 1){
+                        response.sendStatus(200);
+                    }else{
+                        response.sendStatus(404);
+                    }
+                }
+            });
+    
         });
     }
 
