@@ -1,8 +1,7 @@
 console.log("Init script");
 const BASE_API = "/api/v1";
 
-const express = require("express");
-const cool = require("cool-ascii-faces");
+import express from "express";
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
 //que si se ejecuta en local coja el segundo 
@@ -16,6 +15,8 @@ app.options('*', (req, res) => {
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.sendStatus(200);
 });
+
+import { loadBackendJavier } from "./src/backend/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 
 const university_academic_performance = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
@@ -90,23 +91,7 @@ const university_academic_performance = [
         
     ];
 
-    const university_demands = [ 
-        { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
-        { location: "Almendralejo", degree: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
-        { location: "Mérida", degree: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
-        { location: "Badajoz", degree: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
-        { location: "Badajoz", degree: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
-        { location: "Badajoz", degree: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
-        { location: "Plasencia", degree: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
-        { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
-        { location: "Badajoz", degree: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
-        { location: "Cáceres", degree: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
-        { location: "Cáceres", degree: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
-        { location: "Badajoz", degree: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
-        { location: "Plasencia", degree: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
-        { location: "Cáceres", degree: "Grado en Educación Infantil", over45: 15, spanishFirst: 6, foreigners: 123, graduated: 137, academicYear: "2016-2017" },
-        { location: "Cáceres", degree: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
-    ];
+    
     
 
 const students_satisfaction = [
@@ -134,139 +119,14 @@ app.get("/", (request,response)=>{
     response.send("Hello from the server, the sos2425-17 team greets you");
 }) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
-
+loadBackendJavier(app) //aqui pongo la funcion loadBackend importada de src/back para que se muestre en pantalla
 
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
 }); //Esto es para usar el framework en ese puerto (poner un puerto alto)
 
         
-//API JAVIER 
 
-// https://sos2425-XX.onrender.com/api/v1/FFFFF
-
-//Obtener todos los registros con filtros
-
-app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-    //para que sea /api/v1/university-demands
-        console.log("New get to /university-demands")
-        response.send(JSON.stringify(university_demands,null,2)); //Te responde con los contactos convertidos a JSON
-        //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
-
-
-    });
-
-// Obtener registros por año y ciudad
-app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-    //para que sea /api/v1/contacts
-        console.log("New get to /university-demands/:degree/:location/:academicYear")
-        const degree= req.params.degree
-        const location = req.params.location;
-        const academicYear = req.params.academicYear
-// Filtramos los datos según los parámetros recibidos
-    const filteredData = university_demands.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
-
-if (filteredData.length === 0) {
-    return response.status(404).json({ error: "No data found for the given parameters" });
-}
-
-// Enviamos los datos filtrados en formato JSON
-response.send(JSON.stringify(filteredData))
-    });
-    
-
-//Cargar datos iniciales
-let myNullArray1=[]
-app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
-        if (myNullArray1.length ===0){
-            myNullArray1.push(...university_demands) // Los puntos suspensivos sirven para añadirlos de 1 en 1
-        }
-            
-            response.send(JSON.stringify(myNullArray1));
-    
-})
-
-//POST  
-
-//El post es para meter nuevos datos a la api 
-app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un post necesitamos postman
-    
-    console.log("POST to /university-demands");
-    console.log(`<${request.body}>`);
-//location,degree
-    const body = request.body
-
-    let newUniversityDemand = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-    //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
-
-    //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
-
-    //Si existe algun campo que no se ha rellenado , mostrar error 
-    if (!body.location || !body.degree || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
-        return response.status(400).json({ error: "Missing required fields" });
-    }
-
-    //Si esos campos son iguales que los nuevos que pones sale error 
-    if (university_demands.find(d => d.academicYear === body.academicYear && d.location === body.location && d.degree === body.degree)) {
-        return response.status(409).json({ error: "Record already exists" });
-    }
-    
-    university_demands.push(newUniversityDemand); //Para enviar los datos 
-
-    response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
-});
-
-//Post ERROR 405
-
-app.post(BASE_API + "/university-demands/:degree/:location/:academicYear",(req,res)=>{    
-    res.sendStatus(405);
-});
-
-// Modificar un registro existente
-app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
-    const degree= req.params.degree
-    const location = req.params.location;
-    const academicYear = req.params.academicYear;
-    
-    
-    const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
-        return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
-    }
-    university_demands[index] = { ...university_demands[index], ...req.body };
-    res.status(200).json({ message: "Record updated successfully" });
-});
-
-//FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-demands",(req,res)=>{    
-    
-    res.sendStatus(405);
-});
-
-
-// Eliminar todos los registros
-app.delete(BASE_API + "/university-demands", (req, res) => {
-    console.log("DELETE request received");
-
-    university_demands = [];
-    
-    res.status(200).json({ message: "All records deleted successfully" });
-});
-
-
-// Eliminar un registro existente
-app.delete(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
-    const degree= req.params.degree
-    const location = req.params.location;
-    const academicYear = req.params.academicYear
-
-
-    const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    university_demands.splice(index, 1);
-    res.status(200).json({ message: "Record deleted successfully" });
-});
 
 
 //API ALEJANDRO 
