@@ -73,44 +73,166 @@ const university_academic_performance = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", location: "MÉRIDA", dropoutFirstCourse: 15.38, efficiencyRate: 76.76, dropoutSecondCourse: 6.41, successRate: 66.34, dropoutThirdCourse: 46.15, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 36, performanceRate: 48.12, cohortStudents: 78, dropoutsSecondCourse: 12, dropoutRate: 61.84, graduationRate: 92.11, academicYear: "2018-2019" },
         
     ];
+
+
+
+
+
+
+
     const BASE_API = "/api/v1"; //Con esto lo que hago es crear la URL base de la api y digo que para encontrar la api pongas esa direccion 
     let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
     import dataStore from "nedb"; //Esto es para importar la base de datos ndb que es un paquete que te descargas con node
+    let  myNullArrayUniversityAcademicPerformance=[]
+
+
+    db.find({},(err,contacts)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
+        //El err esque te devolvera error y el contacts es lo que te va a devolver 
+        if (contacts.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
+            db.insert(university_academic_performance);
+        }
+    });
+
+
+
+
+
+
+
+
+
 
     function loadBackendPablo(app){
     
 
-        db.find({},(err,contacts)=>{
-    if (contacts.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
-        db.insert(initialContacts);
+        app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+            //para que sea /api/v1/contacts
+                console.log("New get to /university-academic-performance")
+                response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance,null,2)); //Te responde con los contactos convertidos a JSON
+                //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
+        
+        
+            });
+        
+            app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
+                //para que sea /api/v1/contacts
+                    console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
+                    const degree= req.params.degree
+                    const location = req.params.location;
+                    const academicYear = req.params.academicYear
+            // Filtramos los datos según los parámetros recibidos
+                const filteredData = myNullArrayUniversityAcademicPerformance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
+        
+            if (filteredData.length === 0) {
+                return response.status(404).json({ error: "No data found for the given parameters" });
+            }
+        
+            // Enviamos los datos filtrados en formato JSON
+            response.send(JSON.stringify(filteredData))
+            
+                });
+        
+        
+        
+        app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
+            if (myNullArrayUniversityAcademicPerformance.length ===0){
+                myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+            }
+                
+                response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
+        
+                response.sendStatus(201);
+        })
+        
+        //POST PABLO
+        /*degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017"*/
+        app.post(BASE_API+"/university-academic-performance",(request,response)=>{
+            
+            console.log("POST to /university-academic-performance");
+            console.log(`<${request.body}>`);
+        
+            const body = request.body
+        
+            let newUniversityAcademicPerformance = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
+            //en postman se escribe en body y haces request.body para que te coja el codigo de body de postman
+            
+            //Si existe algun campo que no se ha rellenado , mostrar error 
+            if ([body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, body.dropoutRate, body.graduationRate, body.academicYear]
+                .some(value => value === undefined || value === null || value === "")) {        
+                return response.status(400).json({ error: "Missing required fields" });
+            }
+        
+            //Si esos campos son iguales que los nuevos que pones sale error 
+            // if (university_academic_performance.find(u => u.degree  === body.degree  && u.location === body.location && u.dropoutSecondCourse === body.dropoutSecondCourse && u.efficiencyRate=== body.efficiencyRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse  === body.dropoutsThirdCourse  && u.successRate === body.successRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse === body.dropoutsThirdCourse && u.progressNormalized === body.progressNormalized && u.dropoutsFirstCourse === body.dropoutsFirstCourse && u.performanceRate === body.performanceRate &&u.cohortStudents === body.cohortStudents && u.dropoutsSecondCourse === body.dropoutsSecondCourse &&u.dropoutRate === body.dropoutRate && u.graduationRate === body.graduationRate && u.academicYear === body.academicYear)) {
+        
+            if (myNullArrayUniversityAcademicPerformance.find(u => u.degree  === body.degree  &&  u.academicYear === body.academicYear &&  u.location  === body.location)) {
+                return response.status(409).json({ error: "Record already exists" });
+            }
+            
+            myNullArrayUniversityAcademicPerformance.push(newUniversityAcademicPerformance); //Para enviar los datos 
+        
+            response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
+        });
+        
+        // Modificar un registro existente
+        app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
+            const degree= req.params.degree
+            const location = req.params.location;
+            const academicYear = req.params.academicYear;
+            
+            
+            const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
+            if (index === -1) return res.status(404).json({ error: "Record not found" });
+            if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
+                return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
+            }
+            myNullArrayUniversityAcademicPerformance[index] = { ...myNullArrayUniversityAcademicPerformance[index], ...req.body };
+            res.status(200).json({ message: "Record updated successfully" });
+        });
+        
+        
+        app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
+            res.sendStatus(405);
+        });
+        
+        
+        //FALLO DE PUT a todos los datos
+        app.put(BASE_API + "/university-academic-performance",(req,res)=>{    
+            
+            res.sendStatus(405);
+        });
+        
+        
+        // Eliminar todos los registros
+        app.delete(BASE_API + "/university-academic-performance", (req, res) => {
+            console.log("DELETE request received");
+        
+            myNullArrayUniversityAcademicPerformance = [];
+            
+            res.status(200).json({ message: "All records deleted successfully" });
+        });
+        
+        
+        
+        
+        // Eliminar un registro existente
+        app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
+            const degree= req.params.degree
+            const location = req.params.location;
+            const academicYear = req.params.academicYear
+        
+        
+            const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
+            if (index === -1) return res.status(404).json({ error: "Record not found" });
+            myNullArrayUniversityAcademicPerformance.splice(index, 1);
+            res.status(200).json({ message: "Record deleted successfully" });
+        });
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
-
-
-
-
-
-
-    }
     
     export {loadBackendPablo}
+
+   
 
        
     
@@ -122,131 +244,9 @@ const university_academic_performance = [
 
 
 
-let  myNullArrayUniversityAcademicPerformance=[]
 
 
 
 
 
-app.get(BASE_API + "/university-academic-performance", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-    //para que sea /api/v1/contacts
-        console.log("New get to /university-academic-performance")
-        response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance,null,2)); //Te responde con los contactos convertidos a JSON
-        //Lo de null y 2 es para que quede mas bonito . 2 es el numero de espacios por tabulador y el null es para que no haga callbaks
 
-
-    });
-
-    app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-        //para que sea /api/v1/contacts
-            console.log("New get to /university-academic-performance/:degree/:location/:academicYear")
-            const degree= req.params.degree
-            const location = req.params.location;
-            const academicYear = req.params.academicYear
-    // Filtramos los datos según los parámetros recibidos
-        const filteredData = myNullArrayUniversityAcademicPerformance.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
-
-    if (filteredData.length === 0) {
-        return response.status(404).json({ error: "No data found for the given parameters" });
-    }
-
-    // Enviamos los datos filtrados en formato JSON
-    response.send(JSON.stringify(filteredData))
-    
-        });
-
-
-
-app.get(BASE_API+"/university-academic-performance/loadInitialData",(request,response)=>{
-    if (myNullArrayUniversityAcademicPerformance.length ===0){
-        myNullArrayUniversityAcademicPerformance.push(...university_academic_performance) // Los puntos suspensivos sirven para añadirlos de 1 en 1
-    }
-        
-        response.send(JSON.stringify(myNullArrayUniversityAcademicPerformance));
-
-        response.sendStatus(201);
-})
-
-//POST PABLO
-/*degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017"*/
-app.post(BASE_API+"/university-academic-performance",(request,response)=>{
-    
-    console.log("POST to /university-academic-performance");
-    console.log(`<${request.body}>`);
-
-    const body = request.body
-
-    let newUniversityAcademicPerformance = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-    //en postman se escribe en body y haces request.body para que te coja el codigo de body de postman
-    
-    //Si existe algun campo que no se ha rellenado , mostrar error 
-    if ([body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, body.dropoutRate, body.graduationRate, body.academicYear]
-        .some(value => value === undefined || value === null || value === "")) {        
-        return response.status(400).json({ error: "Missing required fields" });
-    }
-
-    //Si esos campos son iguales que los nuevos que pones sale error 
-    // if (university_academic_performance.find(u => u.degree  === body.degree  && u.location === body.location && u.dropoutSecondCourse === body.dropoutSecondCourse && u.efficiencyRate=== body.efficiencyRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse  === body.dropoutsThirdCourse  && u.successRate === body.successRate && u.dropoutFirstCourse === body.dropoutFirstCourse && u.dropoutsThirdCourse === body.dropoutsThirdCourse && u.progressNormalized === body.progressNormalized && u.dropoutsFirstCourse === body.dropoutsFirstCourse && u.performanceRate === body.performanceRate &&u.cohortStudents === body.cohortStudents && u.dropoutsSecondCourse === body.dropoutsSecondCourse &&u.dropoutRate === body.dropoutRate && u.graduationRate === body.graduationRate && u.academicYear === body.academicYear)) {
-
-    if (myNullArrayUniversityAcademicPerformance.find(u => u.degree  === body.degree  &&  u.academicYear === body.academicYear &&  u.location  === body.location)) {
-        return response.status(409).json({ error: "Record already exists" });
-    }
-    
-    myNullArrayUniversityAcademicPerformance.push(newUniversityAcademicPerformance); //Para enviar los datos 
-
-    response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
-});
-
-// Modificar un registro existente
-app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
-    const degree= req.params.degree
-    const location = req.params.location;
-    const academicYear = req.params.academicYear;
-    
-    
-    const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
-        return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
-    }
-    myNullArrayUniversityAcademicPerformance[index] = { ...myNullArrayUniversityAcademicPerformance[index], ...req.body };
-    res.status(200).json({ message: "Record updated successfully" });
-});
-
-
-app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear",(req,res)=>{    
-    res.sendStatus(405);
-});
-
-
-//FALLO DE PUT a todos los datos
-app.put(BASE_API + "/university-academic-performance",(req,res)=>{    
-    
-    res.sendStatus(405);
-});
-
-
-// Eliminar todos los registros
-app.delete(BASE_API + "/university-academic-performance", (req, res) => {
-    console.log("DELETE request received");
-
-    myNullArrayUniversityAcademicPerformance = [];
-    
-    res.status(200).json({ message: "All records deleted successfully" });
-});
-
-
-
-
-// Eliminar un registro existente
-app.delete(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
-    const degree= req.params.degree
-    const location = req.params.location;
-    const academicYear = req.params.academicYear
-
-
-    const index = myNullArrayUniversityAcademicPerformance.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-    if (index === -1) return res.status(404).json({ error: "Record not found" });
-    myNullArrayUniversityAcademicPerformance.splice(index, 1);
-    res.status(200).json({ message: "Record deleted successfully" });
-});
