@@ -65,32 +65,14 @@ const university_academic_performance = [
         
     ];
 
-
-
-
-
-
-
     const BASE_API = "/api/v1"; //Con esto lo que hago es crear la URL base de la api y digo que para encontrar la api pongas esa direccion 
     let university_academic_performance_db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
     import dataStore from "nedb"; //Esto es para importar la base de datos ndb que es un paquete que te descargas con node
-    let  myNullArrayUniversityAcademicPerformance=[]
-
-
-  
-
-
-
-
-
-
-
-
 
 
     function loadBackendPablo(app){
     
-
+        //GET Todo lo que haya
         app.get(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("New GET to /university-academic-performance");
         
@@ -103,17 +85,7 @@ const university_academic_performance = [
             });
         });
 
-
-
-
-
-
-
-
-
-
-        
-        
+        // GET uno en concreto
         app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, response) => {
             console.log("New GET to /university-academic-performance/:degree/:location/:academicYear");
 
@@ -139,19 +111,7 @@ const university_academic_performance = [
 
         })
 
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
+        //LOAD INITIAL DATA
         
         app.get(BASE_API + "/university-academic-performance/loadInitialData", (request, response) => {
             console.log("Loading initial data into the database...");
@@ -163,29 +123,22 @@ const university_academic_performance = [
                 }
         
                 if (count === 0) {
-        
-                    // Insertar datos en la base de datos
                     university_academic_performance_db.insert(university_academic_performance, (err, newDocs) => {
                         if (err) {
                             return response.status(500).json({ error: "Error inserting initial data" });
                         }
-                        response.status(201).json("Datos insertados con éxito"); // Devuelve los datos insertados
+                        response.status(201).json({message: "the data was inserted successfully"}); // Devuelve los datos insertados
                     });
                 } else {
-                    response.status(200).json({ message: "Database already initialized" });
+                    response.status(409).json({ message: "empty the database first to initialize it" });
                 }
             });
         });
         
 
 
-
-
-
-
-
         //POST PABLO
-        /*degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017"*/
+
         app.post(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("POST to /university-academic-performance");
             console.log(`<${JSON.stringify(request.body)}>`);
@@ -193,6 +146,8 @@ const university_academic_performance = [
             const body = request.body;
         
             // Verificar si algún campo obligatorio está vacío o no definido
+
+
             if ([
                 body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
                 body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
@@ -218,58 +173,53 @@ const university_academic_performance = [
                     if (err) {
                         return response.status(500).json({ error: "Error inserting data" });
                     }
-                    response.status(201).json(newDoc);
+                    response.status(200).json({ message: "successfully created" });
                 });
             });
         });
 
-
+         // POST a uno
         app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {    
-            res.sendStatus(405); // Método no permitido
+            res.sendStatus(405); 
         });
-        
-
-
+    
+        // PUT a todo
         app.put(BASE_API + "/university-academic-performance", (req, res) => {    
             res.sendStatus(405); // Método no permitido
         });
-        
 
-
-
-
-
-        
+        // PUT a uno
         app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (req, res) => {
             const { degree, location, academicYear } = req.params;
+            const body = req.body;
+            if ([
+                body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
+                body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
+                body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, 
+                body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, 
+                body.dropoutRate, body.graduationRate, body.academicYear
+            ].some(value => value === undefined || value === null || value === "")) 
+            {
+                return res.status(400).json({ error: "Missing required fields" });
+            }
         
-            // Validar que los parámetros de la URL coincidan con el cuerpo de la solicitud
-            if (req.body.degree !== degree || req.body.location !== location || req.body.academicYear !== academicYear) {
-                return res.status(400).json({ error: "degree, location, and academicYear in body must match URL parameters" });
+            if (body.degree !== degree || body.location !== location || body.academicYear !== academicYear) {
+                return res.status(404).json({ error: "No data found for the given parameters" });
             }
         
             // Buscar y actualizar el registro en la base de datos
-            university_academic_performance_db.update(
-                { degree, location, academicYear }, // Criterio de búsqueda
-                { $set: req.body }, // Nuevos valores
-                {}, // Opciones (vacío porque no queremos cambiar múltiples registros)
-                (err, numReplaced) => {
+            university_academic_performance_db.update({ degree, location, academicYear }, { $set: body }, { multi: false },(err, numReplaced) => {
                     if (err) {
                         return res.status(500).json({ error: "Database error" });
                     }
                     if (numReplaced === 0) {
-                        return res.status(404).json({ error: "Record not found" });
+                        return res.status(404).json({ error: "No record found to update" });
                     }
                     res.status(200).json({ message: "Record updated successfully" });
                 }
             );
         });
 
-
-
-
-        
-        
         // Elimina todo
         app.delete(BASE_API + "/university-academic-performance", (req, response) => {
             console.log("DELETE request received - Removing all records");
@@ -279,16 +229,11 @@ const university_academic_performance = [
                     return response.status(500).json({ error: "Database error (Code 01)" });
                 }
                 
-                if (numRemoved > 0) {
+                else
                     return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
-                } else {
-                    return response.status(404).json({ error: "No records found to delete" });
-                }
+                
             });
         });
-        
-        
-        
         
         // Eliminar un registro existente
         app.delete(BASE_API+"/university-academic-performance/:degree/:location/:academicYear",(req,response)=>{
@@ -303,7 +248,7 @@ const university_academic_performance = [
                     response.status(500).send("Error code 01");
                 }else{
                     if(numRemoved >= 1){
-                        response.sendStatus(200);
+                        return response.status(200).json({ message: "records deleted successfully" });;
                     }else{
                         response.sendStatus(404);
                     }
