@@ -173,9 +173,9 @@ const university_academic_performance = [
                     if (err) {
                         return response.status(500).json({ error: "Error inserting data" });
                     }
-                    response.status(201).json({ message: "successfully created" });
+                    response.status(201).json({message: "Created successfully"});
                 });
-            });
+             });
         });
 
          // POST a uno

@@ -153,6 +153,16 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
 							"pm.test(\"Status is 201\", function () {\r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
