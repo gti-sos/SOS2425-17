@@ -52,6 +52,9 @@ app.get("/", (req, res) => {
 app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
 
 
+app.get("/", (request,response)=>{
+    response.send("Hello from the server, the sos2425-17 team greets you");
+}) //Esto es para que cuando entres al localhost:16078 te lleve a una pagina que tenga un mensaje Hello from the server
 
 
 loadBackendJavier(app) //aqui pongo la funcion loadBackend importada de src/back para que se muestre en pantalla
