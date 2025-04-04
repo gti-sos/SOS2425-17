@@ -1,6 +1,15 @@
 console.log("Init script");
 const BASE_API = "/api/v1";
 
+
+
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
 import express from "express";
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
@@ -36,7 +45,9 @@ const students_satisfaction = [
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
-app.use(express.static("./public/index.html")); //Esto es para que ponga el html  ya que coje la carpeta static 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
 
 app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
 
