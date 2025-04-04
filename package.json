@@ -10,10 +10,16 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start" : "node index.js",
-    "test-local-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-local.json",
-    "test-online-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-online.json",
-    "test-university-demands": "npm run test-local-jav"
+    "start": "node index.js",
+    "test-api-local-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-local.json",
+    "test-api-online-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-online.json",
+    "test-local-university-demands": "start-server-and-test start http:localhost:16078 test-api-local-demands",
+    "test-university-demands": "npm run test-local-university-demands",
+
+    "test-api-local-academic": "npx newman run tests/back/university-academic-performance/Collection.json -e tests/back/Public/api-env-local.json",
+    "test-api-online-academic": "npx newman run tests/back/university-academic-performance/Collection.json -e tests/back/Public/api-env-online.json",
+    "test-local-academic": "start-server-and-test start http:localhost:16078 test-api-local-academic",
+    "test-university-academic": "npm run test-local-academic" 
   },
   "repository": {
     "type": "git",
@@ -24,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/gti-sos/SOS2425-17/issues"
   },
-  "homepage": "https://github.com/gti-sos/SOS2425-17#readme"
+  "homepage": "https://github.com/gti-sos/SOS2425-17#readme",
+  "devDependencies": {
+    "start-server-and-test": "^2.0.11"
+  }
 }
