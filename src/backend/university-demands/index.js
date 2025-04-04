@@ -28,13 +28,13 @@ const university_demands = [
     { location: "Cáceres", degree: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
 ];
 
-db.find({},(err,demands)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
+//db.find({},(err,demands)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
      //El err esque te devolvera error y el contacts es lo que te va a devolver 
-     if (demands.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
-         db.insert(university_demands);
-     }
- });
- 
+  //   if (demands.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
+    //     db.insert(university_demands);
+     //}
+ //});
+
 function loadBackendJavier(app){
     app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/university-demands
@@ -85,16 +85,14 @@ function loadBackendJavier(app){
             }
     
             if (count === 0) {
-    
-                // Insertar datos en la base de datos
                 db.insert(university_demands, (err, newDocs) => {
                     if (err) {
                         return response.status(500).json({ error: "Error inserting initial data" });
                     }
-                    response.status(201).json("Datos insertados con éxito"); // Devuelve los datos insertados
+                    response.status(201).json({message: "the data was inserted successfully"}); // Devuelve los datos insertados
                 });
             } else {
-                response.status(200).json({ message: "Database already initialized" });
+                response.status(409).json({ message: "empty the database first to initialize it" });
             }
         });
     });
@@ -198,9 +196,10 @@ function loadBackendJavier(app){
     
     // Eliminar todos los registros
     app.delete(BASE_API+"/university-demands",(req,response)=>{
-    
+        
+        console.log("DELETE request received - Removing all records");
             
-        db.remove({},{},(err,numRemoved)=>{
+        db.remove({},{multi: true},(err,numRemoved)=>{
             if(err){
                 response.status(500).send("Error code 01");                
                 console.error(`ÈRROR: ${err}`);
@@ -214,7 +213,6 @@ function loadBackendJavier(app){
         });
     
     });
-    
     
     // Eliminar un registro existente
     app.delete(BASE_API+"/university-demands/:degree/:location/:academicYear",(req,response)=>{
