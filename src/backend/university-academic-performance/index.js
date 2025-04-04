@@ -200,11 +200,7 @@ const university_academic_performance = [
                 body.dropoutRate, body.graduationRate, body.academicYear
             ].some(value => value === undefined || value === null || value === "")) 
             {
-                return res.status(400).json({ error: "Missing required fields" });
-            }
-        
-            if (body.degree !== degree || body.location !== location || body.academicYear !== academicYear) {
-                return res.status(404).json({ error: "No data found for the given parameters" });
+                return res.status(400).json({error: "All fields needs a value"});
             }
         
             // Buscar y actualizar el registro en la base de datos
@@ -260,22 +256,3 @@ const university_academic_performance = [
 
     
     export {loadBackendPablo}
-
-   
-
-       
-    
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
