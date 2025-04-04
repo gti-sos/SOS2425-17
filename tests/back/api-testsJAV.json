@@ -1,0 +1,713 @@
+{
+	"info": {
+		"_postman_id": "632ee2ee-6046-4673-ab69-e79b75668cda",
+		"name": "API Javier",
+		"description": "This is the api of university-demands",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42357894",
+		"_collection_link": "https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/42357894-632ee2ee-6046-4673-ab69-e79b75668cda?action=share&source=collection_link&creator=42357894"
+	},
+	"item": [
+		{
+			"name": "GET /university-demands",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ESPECIFICO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ERROR 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"location\": \"Huelva\",\r\n\"degree\": \"Enfermería\",\r\n\"over45\": 5,\r\n\"spanishFirst\": 57,\r\n\"foreigners\": null,\r\n\"graduated\": 8,\r\n\"academicYear\": \"2016-2017\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Enfermería/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Enfermería",
+						"Huelva",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /university-demands",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"location\": \"Almendralejo\",\r\n\"degree\": \"Educación Pera\",\r\n\"over45\": 1,\r\n\"spanishFirst\": 5,\r\n\"foreigners\": 1,\r\n\"graduated\": 5,\r\n\"academicYear\": \"2016-2017\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ERROR 409",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"location\": \"Almendralejo\",\r\n\"degree\": \"Educación Infantil\",\r\n\"over45\": 1,\r\n\"spanishFirst\": 5,\r\n\"foreigners\": 1,\r\n\"graduated\": 5,\r\n\"academicYear\": \"2016-2017\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ERROR 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"degree\": \"Almendralejo\",\r\n\"location\": \"Educación Infantil\",\r\n\"spanishFirst\": 5,\r\n\"foreigners\": 1,\r\n\"graduated\": 5,\r\n\"academicYear\": \"2016-2017\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ERROR 405",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Ingeniería Electrónica y Automática/Badajoz/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Ingeniería Electrónica y Automática",
+						"Badajoz",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE  ESPECIFICO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Pera",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE  ERROR 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Pera",
+						"Huelva",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT ESPECIFICO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"location\": \"Almendralejo\",\r\n        \"degree\": \"Educación Infantil\",\r\n        \"over45\": 1,\r\n        \"spanishFirst\": 5,\r\n        \"foreigners\": 1,\r\n        \"graduated\": 5,\r\n        \"academicYear\": \"2016-2017\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT ERROR 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"location\": \"Badajoz7\",\r\n\"degree\": \"Ingeniería Electrónica y Automática\",\r\n\"spanishFirst\": 8,\r\n\"foreigners\": 9,\r\n\"graduated\": 65\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT 405",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"ciudad\": \"Almendralejo\",\r\n\"grado\": \"Educación Pepe\",\r\n\"over45\": 1,\r\n\"spanishFirst\": 5,\r\n\"foreigners\": 1,\r\n\"graduated\": 5,\r\n\"academicYear\": \"2016-2017\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT ERROR 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"location\": \"Huelva\",\r\n        \"degree\": \"Educación Infantil\",\r\n        \"over45\": 1,\r\n        \"spanishFirst\": 10,\r\n        \"foreigners\": 1,\r\n        \"graduated\": 5,\r\n        \"academicYear\": \"2016-2017\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Huelva",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /university-demands",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Para ver el resultado de los test te vas a Test Results\r",
+							"\r",
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
