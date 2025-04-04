@@ -240,6 +240,12 @@ function loadBackendJavier(app){
         });
     
     });
+    
+    //Esto es para que te redirija a la documentacion de la api cuando pongas /base_api//university-demands/docs
+    app.get(BASE_API+"/university-demands/docs",(request,response)=>{
+        response.redirect("https://documenter.getpostman.com/view/42357894/2sB2cUAN1D");
+    });
+
 }
 
 export {loadBackendJavier}
