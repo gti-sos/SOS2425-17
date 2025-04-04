@@ -1,5 +1,6 @@
 //API JAVIER 
 
+
 import dataStore from "nedb"; //Esto es para importar la base de datos ndb que es un paquete que te descargas con node
 const BASE_API = "/api/v1"; //Con esto lo que hago es crear la URL base de la api y digo que para encontrar la api pongas esa direccion 
 
@@ -54,28 +55,49 @@ function loadBackendJavier(app){
             const degree= req.params.degree
             const location = req.params.location;
             const academicYear = req.params.academicYear
-    // Filtramos los datos según los parámetros recibidos
-        const filteredData = university_demands.filter(item =>item.degree === degree &&item.location === location &&item.academicYear === academicYear);
-    
-    if (filteredData.length === 0) {
-        return response.status(404).json({ error: "No data found for the given parameters" });
-    }
-    
-    // Enviamos los datos filtrados en formato JSON
-    response.send(JSON.stringify(filteredData))
-        });
+
+            db.find({ "degree": degree, "location": location, "academicYear": academicYear }, (err, demands) => {
+                if (err) {
+                    response.status(500).send("Internal Server Error");
+                    return;
+                }
         
+                if (demands.length >= 1) {
+                    response.status(200).json(demands.map((c) => {
+                        delete c._id;
+                        return c;
+                    }));
+                } else {
+                    response.sendStatus(404);
+                }
+            });
+    
+        });
     
     //Cargar datos iniciales
-    let myNullArray1=[]
-    app.get(BASE_API+"/university-demands/loadInitialData",(request,response)=>{
-            if (myNullArray1.length ===0){
-                myNullArray1.push(...university_demands) // Los puntos suspensivos sirven para añadirlos de 1 en 1
+    app.get(BASE_API + "/university-demands/loadInitialData", (request, response) => {
+        console.log("Loading initial data into the database...");
+    
+        // Verificar si la base de datos ya tiene datos
+        db.count({}, (err, count) => {
+            if (err) {
+                return response.status(500).json({ error: "Database error" });
             }
-                
-                response.send(JSON.stringify(myNullArray1));
-        
-    })
+    
+            if (count === 0) {
+    
+                // Insertar datos en la base de datos
+                db.insert(university_demands, (err, newDocs) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Error inserting initial data" });
+                    }
+                    response.status(201).json("Datos insertados con éxito"); // Devuelve los datos insertados
+                });
+            } else {
+                response.status(200).json({ message: "Database already initialized" });
+            }
+        });
+    });
     
     //POST  
     
@@ -86,26 +108,31 @@ function loadBackendJavier(app){
         console.log(`<${request.body}>`);
     //location,degree
         const body = request.body
-    
-        let newUniversityDemand = request.body; //Creo una variable donde guardo el nuevo contacto y para ello hago request.body porque 
-        //en postman se esqcribe en body y haces request.body para que te coja el codigo de body de postman
-    
-        //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
-    
-        //Si existe algun campo que no se ha rellenado , mostrar error 
+
         if (!body.location || !body.degree || !body.over45 || !body.spanishFirst || !body.foreigners || !body.graduated || !body.academicYear) {
             return response.status(400).json({ error: "Missing required fields" });
         }
     
-        //Si esos campos son iguales que los nuevos que pones sale error 
-        if (university_demands.find(d => d.academicYear === body.academicYear && d.location === body.location && d.degree === body.degree)) {
-            return response.status(409).json({ error: "Record already exists" });
-        }
-        
-        university_demands.push(newUniversityDemand); //Para enviar los datos 
+        db.findOne({ degree: body.degree, academicYear: body.academicYear, location: body.location }, (err, existingRecord) => {
+            if (err) {
+                return response.status(500).json({ error: "Database error" });
+            }
     
-        response.sendStatus(201); //Para que la persona vea que esos datos se han enviado . Esto siempre se hace con el sendStatus
+            if (existingRecord) {
+                return response.status(409).json({ error: "Record already exists" });
+            }
+    
+            // Insertar el nuevo registro en la base de datos
+            db.insert(body, (err, newDoc) => {
+                if (err) {
+                    return response.status(500).json({ error: "Error inserting data" });
+                }
+                delete newDoc._id;
+                response.sendStatus(201);;
+            });
+        }); 
     });
+
     
     //Post ERROR 405
     
@@ -113,21 +140,54 @@ function loadBackendJavier(app){
         res.sendStatus(405);
     });
     
-    // Modificar un registro existente
+    // PUT . Modificar un registro existente //Mirar porque no esta bien 
     app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
-        const degree= req.params.degree
+        const degree = req.params.degree;
         const location = req.params.location;
         const academicYear = req.params.academicYear;
-        
-        
-        const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-        if (index === -1) return res.status(404).json({ error: "Record not found" });
-        if (req.body.degree !== degree || req.body.location !==location || req.body.academicYear !==academicYear) {
-            return res.status(400).json({ error: "degree, location and academicYear in body must match URL parameters" });
+        const body = req.body;
+    
+        // Validar que todos los campos esten en el body 
+        if (
+            !body.location || !body.degree || !body.over45 || !body.spanishFirst ||
+            !body.foreigners || !body.graduated || !body.academicYear
+        ) {
+            return res.status(400).json({ error: "Missing required fields" });
         }
-        university_demands[index] = { ...university_demands[index], ...req.body };
-        res.status(200).json({ message: "Record updated successfully" });
+    
+        // Validar que los datos del body coincidan con los de la URL
+        if (
+            body.degree !== degree ||
+            body.location !== location ||
+            body.academicYear !== academicYear
+        ) {
+            return res.status(400).json({
+                error: "degree, location and academicYear in body must match URL parameters"
+            });
+        }
+    
+        //  Hacer el put
+        db.update(
+            { degree: degree, location: location, academicYear: academicYear },
+            { $set: body },
+            {},
+            (err, numUpdated) => {
+                if (err) {
+                    console.error("Error al actualizar en la base de datos:", err);
+                    return res.status(500).json({ error: "Internal Error" });
+                }
+    
+                if (numUpdated === 0) {
+                    return res.status(404).json({
+                        error: "No record found to update"
+                    });
+                }
+    
+                return res.sendStatus(200); // Solo devuelve 200 OK, sin datos
+            }
+        );
     });
+    
     
     //FALLO DE PUT a todos los datos
     app.put(BASE_API + "/university-demands",(req,res)=>{    
@@ -137,26 +197,48 @@ function loadBackendJavier(app){
     
     
     // Eliminar todos los registros
-    app.delete(BASE_API + "/university-demands", (req, res) => {
-        console.log("DELETE request received");
+    app.delete(BASE_API+"/university-demands",(req,response)=>{
     
-        university_demands = [];
-        
-        res.status(200).json({ message: "All records deleted successfully" });
+            
+        db.remove({},{},(err,numRemoved)=>{
+            if(err){
+                response.status(500).send("Error code 01");                
+                console.error(`ÈRROR: ${err}`);
+            }else{
+                if(numRemoved >= 1){
+                    response.sendStatus(200);
+                }else{
+                    response.sendStatus(404);
+                }
+            }
+        });
+    
     });
     
     
     // Eliminar un registro existente
-    app.delete(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
-        const degree= req.params.degree
+    app.delete(BASE_API+"/university-demands/:degree/:location/:academicYear",(req,response)=>{
+    
+        const degree= req.params.degree;
         const location = req.params.location;
-        const academicYear = req.params.academicYear
+        const academicYear = req.params.academicYear;
+
+        console.log(`DELETE to /university-demands/${degree}/${location},${academicYear}`);
+       
+            
+        db.remove({"degree" : degree , "location" : location , "academicYear" : academicYear},{},(err,numRemoved)=>{
+            if(err){
+                response.status(500).send("Error code 01");                
+                console.error(`ÈRROR: ${err}`);
+            }else{
+                if(numRemoved >= 1){
+                    response.sendStatus(200);
+                }else{
+                    response.sendStatus(404);
+                }
+            }
+        });
     
-    
-        const index = university_demands.findIndex(d => d.degree === degree && d.location === location && d.academicYear === academicYear);
-        if (index === -1) return res.status(404).json({ error: "Record not found" });
-        university_demands.splice(index, 1);
-        res.status(200).json({ message: "Record deleted successfully" });
     });
 }
 
