@@ -10,7 +10,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start" : "node index.js",
+    "test-local-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-local.json",
+    "test-online-demands": "npx newman run tests/back/university-demands/api-tests.json -e tests/back/Public/api-env-online.json",
+    "test-university-demands": "npm run test-local-jav"
   },
   "repository": {
     "type": "git",
