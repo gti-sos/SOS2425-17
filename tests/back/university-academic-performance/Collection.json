@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "6292f6da-e345-4bc1-aaad-6faf089cd44f",
+		"name": "API Pablo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43694449",
+		"_collection_link": "https://hola11-0443.postman.co/workspace/98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-6292f6da-e345-4bc1-aaad-6faf089cd44f?action=share&source=collection_link&creator=43694449"
+	},
+	"item": [
+		{
+			"name": "Initial Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/loadInitialData",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"loadInitialData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Uno en concreto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error no encuentra Uno en concreto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN ENCUENTRAME ESTA/ALMENDRALEJO/2055",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN ENCUENTRAME ESTA",
+						"ALMENDRALEJO",
+						"2055"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Función normal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 48.12, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error uno en concreto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 48.12, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error falta un campo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"degree\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n    \"location\": \"ALMENDRALEJO\",\r\n    \"dropoutSecondCourse\": 0,\r\n    \"efficiencyRate\": 96.58,\r\n    \"dropoutThirdCourse\": 0,\r\n    \"successRate\": 99.39,\r\n    \"dropoutFirstCourse\": 3.33,\r\n    \"dropoutsThirdCourse\": 0,\r\n    \"progressNormalized\": 1,\r\n    \"dropoutsFirstCourse\": 3,\r\n    \"performanceRate\": 97.32,\r\n    \"cohortStudents\": 9,\r\n    \"dropoutsSecondCourse\": 0\r\n    \r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error ya existe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 48.12, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edita uno",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edita Uno no Existe",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016ww",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016ww"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edita muchos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edita Uno Faltan campos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"degree\": \"GRADO EN COMUNICACIÓN AUDIOVISUAL\",\r\n        \"location\": \"BADAJOZ\",\r\n        \"dropoutFirstCourse\": 4.69,\r\n        \"efficiencyRate\": 92.2,\r\n        \"dropoutSecondCourse\": 0,\r\n        \"successRate\": 92.37,\r\n        \"dropoutThirdCourse\": 15.79,\r\n        \"dropoutsThirdCourse\": 0,\r\n        \"progressNormalized\": 0.88,\r\n        \"dropoutsFirstCourse\": 5,\r\n        \"performanceRate\": 90.31,\r\n        \"cohortStudents\": 64,\r\n        \"dropoutsSecondCourse\": 3,\r\n        \"dropoutRate\": 2.21,\r\n        \"graduationRate\": 50.65   }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN PRIMARIA/CÁCERES/2018-2019",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN PRIMARIA",
+						"CÁCERES",
+						"2018-2019"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error Borra Uno No existe",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN ENCUENTRAME ESTA/ALMENDRALEJO/2055",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN ENCUENTRAME ESTA",
+						"ALMENDRALEJO",
+						"2055"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borra Uno",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borra Todo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
