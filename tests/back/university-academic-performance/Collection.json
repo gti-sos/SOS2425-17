@@ -550,7 +550,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2017-2018",
 					"host": [
 						"{{BASE_URL}}"
 					],
