@@ -28,7 +28,13 @@ const university_demands = [
     { location: "Cáceres", degree: "Grado en Educación Primaria", over45: 68, spanishFirst: null, foreigners: 71, graduated: 140, academicYear: "2016-2017" }        
 ];
 
-
+db.find({},(err,demands)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
+     //El err esque te devolvera error y el contacts es lo que te va a devolver 
+     if (demands.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
+         db.insert(university_demands);
+     }
+ });
+ 
 function loadBackendJavier(app){
     app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
         //para que sea /api/v1/university-demands
