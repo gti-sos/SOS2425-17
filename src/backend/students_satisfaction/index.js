@@ -126,9 +126,11 @@ app.post(BASE_API+"/students_satisfaction",(request,response)=>{ //Para hacer un
 app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad",(req,res)=>{    
     res.sendStatus(405);
 });
+
+
 app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-    const { carrera, ciudad } = req.params;  // Extraemos carrera y ciudad desde los parámetros de la URL
-    const body = req.body;  // Extraemos el cuerpo de la solicitud
+    const { carrera, ciudad } = req.params;  // Parámetros de la URL
+    const body = req.body;  // Cuerpo de la solicitud
 
     // Verificación de que todos los campos requeridos están presentes en el cuerpo de la solicitud
     if (!body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi || !body.carrera || !body.ciudad) {
@@ -137,8 +139,14 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         });
     }
 
-    // Comprobación de que los valores en el cuerpo coinciden con los parámetros de la URL
-    if (body.carrera !== carrera || body.ciudad !== ciudad) {
+    // Normalizamos tanto los parámetros de la URL como los del cuerpo de la solicitud (sin tildes y en minúsculas)
+    const carreraParam = removeAccents(carrera);
+    const ciudadParam = removeAccents(ciudad);
+    const carreraBody = removeAccents(body.carrera);
+    const ciudadBody = removeAccents(body.ciudad);
+
+    // Comprobamos si los valores en el cuerpo coinciden con los valores de la URL
+    if (carreraParam !== carreraBody || ciudadParam !== ciudadBody) {
         return res.status(400).json({
             error: `The 'carrera' and 'ciudad' in the body must match the URL parameters. You provided 'carrera': ${body.carrera}, 'ciudad': ${body.ciudad}`
         });
@@ -167,7 +175,6 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         }
     );
 });
-
 
 //FALLO DE PUT a todos los datos
 app.put(BASE_API + "/students_satisfaction",(req,res)=>{            
