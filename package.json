@@ -21,6 +21,7 @@
     "test-university-academic": "npm run test-local-academic"
   },
   "repository": {
+  
     "type": "git",
     "url": "git+https://github.com/gti-sos/SOS2425-17.git"
   },

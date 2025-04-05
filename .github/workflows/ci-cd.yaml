@@ -1,0 +1,20 @@
+name: CI / CD
+on: [push,pull_request]
+jobs:
+  ci-cd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependences
+        run: npm install
+      - name: Run tests - university-demands
+        run: npm run test-local-university-demands
+      - name: Run tests - university-academic-performance
+        run: npm run test-local-academic  
+      - name: Deploy to Render
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          
