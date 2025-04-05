@@ -17,12 +17,6 @@ const students_satisfaction = [
     { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
     { satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ" }
 ];
-db.find({},(err,demands)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
-    //El err esque te devolvera error y el contacts es lo que te va a devolver 
-    if (demands.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
-        db.insert(students_satisfaction);
-    }
-});
 
 //API ALEJANDRO 
 function loadBackendAlejandro(app){
