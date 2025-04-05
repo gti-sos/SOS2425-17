@@ -127,47 +127,47 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad",(req,res)=>{
     res.sendStatus(405);
 });
 app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-    const { carrera, ciudad } = req.params;
-    const body = req.body;
+    const { carrera, ciudad } = req.params;  // Extraemos carrera y ciudad desde los parámetros de la URL
+    const body = req.body;  // Extraemos el cuerpo de la solicitud
 
-    if (
-        !body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi || !body.carrera ||
-        !body.ciudad 
-    ) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    // Validar que carrera y ciudad en el body coincidan con los de la URL
-    if (
-        body.carrera !== carrera ||
-        body.ciudad !== ciudad 
-    ) {
-        return res.status(400).json({
-            error: "carrera and ciudad in body must match URL parameters"
+    // Verificación de que todos los campos requeridos están presentes en el cuerpo de la solicitud
+    if (!body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi || !body.carrera || !body.ciudad) {
+        return res.status(400).json({ 
+            error: "Missing required fields. Ensure 'satisfaccion_total', 'sat_estudiantes', 'satisfaccion_pdi', 'carrera', and 'ciudad' are all included." 
         });
     }
 
-    //  Hacer el put
+    // Comprobación de que los valores en el cuerpo coinciden con los parámetros de la URL
+    if (body.carrera !== carrera || body.ciudad !== ciudad) {
+        return res.status(400).json({
+            error: `The 'carrera' and 'ciudad' in the body must match the URL parameters. You provided 'carrera': ${body.carrera}, 'ciudad': ${body.ciudad}`
+        });
+    }
+
+    // Realizamos la actualización en la base de datos
     db.update(
-        { carrera: carrera, ciudad: ciudad},
-        { $set: body },
-        {},
+        { carrera: carrera, ciudad: ciudad },  // Filtro para encontrar el registro a actualizar
+        { $set: body },  // Nuevos valores que queremos establecer
+        {},  // Configuración adicional (vacío en este caso)
         (err, numUpdated) => {
             if (err) {
                 console.error("Error al actualizar en la base de datos:", err);
-                return res.status(500).json({ error: "Internal Error" });
+                return res.status(500).json({ error: "Internal Server Error. There was an issue updating the record." });
             }
 
+            // Si no se encuentra el registro, respondemos con un 404
             if (numUpdated === 0) {
                 return res.status(404).json({
-                    error: "No record found to update"
+                    error: "No record found to update. Ensure the 'carrera' and 'ciudad' exist in the database."
                 });
             }
 
-            return res.sendStatus(200); // Solo devuelve 200 OK, sin datos
+            // Si la actualización es exitosa, respondemos con un 200 OK
+            return res.sendStatus(200);
         }
     );
 });
+
 
 //FALLO DE PUT a todos los datos
 app.put(BASE_API + "/students_satisfaction",(req,res)=>{            
