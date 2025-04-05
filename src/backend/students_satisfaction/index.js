@@ -37,32 +37,26 @@ function removeAccents(str) {
 }
 
 // Obtener registros por carrera y ciudad
-app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
-    console.log("New GET to /students_satisfaction/:carrera/:ciudad");
-
+app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
     const carreraParam = removeAccents(req.params.carrera.toLowerCase());
     const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
 
-    // Buscar en la base de datos ignorando mayúsculas, minúsculas y tildes
-    db.find({}, (err, demands) => {
-        if (err) {
-            response.status(500).send("Internal Server Error");
-            return;
-        }
+    console.log(`DELETE to /students_satisfaction/${carreraParam}/${ciudadParam}`);
 
-        const filtered = demands.filter(record =>
-            removeAccents(record.carrera.toLowerCase()) === carreraParam &&
-            removeAccents(record.ciudad.toLowerCase()) === ciudadParam
+    db.find({}, (err, records) => {
+        if (err) return response.status(500).send("Database error");
+
+        const match = records.find(r =>
+            removeAccents(r.carrera.toLowerCase()) === carreraParam &&
+            removeAccents(r.ciudad.toLowerCase()) === ciudadParam
         );
 
-        if (filtered.length > 0) {
-            response.status(200).json(filtered.map((c) => {
-                delete c._id;
-                return c;
-            }));
-        } else {
-            response.sendStatus(404);
-        }
+        if (!match) return response.sendStatus(404);
+
+        db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
+            if (err) return response.status(500).send("Error deleting");
+            return response.sendStatus(numRemoved > 0 ? 200 : 404);
+        });
     });
 });
 
