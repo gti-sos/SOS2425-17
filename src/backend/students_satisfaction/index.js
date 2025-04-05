@@ -14,7 +14,7 @@ const students_satisfaction = [
     { satisfaccion_total: 4.57, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58, carrera: "GRADO EN MEDICINA", ciudad: "BADAJOZ" },
     { satisfaccion_total: 8.28, sat_estudiantes: null, satisfaccion_pdi: 4.58, carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA" },
     { satisfaccion_total: 8.27, sat_estudiantes: 7.41, satisfaccion_pdi: 3.89, carrera: "GRADO EN DERECHO", ciudad: "CÁCERES" },
-    { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ" },
+    { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA" },
     { satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ" }
 ];
 
@@ -37,26 +37,32 @@ function removeAccents(str) {
 }
 
 // Obtener registros por carrera y ciudad
-app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
+app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
+    console.log("New GET to /students_satisfaction/:carrera/:ciudad");
+
     const carreraParam = removeAccents(req.params.carrera.toLowerCase());
     const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
 
-    console.log(`DELETE to /students_satisfaction/${carreraParam}/${ciudadParam}`);
+    // Buscar en la base de datos ignorando mayúsculas, minúsculas y tildes
+    db.find({}, (err, demands) => {
+        if (err) {
+            response.status(500).send("Internal Server Error");
+            return;
+        }
 
-    db.find({}, (err, records) => {
-        if (err) return response.status(500).send("Database error");
-
-        const match = records.find(r =>
-            removeAccents(r.carrera.toLowerCase()) === carreraParam &&
-            removeAccents(r.ciudad.toLowerCase()) === ciudadParam
+        const filtered = demands.filter(record =>
+            removeAccents(record.carrera.toLowerCase()) === carreraParam &&
+            removeAccents(record.ciudad.toLowerCase()) === ciudadParam
         );
 
-        if (!match) return response.sendStatus(404);
-
-        db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
-            if (err) return response.status(500).send("Error deleting");
-            return response.sendStatus(numRemoved > 0 ? 200 : 404);
-        });
+        if (filtered.length > 0) {
+            response.status(200).json(filtered.map((c) => {
+                delete c._id;
+                return c;
+            }));
+        } else {
+            response.sendStatus(404);
+        }
     });
 });
 
