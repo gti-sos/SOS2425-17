@@ -31,21 +31,32 @@ function loadBackendAlejandro(app){
             });
         });
 
-    // Obtener registros por carrera y ciudad
-    app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-        //para que sea /api/v1/contacts
-            console.log("New get to /students_satisfaction/:carrera/:ciudad")
-            const carrera= req.params.carrera
-            const ciudad = req.params.ciudad;
-    // Filtramos los datos según los parámetros recibidos
-    db.find({ "carrera": carrera, "ciudad": ciudad}, (err, demands) => {
+    // Función para quitar tildes
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+// Obtener registros por carrera y ciudad
+app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
+    console.log("New GET to /students_satisfaction/:carrera/:ciudad");
+
+    const carreraParam = removeAccents(req.params.carrera.toLowerCase());
+    const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
+
+    // Buscar en la base de datos ignorando mayúsculas, minúsculas y tildes
+    db.find({}, (err, demands) => {
         if (err) {
             response.status(500).send("Internal Server Error");
             return;
         }
 
-        if (demands.length >= 1) {
-            response.status(200).json(demands.map((c) => {
+        const filtered = demands.filter(record =>
+            removeAccents(record.carrera.toLowerCase()) === carreraParam &&
+            removeAccents(record.ciudad.toLowerCase()) === ciudadParam
+        );
+
+        if (filtered.length > 0) {
+            response.status(200).json(filtered.map((c) => {
                 delete c._id;
                 return c;
             }));
@@ -53,7 +64,9 @@ function loadBackendAlejandro(app){
             response.sendStatus(404);
         }
     });
-        });
+});
+
+
 
         app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
             console.log("Loading initial data into the database...");

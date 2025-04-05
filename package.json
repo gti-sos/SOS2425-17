@@ -2,7 +2,8 @@
   "dependencies": {
     "cool-ascii-faces": "^1.3.4",
     "express": "^4.21.2",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "normalize-text": "^2.6.0"
   },
   "name": "sos2425-17",
   "version": "1.0.0",
@@ -21,7 +22,6 @@
     "test-university-academic": "npm run test-local-academic"
   },
   "repository": {
-  
     "type": "git",
     "url": "git+https://github.com/gti-sos/SOS2425-17.git"
   },
