@@ -126,41 +126,25 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad",(req,res)=>{
 
 
 app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-    const { carrera, ciudad } = req.params;  // Parámetros de la URL
-    const body = req.body;  // Cuerpo de la solicitud
-
-    // Normalizamos tanto los parámetros de la URL como los del cuerpo de la solicitud (sin tildes y en minúsculas)
-    const carreraParam = removeAccents(carrera.toLowerCase());
-    const ciudadParam = removeAccents(ciudad.toLowerCase());
-    const carreraBody = removeAccents(body.carrera.toLowerCase());
-    const ciudadBody = removeAccents(body.ciudad.toLowerCase());
-
-    // Comprobamos si los valores en el cuerpo coinciden con los valores de la URL
-    if (carreraParam !== carreraBody || ciudadParam !== ciudadBody) {
-        return res.status(400).json({
-            error: `The 'carrera' and 'ciudad' in the body must match the URL parameters. You provided 'carrera': ${body.carrera}, 'ciudad': ${body.ciudad}`
-        });
+    const { carrera, ciudad } = req.params;
+    const body = req.body;
+    if ([
+        body.satisfaccion_total, body.sat_estudiantes, body.satisfaccion_pdi, body.carrera, 
+        body.ciudad
+    ].some(value => value === undefined || value === null || value === "")) 
+    {
+        return res.status(400).json({error: "All fields needs a value"});
     }
 
-    // Realizamos la actualización en la base de datos
-    db.update(
-        { carrera: carrera, ciudad: ciudad },  // Filtro para encontrar el registro a actualizar
-        { $set: body },  // Nuevos valores que queremos establecer
-        {},  // Configuración adicional (vacío en este caso)
-        (err, numUpdated) => {
+    // Buscar y actualizar el registro en la base de datos
+    db.update({ carrera, ciudad }, { $set: body }, { multi: false },(err, numReplaced) => {
             if (err) {
-                return res.status(500).json({ error: "Internal Server Error. There was an issue updating the record." });
+                return res.status(500).json({ error: "Database error" });
             }
-
-            // Si no se encuentra el registro, respondemos con un 404
-            if (numUpdated === 0) {
-                return res.status(404).json({
-                    error: "No record found to update. Ensure the 'carrera' and 'ciudad' exist in the database."
-                });
+            if (numReplaced === 0) {
+                return res.status(404).json({ error: "No record found to update" });
             }
-
-            // Si la actualización es exitosa, respondemos con un 200 OK
-            return res.sendStatus(200);
+            res.status(200).json({ message: "Record updated successfully" });
         }
     );
 });
