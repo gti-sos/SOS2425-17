@@ -68,6 +68,7 @@ app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) =>
 
 
 
+
         app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
             console.log("Loading initial data into the database...");
         
