@@ -198,23 +198,38 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response)
     const carreraParam = removeAccents(req.params.carrera.toLowerCase());
     const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
 
-    console.log(`DELETE to /students_satisfaction/${carreraParam}/${ciudadParam}`);
+    console.log(`DELETE request to /students_satisfaction/${carreraParam}/${ciudadParam}`);
 
     db.find({}, (err, records) => {
-        if (err) return response.status(500).send("Database error");
+        if (err) {
+            console.error("Error finding records:", err);
+            return response.status(500).send("Database error");
+        }
+
+        // Log the records to see what is being retrieved from the database
+        console.log("Records found:", records);
 
         const match = records.find(r =>
             removeAccents(r.carrera.toLowerCase()) === carreraParam &&
             removeAccents(r.ciudad.toLowerCase()) === ciudadParam
         );
 
-        if (!match) return response.sendStatus(404);
+        if (!match) {
+            console.log("No matching record found");
+            return response.sendStatus(404); // No match found, send 404
+        }
 
         db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
-            if (err) return response.status(500).send("Error deleting");
+            if (err) {
+                console.error("Error deleting record:", err);
+                return response.status(500).send("Error deleting");
+            }
+
+            console.log(`Number of records removed: ${numRemoved}`);
             return response.sendStatus(numRemoved > 0 ? 200 : 404);
         });
     });
 });
+
 }
 export {loadBackendAlejandro}
