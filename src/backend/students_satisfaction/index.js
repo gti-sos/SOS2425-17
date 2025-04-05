@@ -187,26 +187,27 @@ app.delete(BASE_API+"/students_satisfaction",(req,response)=>{
 
 });
 // Eliminar un registro especifico
-app.delete(BASE_API+"/students_satisfaction/:carrera/:ciudad",(req,response)=>{
-    
-    const carrera= req.params.carrera;
-    const ciudad = req.params.ciudad;
-    console.log(`DELETE to /students_satisfaction/${carrera}/${ciudad}`);
-   
-        
-    db.remove({"carrera" : carrera , "ciudad" : ciudad },{},(err,numRemoved)=>{
-        if(err){
-            response.status(500).send("Error code 01");                
-            console.error(`ÈRROR: ${err}`);
-        }else{
-            if(numRemoved >= 1){
-                response.sendStatus(200);
-            }else{
-                response.sendStatus(404);
-            }
-        }
-    });
+app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
+    const carreraParam = removeAccents(req.params.carrera.toLowerCase());
+    const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
 
+    console.log(`DELETE to /students_satisfaction/${carreraParam}/${ciudadParam}`);
+
+    db.find({}, (err, records) => {
+        if (err) return response.status(500).send("Database error");
+
+        const match = records.find(r =>
+            removeAccents(r.carrera.toLowerCase()) === carreraParam &&
+            removeAccents(r.ciudad.toLowerCase()) === ciudadParam
+        );
+
+        if (!match) return response.sendStatus(404);
+
+        db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
+            if (err) return response.status(500).send("Error deleting");
+            return response.sendStatus(numRemoved > 0 ? 200 : 404);
+        });
+    });
 });
 }
 export {loadBackendAlejandro}
