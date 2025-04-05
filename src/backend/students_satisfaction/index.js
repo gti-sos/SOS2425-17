@@ -17,7 +17,9 @@ const students_satisfaction = [
     { satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA" },
     { satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ" }
 ];
-
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
 //API ALEJANDRO 
 function loadBackendAlejandro(app){
     app.get(BASE_API+"/students_satisfaction", (request,response)=>{
@@ -30,11 +32,6 @@ function loadBackendAlejandro(app){
                 }),null,2));
             });
         });
-
-    // Función para quitar tildes
-function removeAccents(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
 
 // Obtener registros por carrera y ciudad
 app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response) => {
@@ -132,18 +129,11 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
     const { carrera, ciudad } = req.params;  // Parámetros de la URL
     const body = req.body;  // Cuerpo de la solicitud
 
-    // Verificación de que todos los campos requeridos están presentes en el cuerpo de la solicitud
-    if (!body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi || !body.carrera || !body.ciudad) {
-        return res.status(400).json({ 
-            error: "Missing required fields. Ensure 'satisfaccion_total', 'sat_estudiantes', 'satisfaccion_pdi', 'carrera', and 'ciudad' are all included." 
-        });
-    }
-
     // Normalizamos tanto los parámetros de la URL como los del cuerpo de la solicitud (sin tildes y en minúsculas)
-    const carreraParam = removeAccents(carrera);
-    const ciudadParam = removeAccents(ciudad);
-    const carreraBody = removeAccents(body.carrera);
-    const ciudadBody = removeAccents(body.ciudad);
+    const carreraParam = removeAccents(carrera.toLowerCase());
+    const ciudadParam = removeAccents(ciudad.toLowerCase());
+    const carreraBody = removeAccents(body.carrera.toLowerCase());
+    const ciudadBody = removeAccents(body.ciudad.toLowerCase());
 
     // Comprobamos si los valores en el cuerpo coinciden con los valores de la URL
     if (carreraParam !== carreraBody || ciudadParam !== ciudadBody) {
@@ -159,7 +149,6 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         {},  // Configuración adicional (vacío en este caso)
         (err, numUpdated) => {
             if (err) {
-                console.error("Error al actualizar en la base de datos:", err);
                 return res.status(500).json({ error: "Internal Server Error. There was an issue updating the record." });
             }
 
@@ -175,6 +164,7 @@ app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         }
     );
 });
+
 
 //FALLO DE PUT a todos los datos
 app.put(BASE_API + "/students_satisfaction",(req,res)=>{            
