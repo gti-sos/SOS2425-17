@@ -31,6 +31,29 @@ db.count({}, (err, count) => {
 // Función principal para configurar las rutas del backend
 function loadBackendAlejandro(app) {
 
+    // Cargar datos iniciales en la base de datos
+    app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
+        console.log("Loading initial data into the database...");
+
+        // Verificar si la base de datos ya tiene datos
+        db.count({}, (err, count) => {
+            if (err) {
+                return response.status(500).json({ error: "Database error" });
+            }
+
+            if (count === 0) {
+                db.insert(students_satisfaction_data, (err, newDocs) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Error inserting initial data" });
+                    }
+                    response.status(201).json({ message: "The data was inserted successfully" }); // Devuelve el mensaje
+                });
+            } else {
+                response.status(409).json({ message: "The database already contains data, no need to initialize" });
+            }
+        });
+    });
+
     // GET: Obtener todos los registros
     app.get(BASE_API + "/students_satisfaction", (request, response) => {
         console.log("GET request to /students_satisfaction");
@@ -175,11 +198,7 @@ function loadBackendAlejandro(app) {
         });
     });
 
-    // Redirección a la documentación
-    app.get(BASE_API + "/students_satisfaction/docs", (request, response) => {
-        response.redirect("https://documenter.getpostman.com/view/42357894/2sB2cUAN1D");
-    });
-
+    
 }
 
 export { loadBackendAlejandro };
