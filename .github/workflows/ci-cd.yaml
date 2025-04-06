@@ -11,7 +11,9 @@ jobs:
       - name: Run tests - university-demands
         run: npm run test-local-university-demands
       - name: Run tests - university-academic-performance
-        run: npm run test-local-academic  
+        run: npm run test-local-academic
+      - name: Run tests - students_satisfaction
+        run: npm run test-local-students-satisfaction  
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
