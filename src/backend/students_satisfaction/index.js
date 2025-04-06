@@ -119,6 +119,12 @@ function loadBackendAlejandro(app) {
             });
         });
     });
+    // POST: Intentar modificar un registro específico, no permitido en esta ruta
+app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
+    console.log("POST request to /students_satisfaction/:carrera/:ciudad");
+    response.sendStatus(405); // Método no permitido
+});
+
 
     // PUT: Modificar un registro específico
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
