@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "c7fd7bf1-5c8f-487c-ac4e-5e8a1c0b5593",
+		"name": "API Alejandro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42373237",
+		"_collection_link": "https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/42373237-c7fd7bf1-5c8f-487c-ac4e-5e8a1c0b5593?action=share&source=collection_link&creator=42373237"
+	},
+	"item": [
+		{
+			"name": "loadInitialData",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/loadInitialData",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"loadInitialData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registro específico",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN ECONOMÍA/MÉRIDA",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN ECONOMÍA",
+						"MÉRIDA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EROR 404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/grado en educacion infantil/sevilla",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"grado en educacion infantil",
+						"sevilla"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"satisfaccion_total\": 4.57,\r\n  \"sat_estudiantes\": 4.53,\r\n  \"satisfaccion_pdi\": 4.89,\r\n  \"carrera\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n  \"ciudad\": \"LLERENA\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 409",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"satisfaccion_total\": 4.57,\r\n  \"sat_estudiantes\": 4.53,\r\n  \"satisfaccion_pdi\": 4.89,\r\n  \"carrera\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n  \"ciudad\": \"LLERENA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"satisfaccion_total\": 4.57,\r\n  \"satisfaccion_pdi\": 4.89,\r\n  \"carrera\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n  \"ciudad\": \"LLERENA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 405",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN EDUCACIÓN INFANTIL/LLERENA\n",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"LLERENA\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DEL ESPECÍFICO",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN ECONOMÍA/MÉRIDA",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN ECONOMÍA",
+						"MÉRIDA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-XX.onrender.com/api/v1/students_satisfaction/grado%20en%20educacion%20infantil/manhattan\n",
+					"protocol": "https",
+					"host": [
+						"sos2425-XX",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"grado%20en%20educacion%20infantil",
+						"manhattan\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT específico",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"carrera\": \"GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS\",\r\n    \"ciudad\": \"CÁCERES\",\r\n    \"satisfaccion_total\": 7.75,\r\n    \"sat_estudiantes\": 5,\r\n    \"satisfaccion_pdi\": 3.77\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS/CÁCERES",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS",
+						"CÁCERES"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TODO",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"satisfaccion_total\": 4.57,\r\n  \"satisfaccion_pdi\": 4.89,\r\n  \"carrera\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n  \"ciudad\": \"LLERENA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS/CÁCERES\n",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS",
+						"CÁCERES\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT 405",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "https://sos2425-17.onrender.com/api/v1/students_satisfaction",
+					"protocol": "https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT 404",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"satisfaccion_total\": 8.5,\r\n    \"sat_estudiantes\": 7.0,\r\n    \"satisfaccion_pdi\": 9.0,\r\n    \"carrera\": \"GRADO EN EDUCACIÓN INFANTIL\",\r\n    \"ciudad\": \"manhattan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "PUT https://sos2425-17.onrender.com/api/v1/students_satisfaction/GRADO EN EDUCACIÓN INFANTIL/MADRID\n",
+					"protocol": "PUT https",
+					"host": [
+						"sos2425-17",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"students_satisfaction",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"MADRID\n"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
