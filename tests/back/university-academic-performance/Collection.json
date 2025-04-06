@@ -2,9 +2,10 @@
 	"info": {
 		"_postman_id": "6292f6da-e345-4bc1-aaad-6faf089cd44f",
 		"name": "API Pablo",
+		"description": "University-academic-performance API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "43694449",
-		"_collection_link": "https://hola11-0443.postman.co/workspace/98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-6292f6da-e345-4bc1-aaad-6faf089cd44f?action=share&source=collection_link&creator=43694449"
+		"_collection_link": "https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-6292f6da-e345-4bc1-aaad-6faf089cd44f?action=share&source=collection_link&creator=43694449"
 	},
 	"item": [
 		{
@@ -54,6 +55,13 @@
 						],
 						"type": "text/javascript",
 						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -348,6 +356,51 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
+					"raw": " { \"degree\": \"GRADO EN EDUCACIÓN INFANTIL\", \"location\": \"ALMENDRALEJO\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 6.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 6, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2016-2017\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance",
+						"GRADO EN EDUCACIÓN INFANTIL",
+						"ALMENDRALEJO",
+						"2016-2017"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error edita degree",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
 					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
 					"options": {
 						"raw": {
@@ -373,7 +426,7 @@
 			"response": []
 		},
 		{
-			"name": "Edita Uno no Existe",
+			"name": "Error edita Uno no Existe",
 			"event": [
 				{
 					"listen": "test",
@@ -393,7 +446,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"raw": " { \"degree\": \"GRADO EN EDUCACIÓN INFANTIL\", \"location\": \"ALMENDRALEJO\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 6.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 6, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2016ww\" }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -460,7 +513,7 @@
 			"response": []
 		},
 		{
-			"name": "Edita Uno Faltan campos",
+			"name": "Error edita uno faltan campos",
 			"event": [
 				{
 					"listen": "test",
@@ -480,7 +533,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"degree\": \"GRADO EN COMUNICACIÓN AUDIOVISUAL\",\r\n        \"location\": \"BADAJOZ\",\r\n        \"dropoutFirstCourse\": 4.69,\r\n        \"efficiencyRate\": 92.2,\r\n        \"dropoutSecondCourse\": 0,\r\n        \"successRate\": 92.37,\r\n        \"dropoutThirdCourse\": 15.79,\r\n        \"dropoutsThirdCourse\": 0,\r\n        \"progressNormalized\": 0.88,\r\n        \"dropoutsFirstCourse\": 5,\r\n        \"performanceRate\": 90.31,\r\n        \"cohortStudents\": 64,\r\n        \"dropoutsSecondCourse\": 3,\r\n        \"dropoutRate\": 2.21,\r\n        \"graduationRate\": 50.65   }",
+					"raw": " { \"degree\": \"GRADO EN EDUCACIÓN PRIMARIA\", \"location\": \"CÁCERES\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 6.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00,  \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -585,6 +638,39 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error Borra Todo vacío",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
 							"});"
 						],
 						"type": "text/javascript",

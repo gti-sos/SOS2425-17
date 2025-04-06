@@ -32,7 +32,6 @@ import { loadBackendPablo } from "./src/backend/university-academic-performance/
 import { loadBackendJavier } from "./src/backend/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 import { loadBackendAlejandro } from "./src/backend/students_satisfaction/index.js";
 
-
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
 app.use("/",express.static("./public/index.html")); //Esto es para que ponga el html  ya que coje la carpeta static 
@@ -51,8 +50,3 @@ loadBackendAlejandro(app)
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
 }); //Esto es para usar el framework en ese puerto (poner un puerto alto)
-
-        
-
-
-
