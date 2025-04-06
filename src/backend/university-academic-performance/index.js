@@ -257,7 +257,7 @@ const university_academic_performance = [
         app.get(BASE_API+"/university-academic-performance/docs",(request,response)=>{
             response.redirect("https://documenter.getpostman.com/view/43694449/2sB2cUBica");
         });
-    
+        
     }
     
 
