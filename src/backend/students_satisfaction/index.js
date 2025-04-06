@@ -200,7 +200,11 @@ app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, response)
             return response.sendStatus(404); // No match found, send 404
         }
 
-        db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
+        db.remove({ 
+            carrera: match.carrera, 
+            ciudad: match.ciudad 
+        }, {}, (err, numRemoved) => {
+        
             if (err) {
                 console.error("Error deleting record:", err);
                 return response.status(500).send("Error deleting");
