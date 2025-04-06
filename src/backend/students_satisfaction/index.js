@@ -16,7 +16,7 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", ciudad: "CÁCERES", satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: null },
     { carrera: "GRADO EN ENFERMERÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45 }
 ];
-
+/*
 // Cargar datos iniciales si la base de datos está vacía
 db.count({}, (err, count) => {
     if (count === 0) {
@@ -27,6 +27,7 @@ db.count({}, (err, count) => {
         });
     }
 });
+*/
 
 // Función principal para configurar las rutas del backend
 function loadBackendAlejandro(app) {
@@ -137,14 +138,15 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
         if (!body.carrera || !body.ciudad || !body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi) {
             return response.status(400).json({ error: "Missing required fields" });
         }
-
+/*
         // Validar que los parámetros de la URL coincidan con los del cuerpo
         if (body.carrera !== carrera || body.ciudad !== ciudad) {
+            
             return response.status(400).json({
                 error: "carrera and ciudad in body must match URL parameters"
             });
         }
-
+*/
         // Actualizar el registro
         db.update(
             { carrera: carrera, ciudad: ciudad },
