@@ -20,8 +20,8 @@
     "test-api-online-academic": "npx newman run tests/back/university-academic-performance/Collection.json -e tests/back/Public/api-env-online.json",
     "test-local-academic": "start-server-and-test start http://localhost:16078/ test-api-local-academic",
     "test-university-academic": "npm run test-local-academic",
-    "test-api-local-satisfaction": "npx newman run tests/back/students_satisfaction/api-tests.json -e tests/back/Public/api-env-local.json",
-    "test-api-online-satisfaction": "npx newman run tests/back/students_satisfaction/api-tests.json -e tests/back/Public/api-env-online.json",
+    "test-api-local-satisfaction": "npx newman run tests/back/students_satisfaction/api-tests1.json -e tests/back/Public/api-env-local.json",
+    "test-api-online-satisfaction": "npx newman run tests/back/students_satisfaction/api-tests1.json -e tests/back/Public/api-env-online.json",
     "test-local-students-satisfaction": "start-server-and-test start http://localhost:16078/ test-api-local-satisfaction",
     "test-students-satisfaction": "npm run test-local-students-satisfaction"
   },
