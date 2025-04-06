@@ -203,7 +203,9 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
             }
         });
     });
-
+    app.get(BASE_API+"/students_satisfaction/docs",(request,response)=>{
+        response.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
+    });
     
 }
 
