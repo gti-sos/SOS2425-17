@@ -174,44 +174,50 @@ app.delete(BASE_API+"/students_satisfaction",(req,response)=>{
     });
 
 });
-// Eliminar un registro específico por carrera y ciudad
+// DELETE específico
 app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-    const carreraParam = removeAccents(req.params.carrera.toLowerCase());
-    const ciudadParam = removeAccents(req.params.ciudad.toLowerCase());
+    const carreraParam = removeAccents(req.params.carrera);
+    const ciudadParam = removeAccents(req.params.ciudad);
 
-    console.log(`DELETE request to /students_satisfaction/${req.params.carrera}/${req.params.ciudad}`);
-    console.log(`Normalized -> carrera: "${carreraParam}", ciudad: "${ciudadParam}"`);
+    console.log("🔍 DELETE request:");
+    console.log("- Raw carrera:", req.params.carrera);
+    console.log("- Raw ciudad:", req.params.ciudad);
+    console.log("- Normalized carrera:", carreraParam);
+    console.log("- Normalized ciudad:", ciudadParam);
 
-    // Buscar todos los registros y luego filtrar el que coincida sin tildes y en minúsculas
+    // Buscar TODOS los registros y comparar ya normalizados
     db.find({}, (err, records) => {
         if (err) {
-            console.error("Error al buscar en la base de datos:", err);
+            console.error("❌ Error al buscar registros:", err);
             return res.status(500).send("Database error");
         }
 
-        console.log("Registros encontrados en la base de datos:", records.length);
-
-        const match = records.find(record =>
-            removeAccents(record.carrera.toLowerCase()) === carreraParam &&
-            removeAccents(record.ciudad.toLowerCase()) === ciudadParam
-        );
+        const match = records.find(r => {
+            return removeAccents(r.carrera) === carreraParam &&
+                   removeAccents(r.ciudad) === ciudadParam;
+        });
 
         if (!match) {
-            console.log("❌ No se encontró ningún registro que coincida con los parámetros.");
-            return res.sendStatus(404);
+            console.log("🚫 No se encontró coincidencia para eliminar.");
+            return res.status(404).json({ error: "No matching record found" });
         }
 
-        console.log("✅ Registro encontrado para eliminar:", match);
+        console.log("✅ Coincidencia encontrada:", match);
 
-        // Eliminar el registro usando los datos originales (con tildes y todo)
+        // Eliminar usando los valores exactos que existen en la BD
         db.remove({ carrera: match.carrera, ciudad: match.ciudad }, {}, (err, numRemoved) => {
             if (err) {
-                console.error("❌ Error al eliminar el registro:", err);
+                console.error("❌ Error al eliminar:", err);
                 return res.status(500).send("Error deleting");
             }
 
-            console.log(`✅ Registros eliminados: ${numRemoved}`);
-            return res.sendStatus(numRemoved > 0 ? 200 : 404);
+            if (numRemoved === 0) {
+                console.log("🚫 No se eliminó ningún registro.");
+                return res.status(404).send("Nothing deleted");
+            }
+
+            console.log(`🗑️ Registro eliminado (${numRemoved})`);
+            return res.status(200).json({ message: "Record deleted successfully" });
         });
     });
 });
