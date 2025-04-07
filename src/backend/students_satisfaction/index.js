@@ -57,40 +57,59 @@ function loadBackendAlejandro(app) {
         });
     });
 
-    // GET: Obtener todos los registros con filtros y paginación
-app.get(BASE_API + "/students_satisfaction", (request, response) => {
-    console.log("GET request to /students_satisfaction con filtros y paginación");
-
-    const { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset } = request.query;
-
-    let query = {};
-
-    if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
-    if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
-    if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
-    if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
-    if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
-
-    let skip = isNaN(parseInt(offset)) ? 0 : parseInt(offset);
-    let lim = isNaN(parseInt(limit)) ? 0 : parseInt(limit); // 0 = sin límite
-
-    db.find(query)
-      .skip(skip)
-      .limit(lim)
-      .exec((err, records) => {
-        if (err) {
-            return response.status(500).json({ error: "Database error" });
-        }
-
-        const clean = records.map((r) => {
-            delete r._id;
-            return r;
+    app.get(BASE_API + "/students_satisfaction/paginated", (req, res) => {
+        let {
+            carrera, ciudad,
+            satisfaccion_total, sat_estudiantes, satisfaccion_pdi,
+            limit, offset
+        } = req.query;
+    
+        db.find({}, (err, data) => {
+            if (err) {
+                return res.status(500).json({ error: "Database error" });
+            }
+    
+            let results = data.filter((entry) => {
+                if (carrera && !new RegExp("^" + carrera + "$", "i").test(entry.carrera)) return false;
+                if (ciudad && !new RegExp("^" + ciudad + "$", "i").test(entry.ciudad)) return false;
+                if (satisfaccion_total && Number(entry.satisfaccion_total) !== Number(satisfaccion_total)) return false;
+                if (sat_estudiantes && Number(entry.sat_estudiantes) !== Number(sat_estudiantes)) return false;
+                if (satisfaccion_pdi && Number(entry.satisfaccion_pdi) !== Number(satisfaccion_pdi)) return false;
+                return true;
+            });
+    
+            if (offset !== undefined) {
+                results = results.slice(Number(offset));
+            }
+    
+            if (limit !== undefined) {
+                results = results.slice(0, Number(limit));
+            }
+    
+            results = results.map(r => {
+                delete r._id;
+                return r;
+            });
+    
+            res.json(results);
         });
-
-        response.json(clean);
     });
-});
+    
 
+    // GET: Obtener todos los registros
+    app.get(BASE_API + "/students_satisfaction", (request, response) => {
+        console.log("GET request to /students_satisfaction");
+        db.find({}, (err, records) => {
+            if (err) {
+                response.status(500).json({ error: "Database error" });
+            } else {
+                response.json(records.map((r) => {
+                    delete r._id; // Eliminar el campo _id para que no aparezca en la respuesta
+                    return r;
+                }));
+            }
+        });
+    });
 
     // GET: Obtener un registro específico por carrera y ciudad
     app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
