@@ -32,6 +32,8 @@ db.count({}, (err, count) => {
 // Función principal para configurar las rutas del backend
 function loadBackendAlejandro(app) {
 
+    
+
     // Cargar datos iniciales en la base de datos
     app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
         console.log("Loading initial data into the database...");
@@ -56,19 +58,33 @@ function loadBackendAlejandro(app) {
     });
 
     // GET: Obtener todos los registros
-    app.get(BASE_API + "/students_satisfaction", (request, response) => {
-        console.log("GET request to /students_satisfaction");
-        db.find({}, (err, records) => {
-            if (err) {
-                response.status(500).json({ error: "Database error" });
-            } else {
-                response.json(records.map((r) => {
-                    delete r._id; // Eliminar el campo _id para que no aparezca en la respuesta
-                    return r;
-                }));
-            }
-        });
+    // GET: Obtener todos los registros con paginación
+app.get(BASE_API + "/students_satisfaction", (request, response) => {
+    console.log("GET request to /students_satisfaction");
+
+    // Extraer query params de paginación
+    let limit = parseInt(request.query.limit);
+    let offset = parseInt(request.query.offset);
+
+    // Si no se pasan, usar valores por defecto (opcional)
+    if (isNaN(limit)) limit = 0;
+    if (isNaN(offset)) offset = 0;
+
+    db.find({})
+      .skip(offset)
+      .limit(limit)
+      .exec((err, records) => {
+        if (err) {
+            response.status(500).json({ error: "Database error" });
+        } else {
+            response.json(records.map((r) => {
+                delete r._id;
+                return r;
+            }));
+        }
     });
+});
+
 
     // GET: Obtener un registro específico por carrera y ciudad
     app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
@@ -206,7 +222,7 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
         });
     });
     app.get(BASE_API+"/students_satisfaction/docs",(request,response)=>{
-        response.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
+        response.redirect("https://documnpenter.getpostman.com/view/42373237/2sB2cUBicY");
     });
     
 }
