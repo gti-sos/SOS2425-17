@@ -57,31 +57,37 @@ function loadBackendAlejandro(app) {
         });
     });
 
-    // GET: Obtener todos los registros
-    // GET: Obtener todos los registros con paginación
+    // GET: Obtener todos los registros con filtros y paginación
 app.get(BASE_API + "/students_satisfaction", (request, response) => {
-    console.log("GET request to /students_satisfaction");
+    console.log("GET request to /students_satisfaction con filtros y paginación");
 
-    // Extraer query params de paginación
-    let limit = parseInt(request.query.limit);
-    let offset = parseInt(request.query.offset);
+    const { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset } = request.query;
 
-    // Si no se pasan, usar valores por defecto (opcional)
-    if (isNaN(limit)) limit = 0;
-    if (isNaN(offset)) offset = 0;
+    let query = {};
 
-    db.find({})
-      .skip(offset)
-      .limit(limit)
+    if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
+    if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
+    if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
+    if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
+    if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
+
+    let skip = isNaN(parseInt(offset)) ? 0 : parseInt(offset);
+    let lim = isNaN(parseInt(limit)) ? 0 : parseInt(limit); // 0 = sin límite
+
+    db.find(query)
+      .skip(skip)
+      .limit(lim)
       .exec((err, records) => {
         if (err) {
-            response.status(500).json({ error: "Database error" });
-        } else {
-            response.json(records.map((r) => {
-                delete r._id;
-                return r;
-            }));
+            return response.status(500).json({ error: "Database error" });
         }
+
+        const clean = records.map((r) => {
+            delete r._id;
+            return r;
+        });
+
+        response.json(clean);
     });
 });
 
