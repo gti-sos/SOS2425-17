@@ -69,7 +69,49 @@ const university_academic_performance = [
     import dataStore from "nedb";
 
 
+
     function loadBackendPablo(app){
+
+
+        app.get(BASE_API + "/university-academic-performance/paginated", (req, res) => {
+            let {
+                degree, location, academicYear,
+                dropoutRate, successRate, performanceRate,
+                limit, offset
+            } = req.query;
+        
+            db.find({}, (err, data) => {
+                if (err) {
+                    return res.status(500).json({ error: "Database error" });
+                }
+        
+                let results = data.filter((entry) => {
+                    if (degree && !new RegExp("^" + degree + "$", "i").test(entry.degree)) return false;
+                    if (location && !new RegExp("^" + location + "$", "i").test(entry.location)) return false;
+                    if (academicYear && entry.academicYear !== academicYear) return false;
+                    if (dropoutRate && Number(entry.dropoutRate) !== Number(dropoutRate)) return false;
+                    if (successRate && Number(entry.successRate) !== Number(successRate)) return false;
+                    if (performanceRate && Number(entry.performanceRate) !== Number(performanceRate)) return false;
+                    return true;
+                });
+        
+                if (offset !== undefined) {
+                    results = results.slice(Number(offset));
+                }
+        
+                if (limit !== undefined) {
+                    results = results.slice(0, Number(limit));
+                }
+        
+                results = results.map(r => {
+                    delete r._id;
+                    return r;
+                });
+        
+                res.json(results);
+            });
+        });
+        
     
 
         //GET Todo lo que haya
@@ -90,29 +132,29 @@ const university_academic_performance = [
         // GET uno en concreto
 
         
-        app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response) => {
+        app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request, response) => {
             console.log("GET /university-academic-performance/:degree/:location/:academicYear");
-
-            const degree= request.params.degree
+        
+            const degree = request.params.degree;
             const location = request.params.location;
-            const academicYear = request.params.academicYear
-
-            university_academic_performance_db.find({"degree": degree , "location": location , "academicYear": academicYear },(err,demands)=>{//Busco todo y el contacts es lo que devolveria 
-                if (err) {
-                    return response.status(500).json({ error: "Database error" });
+            const academicYear = request.params.academicYear;
+        
+            university_academic_performance_db.findOne(
+                { degree: degree, location: location, academicYear: academicYear },
+                (err, demand) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Database error" });
+                    }
+        
+                    if (demand) {
+                        delete demand._id;
+                        return response.status(200).json(demand);
+                    } else {
+                        return response.sendStatus(404);
+                    }
                 }
-
-                if (demands.length >= 1) {
-                    return response.status(200).json(demands.map((c) => {
-                        delete c._id;
-                        return c;
-                    }));
-                } else {
-                   return response.sendStatus(404);
-                }
-            });
-
-        })
+            );
+        });
 
         //LOAD INITIAL DATA
 

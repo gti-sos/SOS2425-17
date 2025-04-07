@@ -32,6 +32,8 @@ db.count({}, (err, count) => {
 // Función principal para configurar las rutas del backend
 function loadBackendAlejandro(app) {
 
+    
+
     // Cargar datos iniciales en la base de datos
     app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
         console.log("Loading initial data into the database...");
@@ -55,6 +57,45 @@ function loadBackendAlejandro(app) {
         });
     });
 
+    app.get(BASE_API + "/students_satisfaction/paginated", (req, res) => {
+        let {
+            carrera, ciudad,
+            satisfaccion_total, sat_estudiantes, satisfaccion_pdi,
+            limit, offset
+        } = req.query;
+    
+        db.find({}, (err, data) => {
+            if (err) {
+                return res.status(500).json({ error: "Database error" });
+            }
+    
+            let results = data.filter((entry) => {
+                if (carrera && !new RegExp("^" + carrera + "$", "i").test(entry.carrera)) return false;
+                if (ciudad && !new RegExp("^" + ciudad + "$", "i").test(entry.ciudad)) return false;
+                if (satisfaccion_total && Number(entry.satisfaccion_total) !== Number(satisfaccion_total)) return false;
+                if (sat_estudiantes && Number(entry.sat_estudiantes) !== Number(sat_estudiantes)) return false;
+                if (satisfaccion_pdi && Number(entry.satisfaccion_pdi) !== Number(satisfaccion_pdi)) return false;
+                return true;
+            });
+    
+            if (offset !== undefined) {
+                results = results.slice(Number(offset));
+            }
+    
+            if (limit !== undefined) {
+                results = results.slice(0, Number(limit));
+            }
+    
+            results = results.map(r => {
+                delete r._id;
+                return r;
+            });
+    
+            res.json(results);
+        });
+    });
+    
+
     // GET: Obtener todos los registros
     app.get(BASE_API + "/students_satisfaction", (request, response) => {
         console.log("GET request to /students_satisfaction");
@@ -73,22 +114,25 @@ function loadBackendAlejandro(app) {
     // GET: Obtener un registro específico por carrera y ciudad
     app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
         console.log("GET request to /students_satisfaction/:carrera/:ciudad");
+    
         const carrera = request.params.carrera;
         const ciudad = request.params.ciudad;
-
-        db.find({ carrera: carrera, ciudad: ciudad }, (err, records) => {
+    
+        db.findOne({ carrera: carrera, ciudad: ciudad }, (err, record) => {
             if (err) {
-                response.status(500).json({ error: "Database error" });
-            } else if (records.length > 0) {
-                response.json(records.map((r) => {
-                    delete r._id;
-                    return r;
-                }));
+                response.status(500).send("Internal Server Error");
+                return;
+            }
+    
+            if (record) {
+                delete record._id; // Eliminar el campo _id para que no aparezca en la respuesta
+                response.status(200).json(record); // Devolver el único registro encontrado
             } else {
-                response.sendStatus(404); // Si no encuentra el registro
+                response.sendStatus(404); // Si no se encuentra el registro
             }
         });
     });
+    
 
     // POST: Insertar un nuevo registro
     app.post(BASE_API + "/students_satisfaction", (request, response) => {
@@ -206,7 +250,7 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
         });
     });
     app.get(BASE_API+"/students_satisfaction/docs",(request,response)=>{
-        response.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
+        response.redirect("https://documnpenter.getpostman.com/view/42373237/2sB2cUBicY");
     });
     
 }
