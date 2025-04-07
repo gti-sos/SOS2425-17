@@ -114,22 +114,25 @@ function loadBackendAlejandro(app) {
     // GET: Obtener un registro específico por carrera y ciudad
     app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
         console.log("GET request to /students_satisfaction/:carrera/:ciudad");
+    
         const carrera = request.params.carrera;
         const ciudad = request.params.ciudad;
-
-        db.find({ carrera: carrera, ciudad: ciudad }, (err, records) => {
+    
+        db.findOne({ carrera: carrera, ciudad: ciudad }, (err, record) => {
             if (err) {
-                response.status(500).json({ error: "Database error" });
-            } else if (records.length > 0) {
-                response.json(records.map((r) => {
-                    delete r._id;
-                    return r;
-                }));
+                response.status(500).send("Internal Server Error");
+                return;
+            }
+    
+            if (record) {
+                delete record._id; // Eliminar el campo _id para que no aparezca en la respuesta
+                response.status(200).json(record); // Devolver el único registro encontrado
             } else {
-                response.sendStatus(404); // Si no encuentra el registro
+                response.sendStatus(404); // Si no se encuentra el registro
             }
         });
     });
+    
 
     // POST: Insertar un nuevo registro
     app.post(BASE_API + "/students_satisfaction", (request, response) => {
