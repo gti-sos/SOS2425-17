@@ -36,43 +36,58 @@ const university_demands = [
  //});
 
 function loadBackendJavier(app){
-    app.get(BASE_API + "/university-demands", (request,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-        //para que sea /api/v1/university-demands
-            console.log("New get to /university-demands")
-            db.find({},(err,contacts)=>{//Busco todo y el contacts es lo que devolveria 
-                response.send(JSON.stringify(contacts.map((c)=>{ //Esto es que para cada contatacto hago lo que sea y para acceder 
-                    //a cualquier propiedad lo hago con map 
-                    delete c._id; //con esto lo que hago esque quito el id para que asi no se muestre en la api al hacer un get
-                    return c; //Quito id porque al usar db , db le pone id a todo entonces lo quito para que el usuario no lo vea
-                }),null,2));
-            });
+    app.get(BASE_API + "/university-demands", (req, res) => {
+        let {
+            location, degree, academicYear,
+            over45, spanishFirst, foreigners, graduated,
+            limit, offset
+        } = req.query;
+    
+        let results = university_demands.filter((entry) => {
+            if (location && !new RegExp("^" + location + "$", "i").test(entry.location)) return false;
+            if (degree && !new RegExp("^" + degree + "$", "i").test(entry.degree)) return false;
+            if (academicYear && entry.academicYear !== academicYear) return false;
+            if (over45 && Number(entry.over45) !== Number(over45)) return false;
+            if (spanishFirst && Number(entry.spanishFirst) !== Number(spanishFirst)) return false;
+            if (foreigners && Number(entry.foreigners) !== Number(foreigners)) return false;
+            if (graduated && Number(entry.graduated) !== Number(graduated)) return false;
+            return true;
         });
+    
+        // Paginación
+        if (offset !== undefined) {
+            results = results.slice(Number(offset));
+        }
+        if (limit !== undefined) {
+            results = results.slice(0, Number(limit));
+        }
+    
+        res.json(results);
+    });
     
     // Obtener registros por año y ciudad
-    app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req,response)=>{ //El como buscas la api en la url y seria BASE_API + /contacts
-        //para que sea /api/v1/contacts
-            console.log("New get to /university-demands/:degree/:location/:academicYear")
-            const degree= req.params.degree
-            const location = req.params.location;
-            const academicYear = req.params.academicYear
-
-            db.find({ "degree": degree, "location": location, "academicYear": academicYear }, (err, demands) => {
-                if (err) {
-                    response.status(500).send("Internal Server Error");
-                    return;
-                }
-        
-                if (demands.length >= 1) {
-                    response.status(200).json(demands.map((c) => {
-                        delete c._id;
-                        return c;
-                    }));
-                } else {
-                    response.sendStatus(404);
-                }
-            });
+    app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
+        console.log("New GET to /university-demands/:degree/:location/:academicYear");
     
+        const degree = req.params.degree;
+        const location = req.params.location;
+        const academicYear = req.params.academicYear;
+    
+        db.findOne({ degree, location, academicYear }, (err, demand) => {
+            if (err) {
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+    
+            if (demand) {
+                delete demand._id;
+                res.status(200).json(demand);
+            } else {
+                res.sendStatus(404);
+            }
         });
+    });
+    
     
     //Cargar datos iniciales
     app.get(BASE_API + "/university-demands/loadInitialData", (request, response) => {
