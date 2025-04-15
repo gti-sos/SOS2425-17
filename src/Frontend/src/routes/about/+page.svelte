@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Readme</title>
-</head>
-<body>
-    <h1>SOS2425-17</h1>
+<h1>SOS2425-17</h1>
     
     <h2>Team</h2>
     <ul>
@@ -30,6 +22,3 @@
         <li><a href="https://sos2425-17.onrender.com/api/v1/students_satisfaction/docs">API Alejandro Gaona Penco</a><br></li>
         <li><a href="https://sos2425-17.onrender.com/api/v1/university-academic-performance/docs">API Pablo Aguza Barragán</a><br></li>
     </ul>
-</body>
-</html>
-
