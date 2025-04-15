@@ -10,6 +10,8 @@ let db = new dataStore(); //Esto es para inicializar dataStore que sirve para in
 
 //Obtener todos los registros con filtros
 
+//location,degree,over45,spanishFirst,foreigners,graduated,academicYear
+
 const university_demands = [ 
     { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
     { location: "Almendralejo", degree: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
@@ -43,27 +45,35 @@ function loadBackendJavier(app){
             limit, offset
         } = req.query;
     
-        let results = university_demands.filter((entry) => {
-            if (location && !new RegExp("^" + location + "$", "i").test(entry.location)) return false;
-            if (degree && !new RegExp("^" + degree + "$", "i").test(entry.degree)) return false;
-            if (academicYear && entry.academicYear !== academicYear) return false;
-            if (over45 && Number(entry.over45) !== Number(over45)) return false;
-            if (spanishFirst && Number(entry.spanishFirst) !== Number(spanishFirst)) return false;
-            if (foreigners && Number(entry.foreigners) !== Number(foreigners)) return false;
-            if (graduated && Number(entry.graduated) !== Number(graduated)) return false;
-            return true;
+        let query = {};
+    
+        if (location) query.location = new RegExp("^" + location + "$", "i");
+        if (degree) query.degree = new RegExp("^" + degree + "$", "i");
+        if (academicYear) query.academicYear = academicYear;
+        if (over45) query.over45 = Number(over45);
+        if (spanishFirst) query.spanishFirst = Number(spanishFirst);
+        if (foreigners) query.foreigners = Number(foreigners);
+        if (graduated) query.graduated = Number(graduated);
+    
+        db.find(query, (err, results) => {
+            if (err) {
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+    
+            // Paginación
+            if (offset !== undefined) {
+                results = results.slice(Number(offset));
+            }
+            if (limit !== undefined) {
+                results = results.slice(0, Number(limit));
+            }
+    
+            results.forEach(e => delete e._id); // Limpiar _id para front
+            res.json(results);
         });
-    
-        // Paginación
-        if (offset !== undefined) {
-            results = results.slice(Number(offset));
-        }
-        if (limit !== undefined) {
-            results = results.slice(0, Number(limit));
-        }
-    
-        res.json(results);
     });
+    
     
     // Obtener registros por año y ciudad
     app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
