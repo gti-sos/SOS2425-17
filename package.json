@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/gti-sos/SOS2425-17#readme",
   "devDependencies": {
+    "@sveltejs/kit": "^2.20.7",
     "start-server-and-test": "^2.0.11"
   }
 }
