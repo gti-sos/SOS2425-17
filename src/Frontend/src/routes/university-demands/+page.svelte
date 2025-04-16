@@ -448,31 +448,21 @@ function openEditForm(universityD) {
     <div class="error-message">{errorMessage}</div>
 {/if}
 
+<div class="button-group">
+    <Button color="primary" on:click={getLoadInitialData}>Cargar Datos</Button>
+    <Button color="success" on:click={() => showCreateForm = !showCreateForm}>
+        {showCreateForm ? "Cerrar" : "Crear"}
+    </Button>
+    <Button color="info" on:click={() => showFilterForm = !showFilterForm}>
+        {showFilterForm ? "Cerrar Filtros" : "Filtrar"}
+    </Button>
+    <Button color="secondary" on:click={resetFilters}>Limpiar Filtros</Button>
+    <Button color="danger" on:click={deleteAllDemands}>Eliminar Datos</Button>
+</div>
+
+
 <Table>
     <tbody>
-        <tr>
-            <td>
-                <Button color="info" on:click={() => showFilterForm = !showFilterForm}>
-                    {showFilterForm ? "Cerrar Filtros" : "Filtrar"}
-                </Button>
-            </td>
-            <td>
-                <Button color = "primary" id="load-data-btn" on:click={getLoadInitialData}>Cargar Datos</Button>
-            </td>
-            <td>
-                <Button color = "primary" id="load-data-btn" on:click={deleteAllDemands}>Eliminar Todo</Button>
-            </td>
-            <td>
-                <!-- Botón para mostrar/ocultar el formulario de filtros -->
-                <Button color="info" on:click={() => showCreateForm = !showCreateForm}>
-                    {showCreateForm ? "Cerrar" : "Crear"}
-                </Button>
-            </td>
-            <td>
-                <Button color="secondary" on:click={resetFilters}>Limpiar filtros</Button>
-            </td>
-        </tr>
-
         
         <!-- Esto ejecuta tantos tr como contacts haya -->
         {#each universityData as universityD}
@@ -639,7 +629,39 @@ function openEditForm(universityD) {
     text-align: center;
 }
 
+.button-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .button-group button {
+        min-width: 140px;
+    }
+
+    .success-message, .error-message {
+        text-align: center;
+        margin: 1rem auto;
+        padding: 0.75rem 1rem;
+        width: fit-content;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .success-message {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
 </style>
 
-        
+
+
 

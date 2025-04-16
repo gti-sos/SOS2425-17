@@ -2,20 +2,32 @@
     let showGithubDropdown = false;
     let showFrontendsDropdown = false;
     let showAPIsDropdown = false;
+    let showDocumentationDropdown = false;
 
     function toggleGithubDropdown() {
     showGithubDropdown = !showGithubDropdown; // si estaba abierto, lo cierra. Si estaba cerrado, lo abre.
     showFrontendsDropdown = false;            // cierra los otros
     showAPIsDropdown = false;
+    showDocumentationDropdown = false;
 }
 
 
-function toggleFrontendsDropdown() {
+    function toggleFrontendsDropdown() {
     //Eso lo haces para que solo un dropdown este activo , dices que los otros sean false y que el dropdown de frontend
     //sea el contrario es decir true , ya por defecto es false 
     showFrontendsDropdown = !showFrontendsDropdown;
     showGithubDropdown = false;
     showAPIsDropdown = false;
+    showDocumentationDropdown = false;
+}
+
+    function toggleDocumentationDropdown() {
+    //Eso lo haces para que solo un dropdown este activo , dices que los otros sean false y que el dropdown de frontend
+    //sea el contrario es decir true , ya por defecto es false 
+    showFrontendsDropdown = false;
+    showGithubDropdown = false;
+    showAPIsDropdown = false;
+    showDocumentationDropdown = !showDocumentationDropdown;
 }
 
 
@@ -23,6 +35,7 @@ function toggleFrontendsDropdown() {
     showAPIsDropdown = !showAPIsDropdown;
     showGithubDropdown = false;
     showFrontendsDropdown = false;
+    showDocumentationDropdown = false;
 }
     
 
@@ -30,6 +43,7 @@ function toggleFrontendsDropdown() {
         showGithubDropdown = false;
         showFrontendsDropdown = false;
         showAPIsDropdown = false;
+        showDocumentationDropdown = false;
         
     }
 
@@ -128,7 +142,8 @@ function toggleFrontendsDropdown() {
 <header>
     <div class="nav-container">
         <a href="/" class="nav-link"><i class="fas fa-home"></i>Inicio</a>
-
+        
+        <!-- APIs dropdown -->
         <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleAPIsDropdown}>
             <i class="fas fa-microchip"></i>APIs <i class="fas fa-caret-down arrow-down"></i>
             {#if showAPIsDropdown}
@@ -164,6 +179,18 @@ function toggleFrontendsDropdown() {
             {/if}
         </div>
 
-        <a href="/docs" class="nav-link"><i class="fas fa-file-alt"></i>Documentaciones</a>
+        
+        <!-- Documentaciones dropdown -->
+        <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleDocumentationDropdown}>
+            <i class="fas fa-file-alt"></i>Documentaciones <i class="fas fa-caret-down arrow-down"></i>
+            {#if showDocumentationDropdown}
+                <div class="dropdown">
+                    <a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">University Demands</a>
+                    <a href="http://sos2425-17.onrender.com/api/v1/students_satisfaction/docs">students_satisfaction</a>
+                    <a href="http://sos2425-17.onrender.com/api/v1/university-academic-performance/docs">university-academic-performance</a>
+                </div>
+            {/if}
+        </div>
+        
     </div>
 </header>
