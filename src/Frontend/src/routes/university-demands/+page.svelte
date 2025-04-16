@@ -549,7 +549,7 @@ function openEditForm(universityD) {
             <div class="filter-buttons">
                 <!--Para que ejecuto la funcion createContatcs al pulsar el boton -->
                 <Button color="primary" on:click={createUniversityDemands}>Crear</Button>
-                <Button color="danger" on:click={clearFilterFields}>Borrar Campos</Button>
+                <Button color="danger" on:click={clearFilters}>Borrar Campos</Button>
                 <Button on:click={() => showCreateForm = false}>Cerrar</Button>
             </div>
         </div>
@@ -571,7 +571,8 @@ function openEditForm(universityD) {
 
             <div class="filter-buttons">
                 <Button color="primary" on:click={updateUniversityDemand}>Actualizar</Button>
-                <Button color="danger" on:click={clearFilters}>Cancelar</Button>
+                <Button color="danger" on:click={clearFilters}>Borrar Campos</Button>
+                <Button on:click={() => showUpdateForm = false}>Cerrar</Button>
             </div>
         </div>
     </div>

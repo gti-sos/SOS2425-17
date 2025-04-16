@@ -1,15 +1,38 @@
 <script>
-    let showDropdown = false;
+    let showGithubDropdown = false;
+    let showFrontendsDropdown = false;
+    let showAPIsDropdown = false;
 
-    function toggleDropdown() {
-        showDropdown = !showDropdown;
+    function toggleGithubDropdown() {
+    showGithubDropdown = !showGithubDropdown; // si estaba abierto, lo cierra. Si estaba cerrado, lo abre.
+    showFrontendsDropdown = false;            // cierra los otros
+    showAPIsDropdown = false;
+}
+
+
+function toggleFrontendsDropdown() {
+    //Eso lo haces para que solo un dropdown este activo , dices que los otros sean false y que el dropdown de frontend
+    //sea el contrario es decir true , ya por defecto es false 
+    showFrontendsDropdown = !showFrontendsDropdown;
+    showGithubDropdown = false;
+    showAPIsDropdown = false;
+}
+
+
+    function toggleAPIsDropdown() {
+    showAPIsDropdown = !showAPIsDropdown;
+    showGithubDropdown = false;
+    showFrontendsDropdown = false;
+}
+    
+
+    function closeDropdowns() {
+        showGithubDropdown = false;
+        showFrontendsDropdown = false;
+        showAPIsDropdown = false;
+        
     }
 
-    function closeDropdown() {
-        showDropdown = false;
-    }
-
-    // Acción personalizada para detectar clics fuera
     function clickOutside(node) {
         const handleClick = event => {
             if (!node.contains(event.target)) {
@@ -31,12 +54,12 @@
     @import '@fortawesome/fontawesome-free/css/all.min.css';
 
     header {
-        position: relative; /* importante para posicionar el dropdown */
+        position: relative;
         z-index: 1000;
         background-color: #f0f0f0;
         padding: 1rem 0;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: visible; /* esto es CLAVE para que no se corte el dropdown */
+        overflow: visible;
     }
 
     .nav-container {
@@ -46,7 +69,6 @@
         gap: 2rem;
         padding: 1rem 2rem;
         flex-wrap: nowrap;
-        overflow: visible;
     }
 
     .nav-link {
@@ -73,43 +95,71 @@
     }
 
     .dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 9999; /*para que el dropdown este por encima del header que tiene un z-index menor*/
-    display: flex;
-    flex-direction: column; /* esto los pone uno debajo del otro */
-    padding: 0.5rem 0;
-    width: 200px;
-    text-align: center; /*para centrar los enlaces*/
-}
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 0;
+        width: 200px;
+        text-align: center;
+    }
 
+    .dropdown a {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: black;
+    }
 
     .dropdown a:hover {
         background-color: #e6e2e2;
         color: white;
     }
+
+    .arrow-down {
+        margin-left: 0.3rem;
+    }
 </style>
-
-
 
 <header>
     <div class="nav-container">
         <a href="/" class="nav-link"><i class="fas fa-home"></i>Inicio</a>
-        <a href="/apis" class="nav-link"><i class="fas fa-microchip"></i>APIs</a>
-        <a href="/github" class="nav-link"><i class="fab fa-github"></i>GitHub</a>
 
-        <!-- Dropdown -->
-        <div use:clickOutside on:outclick={closeDropdown} class="nav-link" on:click|stopPropagation={toggleDropdown}>
-            <i class="fas fa-window-maximize"></i>Frontends
-            {#if showDropdown}
+        <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleAPIsDropdown}>
+            <i class="fas fa-microchip"></i>APIs <i class="fas fa-caret-down arrow-down"></i>
+            {#if showAPIsDropdown}
                 <div class="dropdown">
-                    <a href="/university-demands" style="text-decoration: none; color:black">university-demands</a>
-                    <a href="/frontends/vue" style="text-decoration: none; color:black">Vue App</a>
-                    <a href="/frontends/svelte" style="text-decoration: none; color:black">Svelte App</a>
+                    <a href="/api/v1/university-demands">university-demands</a>
+                    <a href="/api/v1/students_satisfaction">students_satisfaction</a>
+                    <a href="/api/v1/university-academic-performance">university-academic-performance</a>
+                </div>
+            {/if}
+        </div>
+
+        <!-- GitHub dropdown -->
+        <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleGithubDropdown}>
+            <i class="fab fa-github"></i>GitHub <i class="fas fa-caret-down arrow-down"></i>
+            {#if showGithubDropdown}
+                <div class="dropdown">
+                    <a href="https://github.com/Javiigp">Javier Guerrero</a>
+                    <a href="https://github.com/alegp2003">Alejandro Gaona</a>
+                    <a href="https://github.com/aguzajr">Pablo Aguza</a>
+                </div>
+            {/if}
+        </div>
+
+        <!-- Frontends dropdown -->
+        <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleFrontendsDropdown}>
+            <i class="fas fa-window-maximize"></i>Frontends <i class="fas fa-caret-down arrow-down"></i>
+            {#if showFrontendsDropdown}
+                <div class="dropdown">
+                    <a href="/university-demands">University Demands</a>
+                    <a href="/frontends/vue">students_satisfaction</a>
+                    <a href="/frontends/svelte">university-academic-performance</a>
                 </div>
             {/if}
         </div>
