@@ -463,6 +463,15 @@ function openEditForm(universityD) {
 
 <Table>
     <tbody>
+        <tr>
+            <th>Localización</th>
+            <th>Grado</th>
+            <th>Mayores 45</th>
+            <th>Españoles Primer Año</th>
+            <th>Extranjeros</th>
+            <th>Graduados</th>
+            <th>Año academico</th>
+        </tr>
         
         <!-- Esto ejecuta tantos tr como contacts haya -->
         {#each universityData as universityD}
@@ -505,13 +514,40 @@ function openEditForm(universityD) {
         <div class="filter-form" on:click|stopPropagation>
             <h5>Filtrar Demanda Universitaria</h5>
 
-            <input required type="text" placeholder="Location" bind:value={filterLocation} />
-            <input required type="text" placeholder="Degree" bind:value={filterDegree} />
-            <input required type="text" placeholder="Over 45" bind:value={filterOver45} />
-            <input required type="text" placeholder="Spanish First" bind:value={filterSpanish} />
-            <input required type="text" placeholder="Foreigners" bind:value={filterForeigners} />
-            <input required type="text" placeholder="Graduated" bind:value={filterGraduated} />
-            <input required type="text" placeholder="Academic Year" bind:value={filterAcademicYear} />
+            <div class="form-group">
+                <label for="location">Localización</label>
+                <input id="location" required type="text" placeholder="Ej : Badajoz" bind:value={filterLocation} />
+            </div>
+
+            <div class="form-group">
+                <label for="degree">Grado</label>
+                <input id="degree" required type="text" placeholder="Ej : Medicina" bind:value={filterDegree} />
+            </div>
+
+            <div class="form-group">
+                <label for="over45">Mayores de 45</label>
+                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={filterOver45} />
+            </div>
+
+            <div class="form-group">
+                <label for="spanishFirst">Españoles Primer año</label>
+                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={filterSpanish} />
+            </div>
+
+            <div class="form-group">
+                <label for="foreigners">Extranjeros</label>
+                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={filterForeigners} />
+            </div>
+
+            <div class="form-group">
+                <label for="graduated">Graduados</label>
+                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={filterGraduated} />
+            </div>
+
+            <div class="form-group">
+                <label for="academicYear">Año Académico</label>
+                <input id="academicYear" required type="text" placeholder="Ej : 2016-2017" bind:value={filterAcademicYear} />
+            </div>
 
             <div class="filter-buttons">
                 <Button color="success" on:click={applyFilters}>Aplicar</Button>
@@ -523,18 +559,47 @@ function openEditForm(universityD) {
 {/if}
 
 
+
 {#if showCreateForm}
     <div class="filter-overlay" on:click={() => showCreateForm = false}>
         <div class="filter-form" on:click|stopPropagation>
             <h5>Crear Demanda Universitaria</h5>
 
-            <input type="text" placeholder="Location" bind:value={newUniversityLocation} />
-            <input type="text" placeholder="Degree" bind:value={newUniversityDegree}>
-            <input type="text" placeholder="Over45" bind:value={newUniversityOver45}> 
-            <input type="text" placeholder="Spanish First" bind:value={newUniversitySpanish}>
-            <input type="text" placeholder="Foreigners" bind:value={newUniversityForeigners}>
-            <input type="text" placeholder="Graduated" bind:value={newUniversitygraduated}>
-            <input type="text" placeholder="Academic Year" bind:value={newUniversityAcademicYear}>
+            <div class="form-group">
+                <label for="location">Localización</label>
+                <input id="location" required type="text" placeholder="Ej : Badajoz" bind:value={newUniversityLocation} />
+            </div>
+
+            <div class="form-group">
+                <label for="degree">Grado</label>
+                <input id="degree" required type="text" placeholder="Ej : Medicina" bind:value={newUniversityDegree} />
+            </div>
+
+            <div class="form-group">
+                <label for="over45">Mayores de 45</label>
+                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+            </div>
+
+            <div class="form-group">
+                <label for="spanishFirst">Españoles Primer año</label>
+                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+            </div>
+
+            <div class="form-group">
+                <label for="foreigners">Extranjeros</label>
+                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+            </div>
+
+            <div class="form-group">
+                <label for="graduated">Graduados</label>
+                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+            </div>
+
+            <div class="form-group">
+                <label for="academicYear">Año Académico</label>
+                <input id="academicYear" required type="text" placeholder="Ej : 2016-2017" bind:value={newUniversityAcademicYear} />
+            </div>
+
 
             <div class="filter-buttons">
                 <!--Para que ejecuto la funcion createContatcs al pulsar el boton -->
@@ -551,13 +616,40 @@ function openEditForm(universityD) {
         <div class="filter-form" on:click|stopPropagation>
             <h5>Editar Demanda Universitaria</h5>
 
-            <input type="text" placeholder="Location" bind:value={newUniversityLocation} />
-            <input type="text" placeholder="Degree" bind:value={newUniversityDegree}>
-            <input type="text" placeholder="Over45" bind:value={newUniversityOver45}> 
-            <input type="text" placeholder="Spanish First" bind:value={newUniversitySpanish}>
-            <input type="text" placeholder="Foreigners" bind:value={newUniversityForeigners}>
-            <input type="text" placeholder="Graduated" bind:value={newUniversitygraduated}>
-            <input type="text" placeholder="Academic Year" bind:value={newUniversityAcademicYear}>
+            <div class="form-group">
+                <label for="location">Localización</label>
+                <input id="location" required type="text" placeholder="Ej : Badajoz" bind:value={newUniversityLocation} />
+            </div>
+
+            <div class="form-group">
+                <label for="degree">Grado</label>
+                <input id="degree" required type="text" placeholder="Ej : Medicina" bind:value={newUniversityDegree} />
+            </div>
+
+            <div class="form-group">
+                <label for="over45">Mayores de 45</label>
+                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+            </div>
+
+            <div class="form-group">
+                <label for="spanishFirst">Españoles Primer año</label>
+                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+            </div>
+
+            <div class="form-group">
+                <label for="foreigners">Extranjeros</label>
+                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+            </div>
+
+            <div class="form-group">
+                <label for="graduated">Graduados</label>
+                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+            </div>
+
+            <div class="form-group">
+                <label for="academicYear">Año Académico</label>
+                <input id="academicYear" required type="text" placeholder="Ej : 2016-2017" bind:value={newUniversityAcademicYear} />
+            </div>
 
             <div class="filter-buttons">
                 <Button color="primary" on:click={updateUniversityDemand}>Actualizar</Button>
@@ -586,23 +678,27 @@ function openEditForm(universityD) {
 
     .filter-form {
         background-color: #fff;
-        padding: 2rem;
+        padding: 0.7rem 1.5rem; /*Vertical , horizontal*/
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         display: flex;
         flex-direction: column;
-        gap: 0.7rem;
+        gap: 0.4rem;
         width: 90%;
         max-width: 500px;
         z-index: 1001;
+        display: flex;
+ 
     }
 
     .filter-form input {
         padding: 0.5rem;
         border-radius: 5px;
         border: 1px solid #ccc;
+        width: 100%; /* Asegura que todos ocupen el mismo ancho */
+        box-sizing: border-box;
     }
-
+    
     .filter-buttons {
         display: flex;
         justify-content: space-between;
