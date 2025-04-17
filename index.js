@@ -16,7 +16,7 @@ app.options('*', (req, res) => {
     res.sendStatus(200);
 });
 import { loadBackendPablo } from "./src/backend/university-academic-performance/index.js";
-import { loadBackendJavier } from "./src/backend/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
+import { loadBackendJavier } from "./src/backend/v2/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 import { loadBackendAlejandro } from "./src/backend/students_satisfaction/index.js";
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback

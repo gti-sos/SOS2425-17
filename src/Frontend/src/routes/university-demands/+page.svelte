@@ -9,7 +9,7 @@
     let Devel_HOST = "http://localhost:16078";
 
 
-    let Api = "/api/v1/university-demands";
+    let Api = "/api/v2/university-demands";
 
     //Para que funcione todo si estas en modod desarrollo
     if (dev){
@@ -74,7 +74,7 @@
     });
 
     function getLoadInitialData() {
-    fetch("/api/v1/university-demands/loadInitialData")
+    fetch("/api/v2/university-demands/loadInitialData")
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
