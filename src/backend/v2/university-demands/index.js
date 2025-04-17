@@ -134,29 +134,6 @@ function loadBackendJavierV2(app){
     });
     
     
-    // Obtener registros por año y ciudad
-    app.get(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
-        console.log("New GET to /university-demands/:degree/:location/:academicYear");
-    
-        const degree = req.params.degree;
-        const location = req.params.location;
-        const academicYear = req.params.academicYear;
-    
-        db.findOne({ degree, location, academicYear }, (err, demand) => {
-            if (err) {
-                res.status(500).send("Internal Server Error");
-                return;
-            }
-    
-            if (demand) {
-                delete demand._id;
-                res.status(200).json(demand);
-            } else {
-                res.sendStatus(404);
-            }
-        });
-    });
-    
     
     //Cargar datos iniciales
     app.get(BASE_API + "/university-demands/loadInitialData", (request, response) => {
