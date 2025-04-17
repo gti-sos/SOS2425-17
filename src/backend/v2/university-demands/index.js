@@ -88,7 +88,7 @@ function loadBackendJavierV2(app){
         let {
             location, degree, academicYear,
             over45, spanishFirst, foreigners, graduated,
-            limit, offset
+            limit, offset ,from, to
         } = req.query;
     
         let query = {};
@@ -100,12 +100,25 @@ function loadBackendJavierV2(app){
         if (spanishFirst) query.spanishFirst = Number(spanishFirst);
         if (foreigners) query.foreigners = Number(foreigners);
         if (graduated) query.graduated = Number(graduated);
+
+        // Filtro por rango de años
+        if (from || to) {
+            query.academicYear = {};
+            if (from) query.academicYear.$gte = from;
+            if (to) query.academicYear.$lte = to;
+        }
     
         db.find(query, (err, results) => {
             if (err) {
                 res.status(500).send("Internal Server Error");
                 return;
             }
+
+            //Esto es para que si te lo devuelve vacio se convierta en 404 para que en el front no te de error
+            if (results.length === 0) {
+                return res.status(404).json({ error: "No se encontraron resultados con esos filtros." });
+            }
+            
     
             // Paginación
             if (offset !== undefined) {
