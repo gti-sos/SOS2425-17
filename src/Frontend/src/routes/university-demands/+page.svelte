@@ -1,4 +1,8 @@
 
+<svelte:head>
+	<title>University Demands</title>
+</svelte:head>
+
 <script>
 
     import {dev} from '$app/environment';
@@ -526,22 +530,22 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={filterOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={filterOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={filterSpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={filterSpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={filterForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={filterForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={filterGraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={filterGraduated} />
             </div>
 
             <div class="form-group">
@@ -577,22 +581,22 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={newUniversityOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
             </div>
 
             <div class="form-group">
@@ -628,22 +632,22 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={newUniversityOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
             </div>
 
             <div class="form-group">

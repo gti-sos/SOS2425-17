@@ -82,6 +82,7 @@ const university_demands = [
      //}
  //});
 
+ //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 function loadBackendJavier(app){
     app.get(BASE_API + "/university-demands", (req, res) => {
         let {
