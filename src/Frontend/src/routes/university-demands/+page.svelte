@@ -15,7 +15,7 @@
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
 
-
+    //Importo el componente de bootstrap para que me haga la tabla
     let universityData = [];
     let result = "";
     let resultStatus = "";
