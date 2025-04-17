@@ -4,6 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"start-front-dev": "npm run dev -- --open",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -31,6 +32,7 @@
 		"vite": "^6.2.5"
 	},
 	"dependencies": {
+		"@fortawesome/fontawesome-free": "^6.7.2",
 		"@sveltestrap/sveltestrap": "^7.1.0"
 	}
 }

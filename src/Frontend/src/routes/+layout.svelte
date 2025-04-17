@@ -1,14 +1,26 @@
 <script>
-    import Header from "./Header.svelte";
-    import Footer from "./Footer.svelte";
+    import Header from './Header.svelte';
+    import Footer from './Footer.svelte';
 </script>
 
+<style>
+    main {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<Header></Header>
-<hr>
-    <slot>
+    .content {
+        flex: 1;
+    }
+</style>
 
-    </slot>
-<hr>
+<main>
+    <Header />
+    
+    <div class="content">
+        <slot />
+    </div>
 
-<Footer></Footer>
+    <Footer />
+</main>
