@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+<svelte:head>
+	<title>SOS2425-17</title>
+</svelte:head>
+
 <script>
     // Datos de los miembros
     const miembros = [
@@ -87,16 +90,6 @@
                 </li>
             {/each}
         </ul>
-=======
-
-<svelte:head>
-	<title>SOS2425-17</title>
-</svelte:head>
-
-<h1>Este es el grupo 17 de SOS24-25.</h1>
-    <div>
-        Si quieres saber más sobre nosotros no dudes en consultar  <a href="https://sos2425-17.onrender.com/about" target="_blank">Conocenos</a>
->>>>>>> adc6680b663659fb17cc672f332608438f57da69
     </div>
 
     <div class="section">
@@ -110,7 +103,6 @@
         </ul>
     </div>
 
-<<<<<<< HEAD
     <div class="section">
         <h2>📄 Enlaces a la documentación de Postman de las APIs</h2>
         <ul>
@@ -120,19 +112,6 @@
                 </li>
             {/each}
         </ul>
-=======
-    <div>
-        <div>
-            Javier guerrero Perez
-            <div>
-                cuya api es : <a href="https://sos2425-17.onrender.com/api/v1/university-demands" target="_blank">university-demands</a>  
-            </div>
-            <div>
-                cuyo frontend es : <a href="/university-demands">Front university-demands</a>
-            </div>
-        </div>
-
->>>>>>> adc6680b663659fb17cc672f332608438f57da69
     </div>
 
     <div class="section">
@@ -142,30 +121,4 @@
         </ul>
     </div>
 
-<<<<<<< HEAD
-    <div class="section">
-        <h2>👥 Integrantes del equipo y su fuente de datos</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fuente de datos / Recurso de API</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each miembros as miembro}
-                    <tr>
-                        <td>{miembro.nombre}</td>
-                        <td>{miembro.recurso}</td>
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
-    </div>
 </main>
-=======
-    <div>
-        Alejandro Gaona Penco cuya api es  <a href="https://sos2425-17.onrender.com/api/v1/students_satisfaction" target="_blank">students_satisfaction</a>
-    </div>
-    
->>>>>>> adc6680b663659fb17cc672f332608438f57da69
