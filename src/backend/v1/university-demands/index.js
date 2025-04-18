@@ -82,7 +82,8 @@ const university_demands = [
      //}
  //});
 
-function loadBackendJavier(app){
+ //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
+function loadBackendJavierV1(app){
     app.get(BASE_API + "/university-demands", (req, res) => {
         let {
             location, degree, academicYear,
@@ -316,4 +317,4 @@ function loadBackendJavier(app){
 
 }
 
-export {loadBackendJavier}
+export {loadBackendJavierV1}

@@ -1,11 +1,15 @@
 
+<svelte:head>
+	<title>University Demands</title>
+</svelte:head>
+
 <script>
 
     import {dev} from '$app/environment';
     let Devel_HOST = "http://localhost:16078";
 
 
-    let Api = "/api/v1/university-demands";
+    let Api = "/api/v2/university-demands";
 
     //Para que funcione todo si estas en modod desarrollo
     if (dev){
@@ -15,7 +19,7 @@
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
 
-
+    //Importo el componente de bootstrap para que me haga la tabla
     let universityData = [];
     let result = "";
     let resultStatus = "";
@@ -42,6 +46,9 @@
     let filterForeigners = "";
     let filterGraduated = "";
     let filterAcademicYear = "";
+
+    let fromYear = '';
+    let toYear = '';
 
 
     async function getUniversityDemands() {
@@ -70,7 +77,7 @@
     });
 
     function getLoadInitialData() {
-    fetch("/api/v1/university-demands/loadInitialData")
+    fetch("/api/v2/university-demands/loadInitialData")
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
@@ -111,33 +118,28 @@
         });
 }
 //Filtrar por un dato 
-//?http://localhost:16078/api/v1/university-demands/?academicYear=2016-2017
+//http://localhost:16078/api/v2/university-demands?from=2017-2018&to=2018-2019
 async function getUniversityEspecifico(params = {}) {
     resultStatus = result = "";
     try {
         const queryString = new URLSearchParams(params).toString();
+        //Lo que hago es que llamo a la direccion /university-demands?campo = valor 
         const url = `${Api}?${queryString}`;
         const res = await fetch(url, { method: "GET" });
 
         const status = res.status;
         resultStatus = status;
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${status}`);
-        }
+            if (status === 404) {
+                const firstParamKey = Object.keys(params)[0];
+                const firstParamValue = params[firstParamKey];
+                errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
+                setTimeout(() => {
+                errorMessage = "";
+                }, 3000);
+            } 
 
         const data = await res.json();
-
-        if (data.length === 0) {
-            errorMessage = "No se encontraron resultados con esos filtros.";
-            universityData = []; // Limpiar la tabla
-
-            // Oculta el mensaje después de unos segundos
-            setTimeout(() => {
-                errorMessage = "";
-            }, 3000);
-            return;
-        }
 
         result = JSON.stringify(data, null, 2);
         universityData = data;
@@ -153,30 +155,6 @@ async function getUniversityEspecifico(params = {}) {
     }
 }
 
-
-async function getUniversityDetalle(degree, location, academicYear) {
-    resultStatus = result = "";
-
-    // Codificar parámetros por si tienen espacios o tildes
-    const url = `${Api}/${encodeURIComponent(degree)}/${encodeURIComponent(location)}/${academicYear}`;
-
-    try {
-        const res = await fetch(url, { method: "GET" });
-
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-        result = JSON.stringify(data, null, 2);
-        universityData = data;
-
-        console.log(`Response received:\n${result}`);
-    } catch (error) {
-        console.log(`Error: GET from ${url} - ${error}`);
-    }
-}
-
 function applyFilters() {
     const params = {};
 
@@ -187,11 +165,14 @@ function applyFilters() {
     if (filterForeigners) params.foreigners = filterForeigners;
     if (filterGraduated) params.graduated = filterGraduated;
     if (filterAcademicYear) params.academicYear = filterAcademicYear;
+    if (fromYear) params.from = fromYear;
+    if (toYear) params.to = toYear;
 
     getUniversityEspecifico(params);
     showFilterForm = false; // Oculta el formulario tras aplicar
 }
 
+//Con esto vacio los campos de crear y actualizar 
 function clearFilters() {
     newUniversityLocation = "";
     newUniversityDegree = "";
@@ -203,7 +184,7 @@ function clearFilters() {
     resultStatus = "";
 }
 
-
+//Con esto lo que hago esque vacio los campos del formulario de filtro
 function clearFilterFields() {
     filterLocation = "";
     filterDegree = "";
@@ -212,8 +193,12 @@ function clearFilterFields() {
     filterForeigners = "";
     filterGraduated = "";
     filterAcademicYear = "";
+    fromYear = "";
+    toYear = "";
 }
 
+//Con esto lo que hago es que dejo todos los campos de ambos formularios vacios y hago un get para que se actualize la tabla
+//con los campos vacios
 function resetFilters() {
     clearFilters();
     clearFilterFields();
@@ -526,27 +511,32 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={filterOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={filterOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={filterSpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={filterSpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={filterForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={filterForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={filterGraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={filterGraduated} />
             </div>
 
             <div class="form-group">
                 <label for="academicYear">Año Académico</label>
                 <input id="academicYear" required type="text" placeholder="Ej : 2016-2017" bind:value={filterAcademicYear} />
+            </div>
+
+            <div class="form-group">
+                <label>Desde: <input bind:value={fromYear} type="text" placeholder="Ej: 2005-2006" /></label>
+                <label>Hasta: <input bind:value={toYear} type="text" placeholder="Ej: 2016-2017" /></label>
             </div>
 
             <div class="filter-buttons">
@@ -577,22 +567,22 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={newUniversityOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
             </div>
 
             <div class="form-group">
@@ -628,22 +618,22 @@ function openEditForm(universityD) {
 
             <div class="form-group">
                 <label for="over45">Mayores de 45</label>
-                <input id="over45" required type="number" placeholder="Ej : 3" bind:value={newUniversityOver45} />
+                <input id="over45" required type="text" placeholder="Ej : 3" bind:value={newUniversityOver45} />
             </div>
 
             <div class="form-group">
                 <label for="spanishFirst">Españoles Primer año</label>
-                <input id="spanishFirst" required type="number" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
+                <input id="spanishFirst" required type="text" placeholder="Ej : 4" bind:value={newUniversitySpanish} />
             </div>
 
             <div class="form-group">
                 <label for="foreigners">Extranjeros</label>
-                <input id="foreigners" required type="number" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
+                <input id="foreigners" required type="text" placeholder="Ej : 5" bind:value={newUniversityForeigners} />
             </div>
 
             <div class="form-group">
                 <label for="graduated">Graduados</label>
-                <input id="graduated" required type="number" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
+                <input id="graduated" required type="text" placeholder="Ej : 25" bind:value={newUniversitygraduated} />
             </div>
 
             <div class="form-group">
@@ -677,33 +667,67 @@ function openEditForm(universityD) {
     }
 
     .filter-form {
-        background-color: #fff;
-        padding: 0.7rem 1.5rem; /*Vertical , horizontal*/
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-        width: 90%;
-        max-width: 500px;
-        z-index: 1001;
-        display: flex;
- 
-    }
+    background-color: #fff;
+    padding: 0.4rem 0.8rem;         /* Menos espacio dentro del cuadro */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;                   /* Menos espacio entre elementos */
+    width: 85%;
+    max-width: 400px;              /* Más estrecho */
+    font-size: 0.85rem;            /* Tamaño de texto más pequeño */
+}
 
-    .filter-form input {
-        padding: 0.5rem;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        width: 100%; /* Asegura que todos ocupen el mismo ancho */
-        box-sizing: border-box;
-    }
+.filter-form input {
+    padding: 0.2rem 0.4rem;        /* Inputs más bajos y angostos */
+    font-size: 0.85rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
     
-    .filter-buttons {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.5rem;
-    }
+}
+
+.filter-form h5 {
+    font-size: 1rem;               /* Título más pequeño */
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: bold;       /* Hace el texto más fuerte */
+    margin-right: 0.5rem;    /* Espacio entre el label y el input */
+    width: 45%;              /* Ancho fijo del label */
+}
+
+.form-group input {
+    flex: 1;
+    padding: 0.3rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+
+.filter-buttons button {
+    font-size: 0.8rem;             /* Botones más pequeños */
+    padding: 0.3rem 0.6rem;
+}
+
 
     .success-message {
     background-color: #d4edda;
