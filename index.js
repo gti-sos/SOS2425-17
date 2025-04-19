@@ -2,12 +2,13 @@ console.log("Init script");
 
 
 import express from "express";
+import cors from "cors";
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
 
 
 app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
-
+app.use(cors());
 
 app.options('*', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -18,7 +19,8 @@ app.options('*', (req, res) => {
 import { loadBackendPablo } from "./src/backend/university-academic-performance/index.js";
 import { loadBackendJavierV1 } from "./src/backend/v1/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 import { loadBackendJavierV2 } from "./src/backend/v2/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
-import { loadBackendAlejandro } from "./src/backend/students_satisfaction/index.js";
+import { loadBackendAlejandro } from "./src/backend/v1/university-demands/students_satisfaction/indexAGP.js";
+import { loadBackendAlejandroV2 } from "./src/backend/v2/university-demands/students_satisfaction/indexAGP.js";
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
@@ -32,6 +34,8 @@ loadBackendPablo(app)
 loadBackendJavierV1(app) //aqui pongo la funcion loadBackend importada de src/back para que se muestre en pantalla
 loadBackendJavierV2(app)
 loadBackendAlejandro(app)
+loadBackendAlejandroV2(app)
+
 
 
 app.use(handler);

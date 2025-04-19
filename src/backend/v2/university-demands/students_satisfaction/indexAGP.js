@@ -193,7 +193,8 @@ function loadBackendAlejandroV2(app) {
 
         db.remove({ carrera: carrera, ciudad: ciudad }, {}, (err, numRemoved) => {
             if (err) {
-                return response.status(500).json({ error: "Database error" });
+                response.status(500).send("Error code 01");                
+                console.error(`ERROR: ${err}`);
             }
 
             if (numRemoved > 0) {
@@ -210,4 +211,4 @@ function loadBackendAlejandroV2(app) {
     });
 }
 
-export { loadBackendAlejandro };
+export { loadBackendAlejandroV2 };
