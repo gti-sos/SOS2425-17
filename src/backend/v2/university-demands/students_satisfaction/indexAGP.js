@@ -1,4 +1,4 @@
-import dataStore from "nedb"; // Para la base de datos
+
 import dataStore from "nedb";
 
 const BASE_API = "/api/v2";
