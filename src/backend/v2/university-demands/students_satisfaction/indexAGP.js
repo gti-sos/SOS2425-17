@@ -1,5 +1,5 @@
 import dataStore from "nedb"; // Para la base de datos
-const BASE_API = "/api/v1"; // URL base de la API
+const BASE_API = "/api/v2"; // URL base de la API
 
 let db = new dataStore(); // Inicializar la base de datos
 
@@ -16,27 +16,12 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", ciudad: "CÁCERES", satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: null },
     { carrera: "GRADO EN ENFERMERÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45 }
 ];
-/*
-// Cargar datos iniciales si la base de datos está vacía
-db.count({}, (err, count) => {
-    if (count === 0) {
-        db.insert(students_satisfaction_data, (err, newDocs) => {
-            if (err) {
-                console.error("Error al insertar datos iniciales", err);
-            }
-        });
-    }
-});
-*/
+// Función principal para configurar las rutas del backend v2
+function loadBackendAlejandroV2(app) {
 
-// Función principal para configurar las rutas del backend
-function loadBackendAlejandro(app) {
-
-    
-
-    // Cargar datos iniciales en la base de datos
+    // Cargar datos iniciales en la base de datos v2
     app.get(BASE_API + "/students_satisfaction/loadInitialData", (request, response) => {
-        console.log("Loading initial data into the database...");
+        console.log("Loading initial data into the v2 database...");
 
         // Verificar si la base de datos ya tiene datos
         db.count({}, (err, count) => {
@@ -49,7 +34,7 @@ function loadBackendAlejandro(app) {
                     if (err) {
                         return response.status(500).json({ error: "Error inserting initial data" });
                     }
-                    response.status(201).json({ message: "The data was inserted successfully" }); // Devuelve el mensaje
+                    response.status(201).json({ message: "The data was inserted successfully into v2" }); // Mensaje de éxito
                 });
             } else {
                 response.status(409).json({ message: "The database already contains data, no need to initialize" });
@@ -57,44 +42,45 @@ function loadBackendAlejandro(app) {
         });
     });
 
-    app.get(BASE_API + "/students_satisfaction/paginated", (req, res) => {
+    // GET: Obtener todos los registros con paginación
+    app.get(BASE_API + "/students_satisfaction", (req, res) => {
         let {
             carrera, ciudad,
             satisfaccion_total, sat_estudiantes, satisfaccion_pdi,
             limit, offset
         } = req.query;
-    
-        db.find({}, (err, data) => {
+        
+        let query = {};
+
+        if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");   
+        if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
+        if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
+        if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
+        if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
+
+        db.find(query, (err, data) => {
             if (err) {
-                return res.status(500).json({ error: "Database error" });
+                res.status(500).send("Internal Server Error");
+                return;
             }
-    
-            let results = data.filter((entry) => {
-                if (carrera && !new RegExp("^" + carrera + "$", "i").test(entry.carrera)) return false;
-                if (ciudad && !new RegExp("^" + ciudad + "$", "i").test(entry.ciudad)) return false;
-                if (satisfaccion_total && Number(entry.satisfaccion_total) !== Number(satisfaccion_total)) return false;
-                if (sat_estudiantes && Number(entry.sat_estudiantes) !== Number(sat_estudiantes)) return false;
-                if (satisfaccion_pdi && Number(entry.satisfaccion_pdi) !== Number(satisfaccion_pdi)) return false;
-                return true;
-            });
-    
+            //Esto es para que si te lo devuelve vacio se convierta en 404 para que en el front no te de error
+            if (results.length === 0) {
+                return res.status(404).json({ error: "No se encontraron resultados con esos filtros." });
+            }
+            // Paginación
             if (offset !== undefined) {
                 results = results.slice(Number(offset));
             }
-    
             if (limit !== undefined) {
                 results = results.slice(0, Number(limit));
             }
     
-            results = results.map(r => {
-                delete r._id;
-                return r;
-            });
-    
+            results.forEach(e => delete e._id); // Limpiar _id para front
             res.json(results);
         });
     });
-    
+
+            
 
     // GET: Obtener todos los registros
     app.get(BASE_API + "/students_satisfaction", (request, response) => {
@@ -110,29 +96,6 @@ function loadBackendAlejandro(app) {
             }
         });
     });
-
-    // GET: Obtener un registro específico por carrera y ciudad
-    app.get(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
-        console.log("GET request to /students_satisfaction/:carrera/:ciudad");
-    
-        const carrera = request.params.carrera;
-        const ciudad = request.params.ciudad;
-    
-        db.findOne({ carrera: carrera, ciudad: ciudad }, (err, record) => {
-            if (err) {
-                response.status(500).send("Internal Server Error");
-                return;
-            }
-    
-            if (record) {
-                delete record._id; // Eliminar el campo _id para que no aparezca en la respuesta
-                response.status(200).json(record); // Devolver el único registro encontrado
-            } else {
-                response.sendStatus(404); // Si no se encuentra el registro
-            }
-        });
-    });
-    
 
     // POST: Insertar un nuevo registro
     app.post(BASE_API + "/students_satisfaction", (request, response) => {
@@ -164,12 +127,11 @@ function loadBackendAlejandro(app) {
             });
         });
     });
-    // POST: Intentar modificar un registro específico, no permitido en esta ruta
-app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
-    console.log("POST request to /students_satisfaction/:carrera/:ciudad");
-    response.sendStatus(405); // Método no permitido
-});
-
+    //Post ERROR 405
+    
+    app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad",(req,res)=>{    
+        res.sendStatus(405);
+    });
 
     // PUT: Modificar un registro específico
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, response) => {
@@ -182,15 +144,7 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
         if (!body.carrera || !body.ciudad || !body.satisfaccion_total || !body.sat_estudiantes || !body.satisfaccion_pdi) {
             return response.status(400).json({ error: "Missing required fields" });
         }
-/*
-        // Validar que los parámetros de la URL coincidan con los del cuerpo
-        if (body.carrera !== carrera || body.ciudad !== ciudad) {
-            
-            return response.status(400).json({
-                error: "carrera and ciudad in body must match URL parameters"
-            });
-        }
-*/
+
         // Actualizar el registro
         db.update(
             { carrera: carrera, ciudad: ciudad },
@@ -210,10 +164,10 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
         );
     });
 
-    // PUT: Intentar modificar todos los registros
-    app.put(BASE_API + "/students_satisfaction", (request, response) => {
-        console.log("PUT request to /students_satisfaction");
-        response.sendStatus(405); // Método no permitido
+    //FALLO DE PUT a todos los datos
+    app.put(BASE_API + "/students_satisfaction",(req,res)=>{    
+        
+        res.sendStatus(405);
     });
 
     // DELETE: Eliminar todos los registros
@@ -249,10 +203,11 @@ app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (request, respons
             }
         });
     });
-    app.get(BASE_API+"/students_satisfaction/docs",(request,response)=>{
+
+    // Ruta para la documentación de la API
+    app.get(BASE_API + "/students_satisfaction/docs", (request, response) => {
         response.redirect("https://documnpenter.getpostman.com/view/42373237/2sB2cUBicY");
     });
-    
 }
 
 export { loadBackendAlejandro };
