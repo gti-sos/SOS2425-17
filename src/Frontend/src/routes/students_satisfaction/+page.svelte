@@ -1,6 +1,7 @@
 <svelte:head>
-	<title>Students Satisfaction</title>
+    <title>Students Satisfaction</title>
 </svelte:head>
+
 
 <script>
     import {dev} from '$app/environment';
@@ -10,9 +11,11 @@
         Api = DEVEL_HOST + Api;
     }
 
+
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
-    
+   
+
 
     let satisfactionData = [];
     let result = "";
@@ -23,11 +26,13 @@
     let newSat_estudiantes="";
     let newSatisfaccion_pdi="";
 
+
     let showFilterForm = false; // Para mostrar/ocultar el formulario
     let showCreateForm = false;
     let showUpdateForm = false;
     let successMessage = "";
     let errorMessage = "";
+
 
     // Campos del filtro (diferente de los de creación)
     let filterCarrera = "";
@@ -36,34 +41,37 @@
     let filterSat_estudiantes = "";
     let filterSatisfaccion_pdi = "";
 
+
     let fromSat="";
     let toSat="";
-    
+   
 
-    async function getStudentsSatisfactionData() {
-    resultStatus = result = "";
-    try {
-        const res = await fetch(Api, { method: "GET" });
-        const data = await res.json();
 
-        // Actualizamos la lista de satisfacción
-        satisfactionData = data;
+    async function getStudentsSatisfaction() {
+        //Para que siempre que llamemos a la funcion esos campos esten vacios
+        resultStatus = result = "";
+        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
+        //Se hace await por el async
+       
+        try{
 
-        console.log(`Datos recargados: ${JSON.stringify(satisfactionData, null, 2)}`);
-    } catch (error) {
-        console.log(`Error al obtener los datos: ${error}`);
-        errorMessage = "¡Error al obtener los datos!";
-        setTimeout(() => {
-            errorMessage = "";
-        }, 3000);
+
+            const res  = await fetch(Api,{method: "GET"});
+            //Para manda el resultado res en json y lo mete en data
+            const data = await res.json();
+            result = JSON.stringify(data,null,2);
+            satisfactionData = data;
+            console.log(`Response received:${(JSON.stringify(satisfactionData,null,2))}`);
+        } catch(error){
+            console.log(`Error : Get from ${Api} : ${(error)}`)
+        }
     }
-}
-
          //Cada vez que cargue la pagina llama a get contact
     onMount(async () => {
         //Cuando se carga la pagina se llama a la funcion getContacts
         await getStudentsSatisfaction();
     });
+
 
     function getLoadInitialData() {
         fetch(`${DEVEL_HOST}/api/v2/students_satisfaction/loadInitialData`)
@@ -72,6 +80,7 @@
                 console.log("Datos iniciales insertados correctamente");
                 getStudentsSatisfaction(); // <-- Esto recarga la tabla
                 successMessage = "¡Datos iniciales insertados correctamente!";
+
 
                 // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
@@ -84,9 +93,9 @@
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
-                
-            } 
-            
+               
+            }
+           
             else {
                 console.log("Error al insertar los datos");
                 errorMessage = "Error al insertar los datos";
@@ -94,7 +103,7 @@
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
-                
+               
             }
         })
         .catch(error => {
@@ -112,12 +121,14 @@ async function getSatisfactionEspecifico(params = {}) {
     try {
         const queryString = new URLSearchParams(params).toString();
         const url = `${Api}?${queryString}`;
-        
+       
         console.log("URL with parameters:", url); // Agrega esto para ver la URL generada
+
 
         const res = await fetch(url, { method: "GET" });
         const status = res.status;
         resultStatus = status.toString();
+
 
         const data = await res.json();
         result = JSON.stringify(data, null, 2);
@@ -133,8 +144,11 @@ async function getSatisfactionEspecifico(params = {}) {
 }
 
 
+
+
 function applyFilters() {
     const params = {};
+
 
     if (filterCarrera) params.carrera = filterCarrera;
     if (filterCiudad) params.ciudad = filterCiudad;
@@ -144,12 +158,15 @@ function applyFilters() {
     if (fromSat) params.from = fromSat;
     if (toSat) params.to = toSat;
 
+
     getSatisfactionEspecifico(params);
     showFilterForm = false; // Oculta el formulario tras aplicar
 }
 
 
-//Con esto vacio los campos de crear y actualizar 
+
+
+//Con esto vacio los campos de crear y actualizar
 function clearFilters() {
     newCarrera = "";
     newCiudad = "";
@@ -158,6 +175,7 @@ function clearFilters() {
     newSatisfaccion_pdi = "";
     resultStatus = "";
 }
+
 
 //Con esto lo que hago esque vacio los campos del formulario de filtro
 function clearFilterFields() {
@@ -168,8 +186,9 @@ function clearFilterFields() {
     filterSatisfaccion_pdi = "";
     fromSat="";
     toSat="";
-    
+   
 }
+
 
 //Con esto lo que hago es que dejo todos los campos de ambos formularios vacios y hago un get para que se actualize la tabla
 //con los campos vacios
@@ -179,71 +198,87 @@ function resetFilters() {
     getStudentsSatisfaction(); // <- Vuelve a cargar todo sin filtros
 }
 
-async function createStudentsSatisfaction() {
-    resultStatus = result = "";
-    try {
-        const res = await fetch(Api, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                carrera: newCarrera,
-                ciudad: newCiudad,
-                satisfaccion_total: newSatisfaccion_total,
-                sat_estudiantes: newSat_estudiantes,
-                satisfaccion_pdi: newSatisfaccion_pdi
-            })
-        });
 
-        const status = await res.status;
-        resultStatus = status;
 
-        if (status == 201) {
-            const newDemand = await res.json();  // Obtener los datos de la nueva demanda desde la respuesta
 
-            // Recargar los datos desde la API para actualizar la lista de registros
-            await getStudentsSatisfactionData();  // Recargamos los datos después de crear un nuevo registro
+    async function createStudentsSatisfaction() {
+        //Para que siempre que llamemos a la funcion esos campos esten vacios
+        resultStatus = result = "";
+        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
+        //Se hace await por el async
+       
+        try{
 
-            showCreateForm = false;
-            clearFilters(); 
 
-            successMessage = "¡Demanda creada con éxito!";
-            setTimeout(() => {
-                successMessage = "";
-            }, 3000);
+            const res  = await fetch(Api,{
+                method: "POST",
+                headers:{
+                    "Content-type": "application/json"
+                },
+                body:JSON.stringify({
+                    carrera: newCarrera,
+                    ciudad: newCiudad,
+                    satisfaccion_total: newSatisfaccion_total,
+                    sat_estudiantes: newSat_estudiantes,
+                    satisfaccion_pdi: newSatisfaccion_pdi
+                })
+            });
+            //Para manda el resultado res en json y lo mete en data
+            const status = res.status;
+            resultStatus=status.toString();
+            if(status==201){
+                console.log(`Satisfaction created:`);
+                getStudentsSatisfaction();
+                showCreateForm = false;
+                successMessage = "¡Demanda creada con éxito!";
+                setTimeout(() => {
+                    successMessage = "";
+                }, 3000);
+            }
+            else if(status == 409){
+                console.log(`ERROR creating demand: status received\n${status}`);
+                errorMessage = "¡Esta demanda ya existe!";
+                // Oculta el mensaje después de unos segundos
+                setTimeout(() => {
+                    errorMessage = "";
+                }, 3000);
+            }
+            else if(status == 400){
+                console.log(`ERROR creating demand: status received\n${status}`);
+                errorMessage = "¡Tienes que rellenar todos los campos!";
 
-            console.log(`Satisfaction created and updated list: ${JSON.stringify(satisfactionData, null, 2)}`);
-        } else if (status == 409) {
-            console.log(`ERROR creando demanda: status recibido ${status}`);
-            errorMessage = "¡Esta demanda ya existe!";
-            setTimeout(() => {
-                errorMessage = "";
-            }, 3000);
-        } else {
-            console.log(`ERROR creando demanda: status recibido ${status}`);
-            errorMessage = "¡Error al crear la demanda!";
-            setTimeout(() => {
-                errorMessage = "";
-            }, 3000);
+
+                // Oculta el mensaje después de unos segundos
+                setTimeout(() => {
+                    errorMessage = "";
+                }, 3000);
+            }
+            else {
+                console.log(`ERROR creating demand: status received\n${status}`);
+                errorMessage = "¡Error al crear la demanda!";
+
+
+                // Oculta el mensaje después de unos segundos
+                setTimeout(() => {
+                    errorMessage = "";
+                }, 3000);
+            }
+           
+
+
+        } catch (error){
+            console.log(`ERROR:  GET from ${Api}: ${error}`);
         }
-    } catch (error) {
-        console.log(`ERROR: POST request to ${Api}: ${error}`);
-        errorMessage = "¡Error al crear la demanda!";
-        setTimeout(() => {
-            errorMessage = "";
-        }, 3000);
-    }
-}
 
 
-// Cuando se carga la página se llama a la función getStudentsSatisfaction para cargar las demandas
 
-    //Put en el front
-    async function updateStudentsSatisfaction() {
+
+    }//Put en el front
+    async function updateUniversityDemand() {
     resultStatus = result = "";
     try {
         const url = `${Api}/${encodeURIComponent(newCarrera)}/${encodeURIComponent(newCiudad)}`;
+
 
         const updatedData = {
             carrera: newCarrera,
@@ -253,6 +288,7 @@ async function createStudentsSatisfaction() {
             satisfaccion_pdi: newSatisfaccion_pdi
         };
 
+
         const res = await fetch(url, {
             method: "PUT",
             headers: {
@@ -261,31 +297,38 @@ async function createStudentsSatisfaction() {
             body: JSON.stringify(updatedData)
         });
 
+
         const status = res.status;
-        resultStatus = status;
+        resultStatus = status.toString();
+
 
         if (status === 200) {
-            console.log("Satisfacción actualizada correctamente.");
-            
-            // Recargar los datos para ver la actualización
-            await getStudentsSatisfactionData();  // Recargamos los datos después de editar
-            
+            console.log("Demanda actualizada correctamente.");
+            getStudentsSatisfaction();
             successMessage = "¡Demanda actualizada con éxito!";
+            showUpdateForm = false;
+
+
             setTimeout(() => {
                 successMessage = "";
             }, 3000);
+        } else if (status === 404) {
+            errorMessage = "No se encontró la demanda a actualizar.";
+        } else if (status === 400) {
+            errorMessage = "Datos incompletos o no coinciden con los parámetros de la URL.";
         } else {
             errorMessage = "Error al actualizar la demanda.";
-            setTimeout(() => {
-                errorMessage = "";
-            }, 3000);
         }
-    } catch (error) {
-        console.log("Error en PUT:", error);
-        errorMessage = "Error de red al actualizar.";
+
+
         setTimeout(() => {
             errorMessage = "";
         }, 3000);
+
+
+    } catch (error) {
+        console.log("Error en PUT:", error);
+        errorMessage = "Error de red al actualizar.";
     }
 }
 
@@ -299,22 +342,26 @@ function openEditForm(sat) {
     showUpdateForm = true;
 }
 
+
 async function deleteStudentsSatisfaction(carrera, ciudad) {
     resultStatus = result = "";
     try {
         console.log("Intentando borrar URL:", `${Api}/${encodeURIComponent(carrera)}/${encodeURIComponent(ciudad)}`);
-        
+       
         const res = await fetch(`${Api}/${encodeURIComponent(carrera)}/${encodeURIComponent(ciudad)}`, {
             method: "DELETE"
         });
 
+
         const status = res.status;
         resultStatus = status.toString();
+
 
         if (status === 200 || status === 204) {  // Verifica tanto 200 como 204
             console.log(`Demand ${carrera} in ${ciudad} deleted`);
             getStudentsSatisfaction(); // Recarga los datos
             successMessage = "¡Demanda borrada con éxito!";
+
 
             setTimeout(() => {
                 successMessage = "";
@@ -327,6 +374,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             }, 3000);
         }
 
+
     } catch (error) {
         console.log(`ERROR: DELETE from ${Api}: ${error}`);
         errorMessage = "Error de red al eliminar.";
@@ -336,20 +384,23 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     }
 }
 
+
     async function deleteAllDemands(){
         resultStatus = result = "";
         try {
-            
+           
             //Hago un delete en api/avi/univertity-demands
             const res = await fetch(Api, {method: "DELETE"});
-            
+           
             const status = res.status;
             resultStatus = status;
+
 
             if (status === 200) {
                 console.log(`All demands deleted`);
                 getStudentsSatisfaction(); // más lógico que recargar los datos con loadInitialData
                 successMessage = "¡Demandas borradas con éxito!";
+
 
                 // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
@@ -364,22 +415,28 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
                 }, 3000);
             }
 
+
         } catch (error){
             console.log(`ERROR:  GET from ${Api}: ${error}`);
         }
 
+
     }
 
+
 </script>
+
 
 <!-- Mensajes de éxito o error -->
 {#if successMessage}
     <div class="success-message">{successMessage}</div>
 {/if}
 
+
 {#if errorMessage}
     <div class="error-message">{errorMessage}</div>
 {/if}
+
 
 <div class="button-group">
     <Button color="primary" on:click={getLoadInitialData}>Cargar Datos</Button>
@@ -393,6 +450,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     <Button color="danger" on:click={deleteAllDemands}>Eliminar Datos</Button>
 </div>
 
+
 <Table>
     <tbody>
         <tr>
@@ -402,7 +460,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <th>Satisfacción Estudiantes</th>
             <th>Satisfacción PDI</th>
         </tr>
-        
+       
         <!-- Esto ejecuta tantos tr como students_satisfaction haya -->
         {#each satisfactionData as universityD}
         <tr>
@@ -420,41 +478,49 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     </tbody>
 </Table>
 
+
 <!-- Si pulso el boton que llama a showFilterForm -->
 {#if showFilterForm}
     <div class="filter-overlay" on:click={() => showFilterForm = false}>
         <div class="filter-form" on:click|stopPropagation>
             <h5>Filtrar Satisfacción Estudiantil</h5>
 
+
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={filterCarrera} />
             </div>
+
 
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={filterCiudad} />
             </div>
 
+
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={filterSatisfaccion_total} />
             </div>
+
 
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={filterSat_estudiantes} />
             </div>
 
+
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={filterSatisfaccion_pdi} />
             </div>
 
+
             <div class="form-group">
                 <label>Desde: <input bind:value={fromSat} type="text" placeholder="Ej: 3" /></label>
                 <label>Hasta: <input bind:value={toSat} type="text" placeholder="Ej: 5" /></label>
             </div>
+
 
             <div class="filter-buttons">
                 <Button color="success" on:click={applyFilters}>Aplicar</Button>
@@ -465,35 +531,42 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     </div>
 {/if}
 
+
 {#if showCreateForm}
     <div class="filter-overlay" on:click={() => showCreateForm = false}>
         <div class="filter-form" on:click|stopPropagation>
             <h5>Crear Demanda de Satisfacción Estudiantil</h5>
+
 
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={newCarrera} />
             </div>
 
+
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={newCiudad} />
             </div>
+
 
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={newSatisfaccion_total} />
             </div>
 
+
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={newSat_estudiantes} />
             </div>
 
+
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={newSatisfaccion_pdi} />
             </div>
+
 
             <div class="filter-buttons">
                 <Button color="primary" on:click={createStudentsSatisfaction}>Crear</Button>
@@ -504,35 +577,42 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     </div>
 {/if}
 
+
 {#if showUpdateForm}
     <div class="filter-overlay" on:click={() => showUpdateForm = false}>
         <div class="filter-form" on:click|stopPropagation>
             <h5>Editar Demanda de Satisfacción Estudiantil</h5>
+
 
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={newCarrera} />
             </div>
 
+
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={newCiudad} />
             </div>
+
 
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={newSatisfaccion_total} />
             </div>
 
+
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={newSat_estudiantes} />
             </div>
 
+
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={newSatisfaccion_pdi} />
             </div>
+
 
             <div class="filter-buttons">
                 <Button color="primary" on:click={updateUniversityDemand}>Actualizar</Button>
@@ -542,6 +622,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         </div>
     </div>
 {/if}
+
 
 <style>
     .filter-overlay {
@@ -557,6 +638,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         z-index: 1000;
     }
 
+
     .filter-form {
         background-color: #fff;
         padding: 0.4rem 0.8rem;         /* Menos espacio dentro del cuadro */
@@ -570,6 +652,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         font-size: 0.85rem;            /* Tamaño de texto más pequeño */
     }
 
+
     .filter-form input {
         padding: 0.2rem 0.4rem;        /* Inputs más bajos y angostos */
         font-size: 0.85rem;
@@ -577,11 +660,13 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         border: 1px solid #ccc;
     }
 
+
     .filter-form h5 {
         font-size: 1rem;               /* Título más pequeño */
         margin-bottom: 0.5rem;
         text-align: center;
     }
+
 
     .form-group {
         display: flex;
@@ -591,11 +676,13 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         width: 100%;
     }
 
+
     .form-group label {
         font-weight: bold;       /* Hace el texto más fuerte */
         margin-right: 0.5rem;    /* Espacio entre el label y el input */
         width: 45%;              /* Ancho fijo del label */
     }
+
 
     .form-group input {
         flex: 1;
@@ -605,6 +692,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         border: 1px solid #ccc;
     }
 
+
     .filter-buttons {
         display: flex;
         justify-content: space-between;
@@ -612,10 +700,12 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         margin-top: 0.5rem;
     }
 
+
     .filter-buttons button {
         font-size: 0.8rem;             /* Botones más pequeños */
         padding: 0.3rem 0.6rem;
     }
+
 
     .success-message {
         background-color: #d4edda;
@@ -627,6 +717,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         text-align: center;    
     }
 
+
     .error-message {
         background-color: #f8d7da;
         color: #721c24;
@@ -637,6 +728,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         text-align: center;
     }
 
+
     .button-group {
         display: flex;
         flex-wrap: wrap;
@@ -644,6 +736,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
+
 
     .button-group button {
         min-width: 140px;
