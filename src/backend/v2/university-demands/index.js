@@ -206,15 +206,7 @@ function loadBackendJavierV2(app){
         const academicYear = req.params.academicYear;
         const body = req.body;
     
-        // Validar que todos los campos esten en el body 
-        if (
-            !body.location || !body.degree || !body.over45 || !body.spanishFirst ||
-            !body.foreigners || !body.graduated || !body.academicYear
-        ) {
-            return res.status(400).json({ error: "Missing required fields" });
-        }
-    
-        // Validar que los datos del body coincidan con los de la URL
+        // Comprobar que los datos clave coincidan
         if (
             body.degree !== degree ||
             body.location !== location ||
@@ -225,27 +217,48 @@ function loadBackendJavierV2(app){
             });
         }
     
-        //  Hacer el put
-        db.update(
-            { degree: degree, location: location, academicYear: academicYear },
-            { $set: body },
-            {},
-            (err, numUpdated) => {
-                if (err) {
-                    console.error("Error al actualizar en la base de datos:", err);
-                    return res.status(500).json({ error: "Internal Error" });
-                }
-    
-                if (numUpdated === 0) {
-                    return res.status(404).json({
-                        error: "No record found to update"
-                    });
-                }
-    
-                return res.sendStatus(200); // Solo devuelve 200 OK, sin datos
+        // Buscar el registro original
+        db.findOne({ degree, location, academicYear }, (err, existing) => {
+            if (err) {
+                console.error("Error al buscar:", err);
+                return res.status(500).json({ error: "Internal error" });
             }
-        );
+    
+            if (!existing) {
+                return res.status(404).json({ error: "Record not found" });
+            }
+    
+            // Verificar si se ha eliminado algún campo que antes existía
+            const requiredFields = ["location", "degree", "over45", "spanishFirst", "foreigners", "graduated", "academicYear"];
+            const removedFields = requiredFields.filter(field => {
+                return existing[field] !== "" && body[field] === "";
+            });
+    
+            if (removedFields.length > 0) {
+                return res.status(400).json({ error: `No puedes eliminar estos campos: ${removedFields.join(", ")}` });
+            }
+    
+            // Todo bien, proceder a actualizar
+            db.update(
+                { degree, location, academicYear },
+                { $set: body },
+                {},
+                (err, numUpdated) => {
+                    if (err) {
+                        console.error("Error al actualizar en la base de datos:", err);
+                        return res.status(500).json({ error: "Internal Error" });
+                    }
+    
+                    if (numUpdated === 0) {
+                        return res.status(404).json({ error: "No record found to update" });
+                    }
+    
+                    return res.sendStatus(200);
+                }
+            );
+        });
     });
+    
     
     
     //FALLO DE PUT a todos los datos

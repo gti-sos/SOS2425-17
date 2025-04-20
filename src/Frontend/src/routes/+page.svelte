@@ -17,7 +17,7 @@
             nombre: 'Javier Guerrero Pérez',
             //Front university-demands
             //<a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">API Javier Guerrero Pérez</a>
-            frontend: 'https://sos2425-17.onrender.com/university-demands',
+            frontend: '/university-demands',
             api: 'https://sos2425-17.onrender.com/api/v1/university-demands/docs',
             postman: 'https://documenter.getpostman.com/view/42357894/2sB2cUAN1D',
             recurso: 'university-demands',
@@ -36,7 +36,6 @@
     const githubComun = 'https://github.com/gti-sos/sos2425-17';
 </script>
 
-<a href="/university-demands">Front university-demands</a>
 
 <style>
     h1 {
@@ -70,7 +69,9 @@
         <ul>
             {#each miembros as miembro}
                 <li><strong>{miembro.nombre}:</strong>
-                    {#if miembro.frontend}
+                    {#if miembro.nombre === 'Javier Guerrero Pérez'}
+                        <a href="/university-demands">Front university-demands</a>
+                    {:else if miembro.frontend}
                         <a href={miembro.frontend} target="_blank">{miembro.frontend}</a>
                     {:else}
                         <em>No disponible</em>
