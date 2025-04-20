@@ -110,71 +110,42 @@ async function getSatisfactionEspecifico(params = {}) {
     resultStatus = result = "";
     try {
         const queryString = new URLSearchParams(params).toString();
-        //Lo que hago es que llamo a la direccion /students_satisfaction?campo = valor 
         const url = `${Api}?${queryString}`;
-        const res = await fetch(url, { method: "GET" });
+        
+        console.log("URL with parameters:", url); // Agrega esto para ver la URL generada
 
+        const res = await fetch(url, { method: "GET" });
         const status = res.status;
         resultStatus = status.toString();
 
-            if (status === 404) {
-                const firstParamKey = Object.keys(params)[0];
-                const firstParamValue = params[firstParamKey];
-                errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
-                setTimeout(() => {
-                errorMessage = "";
-                }, 3000);
-            } 
-
         const data = await res.json();
-
         result = JSON.stringify(data, null, 2);
         satisfactionData = data;
         console.log(`Response received:\n${result}`);
     } catch (error) {
         console.log(`Error: GET from ${Api} - ${error}`);
         errorMessage = "Error al obtener los datos.";
-
-        // Oculta el mensaje después de unos segundos
         setTimeout(() => {
             errorMessage = "";
         }, 3000);
     }
 }
 
+
 function applyFilters() {
     const params = {};
 
-    // Verificamos que las variables sean cadenas antes de intentar convertirlas
     if (filterCarrera) params.carrera = filterCarrera;
     if (filterCiudad) params.ciudad = filterCiudad;
     if (filterSatisfaccion_total) params.satisfaccion_total = filterSatisfaccion_total;
     if (filterSat_estudiantes) params.sat_estudiantes = filterSat_estudiantes;
     if (filterSatisfaccion_pdi) params.satisfaccion_pdi = filterSatisfaccion_pdi;
+    if (fromSat) params.from = fromSat;
+    if (toSat) params.to = toSat;
 
-    // Aseguramos que fromSat y toSat sean números válidos
-    if (fromSat && !isNaN(fromSat)) {
-        params.from = parseFloat(fromSat); // Asegurarnos de que sea número flotante
-    } else {
-        // Si no es un número válido, lo limpiamos o lo dejamos fuera
-        params.from = null;
-    }
-
-    if (toSat && !isNaN(toSat)) {
-        params.to = parseFloat(toSat); // Convertimos a número
-    } else {
-        // Si no es un número válido, lo limpiamos o lo dejamos fuera
-        params.to = null;
-    }
-
-    // Llamamos a la función para obtener los datos filtrados
     getSatisfactionEspecifico(params);
-
-    // Cerrar el formulario
-    showFilterForm = false;
+    showFilterForm = false; // Oculta el formulario tras aplicar
 }
-
-
 
 
 //Con esto vacio los campos de crear y actualizar 

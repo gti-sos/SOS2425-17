@@ -33,7 +33,7 @@ function loadBackendAlejandroV2(app) {
 
     // GET con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
-        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset } = req.query;
+        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset, from, to } = req.query;
 
         let query = {};
         if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
@@ -41,6 +41,12 @@ function loadBackendAlejandroV2(app) {
         if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
         if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
         if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
+
+        if (from || to) {
+            query.satisfaccion_total = {};
+            if (from) query.satisfaccion_total.$gte = from;
+            if (to) query.satisfaccion_total.$lte = to;
+        }
 
         db.find(query, (err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
