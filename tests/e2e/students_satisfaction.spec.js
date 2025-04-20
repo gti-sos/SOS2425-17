@@ -91,55 +91,47 @@ test('Filter 404', async ({ page }) => {
     // Esperar que no haya ninguna fila con celdas (es decir, ningún resultado válido)
     await expect(rows).toHaveCount(0);
 });
-/*
+
 test('Create and delete demand', async ({ page }) => {
+    const testcarrera = "testcarrera";
+    const testciudad = "testciudad";
+    const tests1 = "1";
+    const tests2 = "2";
+    const tests3 = "3";
   
-  //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
-  const testcarrera = "testcarrera";
-  const testciudad = "testciudad";
-  const tests1 = "1";
-  const tests2 = "2";
-  const tests3 = "3";
-
-  //Me voy a la pagina localhost:16078
-  await page.goto('http://localhost:16078/students_satisfaction');
-   
-   // Click en el botón "Crear" que abre el formulario
-   await page.getByRole('button', { name: 'Crear' }).first().click();
- 
-   // Esperar a que aparezca el formulario de creación
-   await page.getByRole('heading', { name: 'Crear Demanda de Satisfacción Estudiantil' }).waitFor();
- 
-
-  // crear el contacto.
-  await page.getByRole('textbox').nth(0).fill(testcarrera);
-  await page.getByRole('textbox').nth(1).fill(testciudad);
-  await page.getByRole('textbox').nth(2).fill(tests1);
-  await page.getByRole('textbox').nth(3).fill(tests2);
-  await page.getByRole('textbox').nth(4).fill(tests3);
-
-
-
-  //Pulso sobre el boton Create
-  await page.getByRole('button', { name: 'Crear' }).click();
-
-  //Creo una variable que busque dentro del tr un texto que sea la localización que hemos creado.
-  const demandRow = page.locator('tr').filter({ hasText: testcarrera });
-
-  //Miro a ver si esa linea contiene los demas campos que hemos creado
-  await expect(demandRow).toContainText(testciudad);
-  await expect(demandRow).toContainText(tests1);
-  await expect(demandRow).toContainText(tests2);
-  await expect(demandRow).toContainText(tests3);
-
-
-  //Busco el boton que tiene el nombre de Delete dentro de la fila que contiene el contacto
-  const deleteButton = demandRow.getByRole('button', { name: 'Borrar' });
-  //Borro el contacto 
-  await deleteButton.click();
-  //Miro a ver si la fila ya no tiene nada
-  await expect(demandRow).toHaveCount(0);
-});
+    await page.goto('http://localhost:16078/students_satisfaction');
+  
+    // Abrir formulario
+    await page.getByRole('button', { name: 'Crear' }).first().click();
+    await page.getByRole('heading', { name: 'Crear Demanda de Satisfacción Estudiantil' }).waitFor();
+  
+    // Rellenar formulario
+    await page.getByRole('textbox').nth(0).fill(testcarrera);
+    await page.getByRole('textbox').nth(1).fill(testciudad);
+    await page.getByRole('textbox').nth(2).fill(tests1);
+    await page.getByRole('textbox').nth(3).fill(tests2);
+    await page.getByRole('textbox').nth(4).fill(tests3);
+  
+    // Crear entrada
+    await page.getByRole('button', { name: 'Crear' }).click();
+  
+    // Esperar a que aparezca la fila
+    const demandRow = page.locator('tr').filter({ hasText: testcarrera });
+  
+    // Validar contenido exacto
+    await expect(demandRow).toContainText(testciudad);
+    await expect(demandRow).toContainText(tests1);
+    await expect(demandRow).toContainText(tests2);
+    await expect(demandRow).toContainText(tests3); // FIX: Este valor se mostraba en una celda diferente
+  
+    // Borrar la fila
+    const deleteButton = demandRow.getByRole('button', { name: 'Borrar' });
+    await deleteButton.click();
+  
+    // Confirmar que la fila ya no existe
+    await expect(demandRow).toHaveCount(0);
+  });
+  
 
 test('Create ERROR 400', async ({ page }) => {
     // Datos de prueba (incompletos)
@@ -171,7 +163,7 @@ test('Create ERROR 400', async ({ page }) => {
     // Verificar que se muestra el mensaje de error
     await expect(page.getByText(expectedMessage)).toBeVisible({ timeout: 5000 });
   });
-  */
+  
 
 test('Create EROR 409', async ({ page }) => {
   
