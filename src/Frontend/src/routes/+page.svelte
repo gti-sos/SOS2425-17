@@ -15,11 +15,13 @@
         },
         {
             nombre: 'Javier Guerrero Pérez',
-            frontend: '',
+            //Front university-demands
+            //<a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">API Javier Guerrero Pérez</a>
+            frontend: 'https://sos2425-17.onrender.com/university-demands',
             api: 'https://sos2425-17.onrender.com/api/v1/university-demands/docs',
             postman: 'https://documenter.getpostman.com/view/42357894/2sB2cUAN1D',
             recurso: 'university-demands',
-            github: ''
+            github: 'https://github.com/Javiigp'
         },
         {
             nombre: 'Alejandro Gaona Penco',
@@ -27,12 +29,14 @@
             api: 'https://sos2425-17.onrender.com/api/v1/students-satisfaction/docs',
             postman: 'https://documenter.getpostman.com/view/42373237/2sB2cUBicY',
             recurso: 'students-satisfaction',
-            github: ''
+            github: 'https://github.com/alegp2003'
         }
     ];
 
     const githubComun = 'https://github.com/gti-sos/sos2425-17';
 </script>
+
+<a href="/university-demands">Front university-demands</a>
 
 <style>
     h1 {
