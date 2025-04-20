@@ -34,38 +34,48 @@ function loadBackendAlejandroV2(app) {
     // GET con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
         let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset, from, to } = req.query;
-
+    
         let query = {};
+    
+        // Filtrar por carrera, ciudad y otros campos
         if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
         if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
         if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
         if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
         if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
-
+    
+        // Si se pasan los parámetros 'from' y 'to', aplicar el filtro sobre 'satisfaccion_total'
         if (from || to) {
             query.satisfaccion_total = {};
-            if (from) query.satisfaccion_total.$gte = Number(from);
-            if (to) query.satisfaccion_total.$lte = Number(to);
-        } else if (satisfaccion_total) {
-            query.satisfaccion_total = Number(satisfaccion_total);
+            if (from) query.satisfaccion_total.$gte = Number(from); // mayor o igual que 'from'
+            if (to) query.satisfaccion_total.$lte = Number(to); // menor o igual que 'to'
+        } 
+    
+        // Si no se pasan 'from' ni 'to' y no se está filtrando por 'satisfaccion_total', aplicar un rango predeterminado
+        if (!from && !to) {
+            query.satisfaccion_total = { $gte: 0, $lte: 10 };  // Rango por defecto (puedes ajustarlo según tus necesidades)
         }
-        
-        // 👇 Este log te va a mostrar exactamente qué estás consultando
+    
+        // Log de la consulta generada para verificar lo que se está pasando
         console.log("Query generado:", query);
-        
-
+    
+        // Consultar la base de datos
         db.find(query, (err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (results.length === 0) return res.status(404).json({ error: "Sin resultados." });
-
+    
+            // Aplicar limit y offset si se proporcionan
             if (offset) results = results.slice(Number(offset));
             if (limit) results = results.slice(0, Number(limit));
-
+    
+            // Eliminar el campo _id de cada resultado
             results.forEach(r => delete r._id);
+    
+            // Devolver los resultados filtrados
             res.json(results);
         });
     });
-
+    
     // POST nuevo registro
     app.post(BASE_API + "/students_satisfaction", (req, res) => {
         const body = req.body;

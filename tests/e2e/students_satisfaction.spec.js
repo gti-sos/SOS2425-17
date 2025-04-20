@@ -25,25 +25,29 @@ test('GetLoadInitialData', async ({ page }) => {
 //Filtro por un dato especifico y desde un año hasta otro y luego le doy a limpiar filtros
 test('Filter', async ({ page }) => {
   const testLocation = "BADAJOZ";
+  const testfrom = "0";
+  const testto = "10";
 
   // Ir a la página principal
   await page.goto('http://localhost:16078/students_satisfaction');
+  
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
 
-  // Abro el cuestionario de filtros dandole a filtrar
+  // Abrir el formulario de filtros
   await page.getByRole('button', { name: 'Filtrar' }).first().click();
 
-  // Relleno los campos del filtro que
+  // Rellenar el filtro con la ciudad "BADAJOZ"
   await page.getByRole('textbox').nth(1).fill(testLocation);
+  await page.getByRole('textbox').nth(5).fill(testfrom);
+  await page.getByRole('textbox').nth(6).fill(testto);
 
   // Aplicar el filtro
   await page.getByRole('button', { name: 'Aplicar' }).click();
 
- // Esperamos a que se muestren los resultados
- const rows = page.locator('table tbody tr');
+  // Esperar a que las filas de la tabla sean visibles
+  const rows = page.locator('table tbody tr');
 
- 
  // Ahora buscamos las filas que contengan Badajoz específicamente
  const rowsWithBadajoz = rows.filter({ hasText: testLocation });
 
@@ -58,13 +62,15 @@ test('Filter', async ({ page }) => {
   await page.getByRole('button', { name: 'Limpiar Filtros' }).click();
 
   // Comprobar que vuelve a haber datos sin filtros
-  const dataAfterClear = page.locator('table tbody tr').filter({ has: page.locator('td') });
+const dataAfterClear = page.locator('table tbody tr').filter({ has: page.locator('td') });
 
   await expect(async () => {
     const count = await dataAfterClear.count();
     expect(count).toBeGreaterThan(0);
   }).toPass();
 });
+
+
 
 //Filtro por un dato que no existe (404)
 test('Filter 404', async ({ page }) => {
