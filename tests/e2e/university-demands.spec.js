@@ -209,8 +209,6 @@ test('Create EROR 400', async ({ page }) => {
   await page.getByRole('textbox').nth(3).fill(testSpanishFirst);
   await page.getByRole('textbox').nth(4).fill(testForeigners);
   await page.getByRole('textbox').nth(5).fill(testGraduated);
-  
-  
 
   //Pulso sobre el boton Create
   await page.getByRole('button', { name: 'Crear' }).click();
