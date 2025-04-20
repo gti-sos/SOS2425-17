@@ -8,13 +8,13 @@ test('título principal', async ({ page }) => {
 
 test('acceso a students satisfaction', async ({ page }) => {
   await page.goto('localhost:16078');
-  await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+  await page.getByRole('link', { name: 'Front students_satisfaction' }).click();
   await expect(page).toHaveTitle(/Students Satisfaction/);
 });
 
 test('cargar datos iniciales', async ({ page }) => {
   await page.goto('localhost:16078');
-  await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+  await page.getByRole('link', { name: 'Front students_satisfaction' }).click();
   await page.getByRole('button', { name: 'Cargar Datos' }).click();
 
   const dataRows = page.locator('table tbody tr').filter({ has: page.locator('td') });
@@ -30,7 +30,7 @@ test('filtrar por carrera y ciudad', async ({ page }) => {
     const testCiudad = 'MÉRIDA';
   
     await page.goto('localhost:16078');
-    await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+    await page.getByRole('link', { name: 'Front students_satisfaction' }).click();
     await page.getByRole('button', { name: 'Cargar Datos' }).click();
     await page.getByRole('button', { name: 'Filtrar' }).click();
   
@@ -62,7 +62,7 @@ test('crear y borrar registro de satisfacción', async ({ page }) => {
   const testYear = '2042-2043';
 
   await page.goto('localhost:16078');
-  await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+  await page.getByRole('link', { name: 'Front students_satisfaction' }).click();
   await page.getByRole('button', { name: 'Crear' }).click();
 
   await page.getByRole('textbox').nth(0).fill(testCarrera);
@@ -87,7 +87,7 @@ test('crear y borrar registro de satisfacción', async ({ page }) => {
 
 test('eliminar todos los datos', async ({ page }) => {
   await page.goto('localhost:16078');
-  await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+  await page.getByRole('link', { name: 'Front students_satisfaction' }).click();
   await page.getByRole('button', { name: 'Cargar Datos' }).click();
   await page.getByRole('button', { name: 'Eliminar Datos' }).click();
 
