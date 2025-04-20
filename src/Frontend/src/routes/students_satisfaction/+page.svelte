@@ -62,7 +62,7 @@
     });
 
     function getLoadInitialData() {
-    fetch("/api/v2/students_satisfaction/loadInitialData")
+        fetch(`${DEVEL_HOST}/api/v2/students_satisfaction/loadInitialData`)
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
