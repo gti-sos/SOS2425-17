@@ -26,31 +26,32 @@ test('cargar datos iniciales', async ({ page }) => {
 });
 
 test('filtrar por carrera y ciudad', async ({ page }) => {
-  const testCarrera = 'GRADO EN ECONOMÍA';
-  const testCiudad = 'MÉRIDA';
-
-  await page.goto('http://localhost:16078');
-  await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
-  await page.getByRole('button', { name: 'Cargar Datos' }).click();
-  await page.getByRole('button', { name: 'Filtrar' }).click();
-
-  await page.getByRole('textbox').nth(0).fill(testCarrera);
-  await page.getByRole('textbox').nth(1).fill(testCiudad);
-  await page.getByRole('button', { name: 'Aplicar' }).click();
-
-  const filteredRows = page.locator('table tbody tr').filter({ hasText: testCiudad });
-  await expect(async () => {
-    const count = await filteredRows.count();
-    expect(count).toBeGreaterThan(0);
-  }).toPass();
+    const testCarrera = 'GRADO EN ECONOMÍA';
+    const testCiudad = 'MÉRIDA';
   
-  await page.getByRole('button', { name: 'Limpiar Filtros' }).click();
-  const allRows = page.locator('table tbody tr').filter({ has: page.locator('td') });
-  await expect(async () => {
-    const count = await filteredRows.count();
-    expect(count).toBeGreaterThan(0);
-  }).toPass();
+    await page.goto('http://localhost:16078');
+    await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
+    await page.getByRole('button', { name: 'Cargar Datos' }).click();
+    await page.getByRole('button', { name: 'Filtrar' }).click();
+  
+    await page.getByRole('textbox').nth(0).fill(testCarrera);
+    await page.getByRole('textbox').nth(1).fill(testCiudad);
+    await page.getByRole('button', { name: 'Aplicar' }).click();
+  
+    const filteredRows = page.locator('table tbody tr').filter({ hasText: testCiudad });
+    await expect(async () => {
+      const count = await filteredRows.count();
+      expect(count).toBeGreaterThan(0);
+    }).toPass();
+  
+    await page.getByRole('button', { name: 'Limpiar Filtros' }).click();
+    const allRows = page.locator('table tbody tr').filter({ has: page.locator('td') });
+    await expect(async () => {
+      const count = await allRows.count();
+      expect(count).toBeGreaterThan(0);
+    }).toPass();
   });
+  
 
 test('crear y borrar registro de satisfacción', async ({ page }) => {
   const testCarrera = '__TEST_CARRERA__';
