@@ -136,9 +136,10 @@ test('Create and delete demand', async ({ page }) => {
 test('Create ERROR 400', async ({ page }) => {
     // Datos de prueba (incompletos)
     const testCarrera = "Ingeniería de Prueba";
-    const testCiudad = "Ciudad de Prueba";
+    const testCiudad = "";
     const testSatisfaccionTotal = "4.5";
     const testSatisfaccionEstudiantes = "4.7";
+    const testsatisfaccion_pdi="5"
     const expectedMessage = "¡Tienes que rellenar todos los campos!";
   
     // Navegar a la página principal
@@ -154,7 +155,10 @@ test('Create ERROR 400', async ({ page }) => {
     await page.getByRole('textbox').nth(0).fill(testCarrera);               // Carrera
     await page.getByRole('textbox').nth(1).fill(testCiudad);                // Ciudad
     await page.getByRole('textbox').nth(2).fill(testSatisfaccionTotal);     // Satisfacción Total
-    await page.getByRole('textbox').nth(3).fill(testSatisfaccionEstudiantes); // Satisfacción Estudiantes
+    await page.getByRole('textbox').nth(3).fill(testSatisfaccionEstudiantes);
+    await page.getByRole('textbox').nth(3).fill(testsatisfaccion_pdi);
+
+    // Satisfacción Estudiantes
     // NOTA: No se rellena el campo .nth(4) = Satisfacción PDI
   
     // Clic en el botón "Crear"
@@ -165,66 +169,53 @@ test('Create ERROR 400', async ({ page }) => {
   });
   
 
-test('Create EROR 409', async ({ page }) => {
+  test('Create ERROR 409', async ({ page }) => {
   
-  //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
-  const testLocation = "Badajoz";
-  const testDegree = "Educación Infantil";
-  const testOver45 = "13";
-  const testSpanishFirst = "5";
-  const testForeigners = "13";
-  const testGraduated = "5";
-  const testAcademicYear = "2016-2017";
-  const expectedMessage = "¡Esta demanda ya existe!";
-
-  //Me voy a la pagina localhost:16078
-  await page.goto('localhost:16078');
-
-  // Pulso sobre el link contacts.
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
-
-  // Cargar los datos
-  await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
-   
-   // Click en el botón "Crear" que abre el formulario
-   await page.getByRole('button', { name: 'Crear' }).first().click();
- 
-   // Esperar a que aparezca el formulario de creación
-   await page.getByRole('heading', { name: 'Crear Demanda Universitaria' }).waitFor();
- 
-
-  // crear el contacto.
-  await page.getByRole('textbox').nth(0).fill(testLocation);
-  await page.getByRole('textbox').nth(1).fill(testDegree);
-  await page.getByRole('textbox').nth(2).fill(testOver45);
-  await page.getByRole('textbox').nth(3).fill(testSpanishFirst);
-  await page.getByRole('textbox').nth(4).fill(testForeigners);
-  await page.getByRole('textbox').nth(5).fill(testGraduated);
-  await page.getByRole('textbox').nth(6).fill(testAcademicYear);
+    // Datos de prueba (mismos que se usarán para el conflicto)
+    const testcarrera = "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA";
+    const testciudad = "BADAJOZ";
+    const tests1 = "1";
+    const tests2 = "2";
+    const tests3 = "3";
+    const expectedMessage = "¡Esta demanda ya existe!";
   
-
-  //Pulso sobre el boton Create
-  await page.getByRole('button', { name: 'Crear' }).click();
-
-  // Comprobar que aparece el mensaje de error
-  const errorMessage = page.getByText(expectedMessage); 
-  await expect(errorMessage).toBeVisible({ timeout: 10000 });
-
+    // Ir a la página principal
+    await page.goto('http://localhost:16078/students_satisfaction');
   
+    // Cargar los datos
+    await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
+     
+    // Crear el primer recurso (Demanda)
+    await page.getByRole('button', { name: 'Crear' }).first().click();
+    await page.getByRole('heading', { name: 'Crear Demanda de Satisfacción Estudiantil' }).waitFor();
+  
+    // Rellenar el formulario con los datos
+    await page.getByRole('textbox').nth(0).fill(testcarrera);
+    await page.getByRole('textbox').nth(1).fill(testciudad);
+    await page.getByRole('textbox').nth(2).fill(tests1);
+    await page.getByRole('textbox').nth(3).fill(tests2);
+    await page.getByRole('textbox').nth(4).fill(tests3);
+    
+    // Pulsar el botón "Crear" para crear el primer recurso
+    await page.getByRole('button', { name: 'Crear' }).click();
+  
+    
+  
+    // Comprobar que aparece el mensaje de error
+    const errorMessage = page.getByText(expectedMessage); 
+    await expect(errorMessage).toBeVisible({ timeout: 10000 });
 });
+
 
 test('PUT ', async ({ page }) => {
   // Datos que NO existen en la base de datos
-  const testOver45 = "80";
+  const testciudad = "8fdfdf0";
   const successMessage = page.getByText('¡Demanda actualizada con éxito!');
   
   
   // Ir a la app
-  await page.goto('http://localhost:16078');
-
-  // Ir al frontend de university-demands
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
-
+  await page.goto('http://localhost:16078/students_satisfaction');
+  
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
 
@@ -233,7 +224,7 @@ test('PUT ', async ({ page }) => {
   await page.getByRole('button', { name: 'Editar' }).first().click(); 
 
   // Rellenar el formulario con academicYear vacio para que me de error 400 de que falta rellenar un campo
-  await page.getByRole('textbox').nth(2).fill(testOver45);
+  await page.getByRole('textbox').nth(2).fill(testciudad);
 
   // Pulsar el botón "Actualizar"
   await page.getByRole('button', { name: 'Actualizar' }).click();
@@ -245,21 +236,17 @@ test('PUT ', async ({ page }) => {
 
 test('PUT ERROR 404 ', async ({ page }) => {
   // Datos que NO existen en la base de datos
-  const testLocation = "";
-  const testDegree = "";
-  const testAcademicYear = "";
-  const testOver45 = "";
-  const testSpanishFirst = "";
-  const testForeigners = "";
-  const testGraduated = "";
+  const testcarrera = "";
+  const testciudad = "";
+  const tests1 = "";
+  const tests2 = "";
+  const tests3 = "";
+  
 
   const expectedErrorMessage = "No se encontró la demanda a actualizar";
 
   // Ir a la app
-  await page.goto('http://localhost:16078');
-
-  // Ir al frontend de university-demands
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
+  await page.goto('http://localhost:16078/students_satisfaction');
 
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
@@ -269,13 +256,11 @@ test('PUT ERROR 404 ', async ({ page }) => {
   await page.getByRole('button', { name: 'Editar' }).first().click(); 
 
   // Rellenar el formulario con los datos inexistentes
-  await page.getByRole('textbox').nth(0).fill(testLocation);
-  await page.getByRole('textbox').nth(1).fill(testDegree);
-  await page.getByRole('textbox').nth(2).fill(testOver45);
-  await page.getByRole('textbox').nth(3).fill(testSpanishFirst);
-  await page.getByRole('textbox').nth(4).fill(testForeigners);
-  await page.getByRole('textbox').nth(5).fill(testGraduated);
-  await page.getByRole('textbox').nth(6).fill(testAcademicYear);
+  await page.getByRole('textbox').nth(0).fill(testcarrera);
+  await page.getByRole('textbox').nth(1).fill(testciudad);
+  await page.getByRole('textbox').nth(2).fill(tests1);
+  await page.getByRole('textbox').nth(3).fill(tests2);
+  await page.getByRole('textbox').nth(4).fill(tests3);
 
   // Pulsar el botón "Actualizar"
   await page.getByRole('button', { name: 'Actualizar' }).click();
@@ -285,45 +270,39 @@ test('PUT ERROR 404 ', async ({ page }) => {
   await expect(errorMessage).toBeVisible({ timeout: 10000 });
 });
 
-test('PUT ERROR 400 ', async ({ page }) => {
-  // Datos que NO existen en la base de datos
-  const testOver45 = "";
-  
-  const expectedErrorMessage = "Datos incompletos o no coinciden con los parámetros de la URL";
+test('PUT ERROR 400', async ({ page }) => {
+  // Datos que provocarán el error (en este caso, campo vacío para "ciudad")
+  const testciudad = "";  // Ciudad vacía para causar el error
+  const expectedErrorMessage = "No se encontró la demanda a actualizar.";
 
-  // Ir a la app
-  await page.goto('http://localhost:16078');
-
-  // Ir al frontend de university-demands
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
+  // Ir a la aplicación
+  await page.goto('http://localhost:16078/students_satisfaction');
 
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
 
   // Ir al formulario de edición
-  //El first click es para que una vez dentro de la pagina pulse sobre el primer boton editar que encuentre
-  await page.getByRole('button', { name: 'Editar' }).first().click(); 
+  await page.getByRole('button', { name: 'Editar' }).first().click();
 
-  // Rellenar el formulario con academicYear vacio para que me de error 400 de que falta rellenar un campo
-  await page.getByRole('textbox').nth(2).fill(testOver45);
+  // Rellenar el formulario con "ciudad" vacío para provocar el error 400
+  await page.getByRole('textbox').nth(1).fill(testciudad);
 
   // Pulsar el botón "Actualizar"
   await page.getByRole('button', { name: 'Actualizar' }).click();
 
-  // Verificar que aparece el mensaje de error (ajústalo si tu frontend lo muestra diferente)
-  const errorMessage = page.getByText(expectedErrorMessage);
-  await expect(errorMessage).toBeVisible({ timeout: 10000 });
-});
+  // Verificar que aparece el mensaje de error
+  const errorMessageLocator = page.locator(`text=${expectedErrorMessage}`);
+  await expect(errorMessageLocator).toBeVisible({ timeout: 10000 });
 
+  // Verificar que el mensaje de error tiene el texto esperado
+  await expect(errorMessageLocator).toHaveText(expectedErrorMessage);
+});
 
 
 //Borro todos los datos
 test('Delete all', async ({ page }) => {
   //Me voy a la pagina localhost:16078
-  await page.goto('localhost:16078');
-
-  // Pulso sobre el link Front university-demands para que me lleve a mi frontend.
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
+  await page.goto('http://localhost:16078/students_satisfaction');
 
   // Cargar datos para que puedas borrarlos
   await page.getByRole('button', { name: 'Cargar Datos' }).click();
