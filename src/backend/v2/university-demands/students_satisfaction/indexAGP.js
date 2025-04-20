@@ -44,9 +44,15 @@ function loadBackendAlejandroV2(app) {
 
         if (from || to) {
             query.satisfaccion_total = {};
-            if (from) query.satisfaccion_total.$gte = from;
-            if (to) query.satisfaccion_total.$lte = to;
+            if (from) query.satisfaccion_total.$gte = Number(from);
+            if (to) query.satisfaccion_total.$lte = Number(to);
+        } else if (satisfaccion_total) {
+            query.satisfaccion_total = Number(satisfaccion_total);
         }
+        
+        // 👇 Este log te va a mostrar exactamente qué estás consultando
+        console.log("Query generado:", query);
+        
 
         db.find(query, (err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
