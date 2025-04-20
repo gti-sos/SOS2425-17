@@ -40,24 +40,25 @@
     let toSat="";
     
 
-    async function getStudentsSatisfaction() {
-        //Para que siempre que llamemos a la funcion esos campos esten vacios
-        resultStatus = result = "";
-        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
-        //Se hace await por el async 
-        
-        try{
+    async function getStudentsSatisfactionData() {
+    resultStatus = result = "";
+    try {
+        const res = await fetch(Api, { method: "GET" });
+        const data = await res.json();
 
-            const res  = await fetch(Api,{method: "GET"});
-            //Para manda el resultado res en json y lo mete en data
-            const data = await res.json();
-            result = JSON.stringify(data,null,2);
-            satisfactionData = data;
-            console.log(`Response received:${(JSON.stringify(satisfactionData,null,2))}`);
-        } catch(error){
-            console.log(`Error : Get from ${Api} : ${(error)}`)
-        }
+        // Actualizamos la lista de satisfacción
+        satisfactionData = data;
+
+        console.log(`Datos recargados: ${JSON.stringify(satisfactionData, null, 2)}`);
+    } catch (error) {
+        console.log(`Error al obtener los datos: ${error}`);
+        errorMessage = "¡Error al obtener los datos!";
+        setTimeout(() => {
+            errorMessage = "";
+        }, 3000);
     }
+}
+
          //Cada vez que cargue la pagina llama a get contact
     onMount(async () => {
         //Cuando se carga la pagina se llama a la funcion getContacts
@@ -178,85 +179,78 @@ function resetFilters() {
     getStudentsSatisfaction(); // <- Vuelve a cargar todo sin filtros
 }
 
+async function createStudentsSatisfaction() {
+    resultStatus = result = "";
+    try {
+        const res = await fetch(Api, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                carrera: newCarrera,
+                ciudad: newCiudad,
+                satisfaccion_total: newSatisfaccion_total,
+                sat_estudiantes: newSat_estudiantes,
+                satisfaccion_pdi: newSatisfaccion_pdi
+            })
+        });
 
-    async function createStudentsSatisfaction() {
-        //Para que siempre que llamemos a la funcion esos campos esten vacios
-        resultStatus = result = "";
-        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
-        //Se hace await por el async 
-        
-        try{
+        const status = await res.status;
+        resultStatus = status;
 
-            const res  = await fetch(Api,{
-                method: "POST", 
-                headers:{
-                    "Content-type": "application/json"
-                },
-                body:JSON.stringify({
-                    carrera: newCarrera,
-                    ciudad: newCiudad, 
-                    satisfaccion_total: newSatisfaccion_total, 
-                    sat_estudiantes: newSat_estudiantes, 
-                    satisfaccion_pdi: newSatisfaccion_pdi 
-                })
-            });
-            //Para manda el resultado res en json y lo mete en data
-            const status = res.status;
-            resultStatus=status.toString();
-            if(status==201){
-                console.log(`Satisfaction created:`);
-                getStudentsSatisfaction();
-                showCreateForm = false;
-                successMessage = "¡Demanda creada con éxito!";
-                setTimeout(() => {
-                    successMessage = "";
-                }, 3000);
-            }
-            else if(status == 409){
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Esta demanda ya existe!";
-                // Oculta el mensaje después de unos segundos
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-            else if(status == 400){
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Tienes que rellenar todos los campos!";
+        if (status == 201) {
+            const newDemand = await res.json();  // Obtener los datos de la nueva demanda desde la respuesta
 
-                // Oculta el mensaje después de unos segundos
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-            else {
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Error al crear la demanda!";
+            // Recargar los datos desde la API para actualizar la lista de registros
+            await getStudentsSatisfactionData();  // Recargamos los datos después de crear un nuevo registro
 
-                // Oculta el mensaje después de unos segundos
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-            
+            showCreateForm = false;
+            clearFilters(); 
 
-        } catch (error){
-            console.log(`ERROR:  GET from ${Api}: ${error}`);
+            successMessage = "¡Demanda creada con éxito!";
+            setTimeout(() => {
+                successMessage = "";
+            }, 3000);
+
+            console.log(`Satisfaction created and updated list: ${JSON.stringify(satisfactionData, null, 2)}`);
+        } else if (status == 409) {
+            console.log(`ERROR creando demanda: status recibido ${status}`);
+            errorMessage = "¡Esta demanda ya existe!";
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
+        } else {
+            console.log(`ERROR creando demanda: status recibido ${status}`);
+            errorMessage = "¡Error al crear la demanda!";
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
         }
+    } catch (error) {
+        console.log(`ERROR: POST request to ${Api}: ${error}`);
+        errorMessage = "¡Error al crear la demanda!";
+        setTimeout(() => {
+            errorMessage = "";
+        }, 3000);
+    }
+}
 
 
-    }//Put en el front
-    async function updateUniversityDemand() {
+// Cuando se carga la página se llama a la función getStudentsSatisfaction para cargar las demandas
+
+    //Put en el front
+    async function updateStudentsSatisfaction() {
     resultStatus = result = "";
     try {
         const url = `${Api}/${encodeURIComponent(newCarrera)}/${encodeURIComponent(newCiudad)}`;
 
         const updatedData = {
             carrera: newCarrera,
-            ciudad: newCiudad, 
-            satisfaccion_total: newSatisfaccion_total, 
-            sat_estudiantes: newSat_estudiantes, 
-            satisfaccion_pdi: newSatisfaccion_pdi 
+            ciudad: newCiudad,
+            satisfaccion_total: newSatisfaccion_total,
+            sat_estudiantes: newSat_estudiantes,
+            satisfaccion_pdi: newSatisfaccion_pdi
         };
 
         const res = await fetch(url, {
@@ -268,34 +262,33 @@ function resetFilters() {
         });
 
         const status = res.status;
-        resultStatus = status.toString();
+        resultStatus = status;
 
         if (status === 200) {
-            console.log("Demanda actualizada correctamente.");
-            getStudentsSatisfaction();
+            console.log("Satisfacción actualizada correctamente.");
+            
+            // Recargar los datos para ver la actualización
+            await getStudentsSatisfactionData();  // Recargamos los datos después de editar
+            
             successMessage = "¡Demanda actualizada con éxito!";
-            showUpdateForm = false;
-
             setTimeout(() => {
                 successMessage = "";
             }, 3000);
-        } else if (status === 404) {
-            errorMessage = "No se encontró la demanda a actualizar.";
-        } else if (status === 400) {
-            errorMessage = "Datos incompletos o no coinciden con los parámetros de la URL.";
         } else {
             errorMessage = "Error al actualizar la demanda.";
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
         }
-
-        setTimeout(() => {
-            errorMessage = "";
-        }, 3000);
-
     } catch (error) {
         console.log("Error en PUT:", error);
         errorMessage = "Error de red al actualizar.";
+        setTimeout(() => {
+            errorMessage = "";
+        }, 3000);
     }
 }
+
 
 function openEditForm(sat) {
         newCarrera = sat.carrera;

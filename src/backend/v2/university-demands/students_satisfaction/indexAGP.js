@@ -79,26 +79,23 @@ function loadBackendAlejandroV2(app) {
     // POST nuevo registro
     app.post(BASE_API + "/students_satisfaction", (req, res) => {
         const body = req.body;
-
+    
         if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
-
+    
         db.findOne({ carrera: body.carrera, ciudad: body.ciudad }, (err, existing) => {
             if (err) return res.status(500).send("Error BD.");
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
-
+    
             db.insert(body, (err, newDoc) => {
                 if (err) return res.status(500).send("Error al insertar.");
-                delete newDoc._id;
-                res.sendStatus(201);
+                delete newDoc._id;  // Eliminamos el _id para no exponerlo al frontend
+                res.status(201).json(newDoc);  // Respondemos con la nueva demanda creada
             });
         });
     });
-
-    app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => res.sendStatus(405));
-    app.put(BASE_API + "/students_satisfaction", (req, res) => res.sendStatus(405));
-
+    
     // PUT actualizar
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         const { carrera, ciudad } = req.params;
