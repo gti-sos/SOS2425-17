@@ -25,7 +25,7 @@
         },
         {
             nombre: 'Alejandro Gaona Penco',
-            frontend: '',
+            frontend: '/students_satisfaction',
             api: 'https://sos2425-17.onrender.com/api/v1/students-satisfaction/docs',
             postman: 'https://documenter.getpostman.com/view/42373237/2sB2cUBicY',
             recurso: 'students-satisfaction',

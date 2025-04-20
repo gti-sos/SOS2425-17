@@ -35,6 +35,9 @@
     let filterSatisfaccion_total = "";
     let filterSat_estudiantes = "";
     let filterSatisfaccion_pdi = "";
+
+    let fromSat="";
+    let toSat="";
     
 
     async function getStudentsSatisfaction() {
@@ -102,6 +105,7 @@
                 }, 3000);
         });
 }
+//http://localhost:16078/api/v2/students_satisfaction?from=3&to=5
 async function getSatisfactionEspecifico(params = {}) {
     resultStatus = result = "";
     try {
@@ -141,16 +145,37 @@ async function getSatisfactionEspecifico(params = {}) {
 function applyFilters() {
     const params = {};
 
+    // Verificamos que las variables sean cadenas antes de intentar convertirlas
     if (filterCarrera) params.carrera = filterCarrera;
     if (filterCiudad) params.ciudad = filterCiudad;
     if (filterSatisfaccion_total) params.satisfaccion_total = filterSatisfaccion_total;
     if (filterSat_estudiantes) params.sat_estudiantes = filterSat_estudiantes;
     if (filterSatisfaccion_pdi) params.satisfaccion_pdi = filterSatisfaccion_pdi;
-   
 
+    // Aseguramos que fromSat y toSat sean números válidos
+    if (fromSat && !isNaN(fromSat)) {
+        params.from = parseFloat(fromSat); // Asegurarnos de que sea número flotante
+    } else {
+        // Si no es un número válido, lo limpiamos o lo dejamos fuera
+        params.from = null;
+    }
+
+    if (toSat && !isNaN(toSat)) {
+        params.to = parseFloat(toSat); // Convertimos a número
+    } else {
+        // Si no es un número válido, lo limpiamos o lo dejamos fuera
+        params.to = null;
+    }
+
+    // Llamamos a la función para obtener los datos filtrados
     getSatisfactionEspecifico(params);
-    showFilterForm = false; // Oculta el formulario tras aplicar
+
+    // Cerrar el formulario
+    showFilterForm = false;
 }
+
+
+
 
 //Con esto vacio los campos de crear y actualizar 
 function clearFilters() {
@@ -169,6 +194,8 @@ function clearFilterFields() {
     filterSatisfaccion_total = "";
     filterSat_estudiantes = "";
     filterSatisfaccion_pdi = "";
+    fromSat="";
+    toSat="";
     
 }
 
@@ -458,6 +485,11 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={filterSatisfaccion_pdi} />
+            </div>
+
+            <div class="form-group">
+                <label>Desde: <input bind:value={fromSat} type="text" placeholder="Ej: 3" /></label>
+                <label>Hasta: <input bind:value={toSat} type="text" placeholder="Ej: 5" /></label>
             </div>
 
             <div class="filter-buttons">
