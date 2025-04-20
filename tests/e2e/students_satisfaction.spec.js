@@ -2,18 +2,18 @@
 import { test, expect } from '@playwright/test';
 
 test('título principal', async ({ page }) => {
-  await page.goto('http://localhost:16078');
+  await page.goto('localhost:16078');
   await expect(page).toHaveTitle(/SOS2425-17/);
 });
 
 test('acceso a students satisfaction', async ({ page }) => {
-  await page.goto('http://localhost:16078');
+  await page.goto('localhost:16078');
   await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
   await expect(page).toHaveTitle(/Students Satisfaction/);
 });
 
 test('cargar datos iniciales', async ({ page }) => {
-  await page.goto('http://localhost:16078');
+  await page.goto('localhost:16078');
   await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
   await page.getByRole('button', { name: 'Cargar Datos' }).click();
 
@@ -29,7 +29,7 @@ test('filtrar por carrera y ciudad', async ({ page }) => {
     const testCarrera = 'GRADO EN ECONOMÍA';
     const testCiudad = 'MÉRIDA';
   
-    await page.goto('http://localhost:16078');
+    await page.goto('localhost:16078');
     await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
     await page.getByRole('button', { name: 'Cargar Datos' }).click();
     await page.getByRole('button', { name: 'Filtrar' }).click();
@@ -61,7 +61,7 @@ test('crear y borrar registro de satisfacción', async ({ page }) => {
   const testTasaRendimiento = '0.95';
   const testYear = '2042-2043';
 
-  await page.goto('http://localhost:16078');
+  await page.goto('localhost:16078');
   await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
   await page.getByRole('button', { name: 'Crear' }).click();
 
@@ -86,7 +86,7 @@ test('crear y borrar registro de satisfacción', async ({ page }) => {
 });
 
 test('eliminar todos los datos', async ({ page }) => {
-  await page.goto('http://localhost:16078');
+  await page.goto('localhost:16078');
   await page.getByRole('link', { name: 'Front students-satisfaction' }).click();
   await page.getByRole('button', { name: 'Cargar Datos' }).click();
   await page.getByRole('button', { name: 'Eliminar Datos' }).click();
