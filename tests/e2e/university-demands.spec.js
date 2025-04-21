@@ -81,7 +81,7 @@ test('Filter', async ({ page }) => {
   await page.getByRole('button', { name: 'Limpiar Filtros' }).click();
 
   // Comprobar que vuelve a haber datos sin filtros
-  const dataAfterClear = page.locator('table tbody tr').filter({ has: page.locator('td') });
+const dataAfterClear = page.locator('table tbody tr').filter({ has: page.locator('td') });
 
   await expect(async () => {
     const count = await dataAfterClear.count();
