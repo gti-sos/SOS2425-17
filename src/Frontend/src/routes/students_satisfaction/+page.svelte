@@ -744,3 +744,4 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         min-width: 140px;
     }
 </style>
+>>>>>>> 8d2704b06c7e06446a7e4c3bfd20edd349703d58
