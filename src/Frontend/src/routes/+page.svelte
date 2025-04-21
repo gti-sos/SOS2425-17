@@ -18,7 +18,8 @@
             //Front university-demands
             //<a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">API Javier Guerrero Pérez</a>
             frontend: '/university-demands',
-            api: 'https://sos2425-17.onrender.com/api/v1/university-demands/docs',
+            api_v1: 'https://sos2425-17.onrender.com/api/v1/university-demands/docs',
+            api_v2: 'https://sos2425-17.onrender.com/api/v2/university-demands/docs',
             postman: 'https://documenter.getpostman.com/view/42357894/2sB2cUAN1D',
             recurso: 'university-demands',
             github: 'https://github.com/Javiigp'
@@ -86,11 +87,19 @@
         <ul>
             {#each miembros as miembro}
                 <li><strong>{miembro.nombre} API:</strong>
-                    <a href={miembro.api} target="_blank">{miembro.api}</a>
+                    {#if miembro.api_v1 && miembro.api_v2}
+                        <a href={miembro.api_v1} target="_blank">API v1</a> | 
+                        <a href={miembro.api_v2} target="_blank">API v2</a>
+                    {:else if miembro.api}
+                        <a href={miembro.api} target="_blank">{miembro.api}</a>
+                    {:else}
+                        <em>No disponible</em>
+                    {/if}
                 </li>
             {/each}
         </ul>
     </div>
+    
 
     <div class="section">
         <h2>📄 Enlaces a la documentación de Postman de las APIs</h2>
