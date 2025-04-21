@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-=======
+
+
 <svelte:head>
     <title>Students Satisfaction</title>
 </svelte:head>
