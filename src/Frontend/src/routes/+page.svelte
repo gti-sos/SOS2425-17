@@ -15,13 +15,12 @@
         },
         {
             nombre: 'Javier Guerrero Pérez',
-            //Front university-demands
-            //<a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">API Javier Guerrero Pérez</a>
+            //API Javier Guerrero Pérez
             frontend: '/university-demands',
-            api_v1: 'https://sos2425-17.onrender.com/api/v1/university-demands',
-            api_v2: 'https://sos2425-17.onrender.com/api/v2/university-demands',
-            postman_v1: 'https://sos2425-17.onrender.com/api/v1/university-demands/docs',
-            postman_v2: 'https://sos2425-17.onrender.com/api/v2/university-demands/docs',
+            api_v1: '/api/v1/university-demands',
+            api_v2: '/api/v2/university-demands',
+            postman_v1: '/api/v1/university-demands/docs',
+            postman_v2: '/api/v2/university-demands/docs',
             recurso: 'university-demands',
             github: 'https://github.com/Javiigp'
         },
