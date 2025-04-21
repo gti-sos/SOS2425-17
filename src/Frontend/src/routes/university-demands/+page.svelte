@@ -314,9 +314,9 @@ function resetFilters() {
                 successMessage = "";
             }, 3000);
         } else if (status === 404) {
-            errorMessage = "No se encontró la demanda a actualizar.";
+            errorMessage = "No se encontró la demanda a actualizar";
         } else if (status === 400) {
-            errorMessage = "Datos incompletos o no coinciden con los parámetros de la URL.";
+            errorMessage = "Datos incompletos o no coinciden con los parámetros de la URL";
         } else {
             errorMessage = "Error al actualizar la demanda.";
         }
