@@ -16,7 +16,7 @@ app.options('*', (req, res) => {
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.sendStatus(200);
 });
-import { loadBackendPablo } from "./src/backend/university-academic-performance/index.js";
+import { loadBackendPabloV1 } from "./src/backend/v1/university-academic-performance/index.js";
 import { loadBackendJavierV1 } from "./src/backend/v1/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 import { loadBackendJavierV2 } from "./src/backend/v2/university-demands/index.js"; //con esto importo la funcion loadBackend del src/back
 import { loadBackendAlejandro } from "./src/backend/v1/university-demands/students_satisfaction/indexAGP.js";
@@ -30,7 +30,7 @@ import {handler} from "./src/Frontend/build/handler.js"
 app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
 
 
-loadBackendPablo(app)
+loadBackendPabloV1(app)
 loadBackendJavierV1(app) //aqui pongo la funcion loadBackend importada de src/back para que se muestre en pantalla
 loadBackendJavierV2(app)
 loadBackendAlejandro(app)

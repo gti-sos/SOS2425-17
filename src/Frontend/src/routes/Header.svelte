@@ -174,7 +174,7 @@
                 <div class="dropdown">
                     <a href="/university-demands">University Demands</a>
                     <a href="/students_satisfaction">students_satisfaction</a>
-                    <a href="/frontends/svelte">university-academic-performance</a>
+                    <a href="/university-academic-performance">university-academic-performance</a>
                 </div>
             {/if}
         </div>

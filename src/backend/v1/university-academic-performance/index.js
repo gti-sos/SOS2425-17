@@ -70,7 +70,7 @@ const university_academic_performance = [
 
 
 
-    function loadBackendPablo(app){
+    function loadBackendPabloV1(app){
 
 
         app.get(BASE_API + "/university-academic-performance/paginated", (req, res) => {
@@ -117,16 +117,21 @@ const university_academic_performance = [
         //GET Todo lo que haya
 
 
-        app.get(BASE_API + "/university-academic-performance", (request,response) => {
+        app.get(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("GET /university-academic-performance");
         
             university_academic_performance_db.find({}, (err, docs) => {
                 if (err) {
                     return response.status(500).send({ error: "Database error" });
                 }
-                return response.json(docs);
+        
+                // Eliminar el campo _id de cada documento
+                const cleanedDocs = docs.map(({ _id, ...rest }) => rest);
+        
+                return response.json(cleanedDocs);
             });
         });
+        
 
 
         // GET uno en concreto
@@ -159,7 +164,7 @@ const university_academic_performance = [
         //LOAD INITIAL DATA
 
         app.get(BASE_API + "/university-academic-performance/loadInitialData", (request, response) => {
-            console.log("GET /university-academic-performance/loadInitialData")
+            console.log("GET /university-academic-performance/loadInitialData");
         
             // Verificar si la base de datos ya tiene datos
             university_academic_performance_db.count({}, (err, count) => {
@@ -168,17 +173,30 @@ const university_academic_performance = [
                 }
         
                 if (count === 0) {
+        
                     university_academic_performance_db.insert(university_academic_performance, (err, newDocs) => {
                         if (err) {
                             return response.status(500).json({ error: "Database error" });
                         }
-                        return response.status(201).json({message: "the data was inserted successfully"}); 
+        
+                        // Limpiar el campo _id antes de enviarlo al cliente
+                        const cleanDocs = newDocs.map(doc => {
+                            const { _id, ...rest } = doc;
+                            return rest;
+                        });
+        
+                        return response.status(201).json({
+                            message: "The data was inserted successfully",
+                            data: cleanDocs
+                        });
                     });
+        
                 } else {
                     return response.status(409).json({ message: "empty the database first to initialize it" });
                 }
             });
         });
+        
         
 
 
@@ -264,7 +282,7 @@ const university_academic_performance = [
             }
         
             // Buscar y actualizar el registro en la base de datos
-            university_academic_performance_db.update({ degree, location, academicYear },  {},(err, numReplaced) => {
+            university_academic_performance_db.update({ degree, location, academicYear },  {$set: body},(err, numReplaced) => {
                     if (err) {
                         return response.status(500).json({ error: "Database error" });
                     }
@@ -340,4 +358,4 @@ const university_academic_performance = [
         
     }
 
-    export {loadBackendPablo}
+    export {loadBackendPabloV1}
