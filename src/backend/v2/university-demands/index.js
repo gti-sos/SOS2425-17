@@ -93,7 +93,7 @@ function loadBackendJavierV2(app){
     
         let query = {};
     
-        if (location) query.location = new RegExp("^" + location + "$", "i");
+        if (location) query.location = new RegExp("^" + location + "$", "i");   
         if (degree) query.degree = new RegExp("^" + degree + "$", "i");
         if (academicYear) query.academicYear = academicYear;
         if (over45) query.over45 = Number(over45);
@@ -315,7 +315,7 @@ function loadBackendJavierV2(app){
     
     //Esto es para que te redirija a la documentacion de la api cuando pongas /base_api//university-demands/docs
     app.get(BASE_API+"/university-demands/docs",(request,response)=>{
-        response.redirect("https://documenter.getpostman.com/view/42357894/2sB2cUAN1D");
+        response.redirect("https://documenter.getpostman.com/view/42357894/2sB2iwFETH");
     });
 
 }
