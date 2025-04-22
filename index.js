@@ -1,4 +1,16 @@
 console.log("Init script");
+console.log("Se recuerda que han sido eliminados los DeprecationWarning");
+
+process.removeAllListeners('warning');
+process.on('warning', (warning) => {
+  if (warning.name === 'DeprecationWarning') {
+    // Silenciar solo los warnings deprecados
+    return;
+  }
+  // Mostrar otros tipos de warning (opcional)
+  console.warn(warning);
+});
+
 
 
 import express from "express";

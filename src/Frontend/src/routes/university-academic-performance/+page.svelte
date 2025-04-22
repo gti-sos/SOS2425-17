@@ -111,41 +111,45 @@
 
     // Cargar datos iniciales
     function getLoadInitialData() {
-        fetch("/api/v1/university-academic-performance/loadInitialData")
-            .then(response => {
-                if (response.status === 201) {
-                    console.log("Datos iniciales insertados correctamente");
-                    successMessage = "¡Datos iniciales insertados correctamente!";
-                    setTimeout(() => { successMessage = ""; }, 3000);
-                } else if (response.status === 409) {
-                    console.log("La base de datos ya tiene datos. Elimínalos primero.");
-                    errorMessage = "¡La base de datos ya tiene datos! Elimínalos primero.";
-                    setTimeout(() => { errorMessage = ""; }, 3000);
-                } else {
-                    console.log("Error al insertar los datos");
-                    errorMessage = "Error al insertar los datos";
-                    setTimeout(() => { errorMessage = ""; }, 3000);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                errorMessage = "Error al cargar los datos iniciales";
+    fetch("/api/v1/university-academic-performance/loadInitialData")
+        .then(response => {
+            if (response.status === 201) {
+                console.log("Datos iniciales insertados correctamente");
+                successMessage = "¡Datos iniciales insertados correctamente!";
+                setTimeout(() => { successMessage = ""; }, 3000);
+            } else if (response.status === 409) {
+                console.log("La base de datos ya tiene datos. Elimínalos primero.");
+                errorMessage = "¡La base de datos ya tiene datos! Elimínalos primero.";
                 setTimeout(() => { errorMessage = ""; }, 3000);
-            });
-    }
+            } else {
+                console.log("Error al insertar los datos");
+                errorMessage = "Error al insertar los datos";
+                setTimeout(() => { errorMessage = ""; }, 3000);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            errorMessage = "Error al cargar los datos iniciales";
+            setTimeout(() => { errorMessage = ""; }, 3000);
+        });
+}
 
     //Filtrar por un dato 
 
 
 async function getOne(params = {}) {
     status = output = "";
+    
+
+
     try {
-        const queryString = new URLSearchParams(params).toString(); 
+        const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(([_, value]) => value !== undefined));
+        const queryString = new URLSearchParams(filteredParams).toString();
         const url = `${ruta_api}?${queryString}`;
-        const res = await fetch(url, { method: "GET" });
-        console.log("La URL es:", url);
-        console.log("params", params);
-        console.log("query", queryString);
+
+            const res = await fetch(url, { method: "GET" });
+            console.log("La URL es:", url);
 
         status = res.status;
 
@@ -374,29 +378,6 @@ async function deleteDemands(degree, location, academicYear){
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function handleActualizar() {
     const params = {
       degree: UniversityAcademicPerformanceDegree,
@@ -424,6 +405,15 @@ async function deleteDemands(degree, location, academicYear){
 
 
 </script>
+
+
+
+{#if successMessage}
+<div class="success">{successMessage}</div>
+{/if}
+{#if errorMessage}
+<div class="error">{errorMessage}</div>
+{/if}
 
 
 <div>
