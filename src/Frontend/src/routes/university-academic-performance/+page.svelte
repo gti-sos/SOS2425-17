@@ -3,6 +3,7 @@
 </svelte:head>
 
 <script>
+    import { Table } from '@sveltestrap/sveltestrap'; 
     import { dev } from '$app/environment';
     import { onMount } from "svelte";
     import { Button } from '@sveltestrap/sveltestrap';
@@ -99,8 +100,7 @@
         output = "";
         status = "";
         try {
-            let res = await fetch(ruta_api, { method: "GET" });
-            let data = await res.json();
+            let data = await fetch(ruta_api, { method: "GET" }).then(response => response.json());
             UniversityAcademicPerformance = data;
             output = JSON.stringify(data, null, 2);
             console.log(`Response received: ${output}`);
@@ -117,6 +117,7 @@
                 console.log("Datos iniciales insertados correctamente");
                 successMessage = "¡Datos iniciales insertados correctamente!";
                 setTimeout(() => { successMessage = ""; }, 3000);
+                getUniversityAcademicPerformance();
             } else if (response.status === 409) {
                 console.log("La base de datos ya tiene datos. Elimínalos primero.");
                 errorMessage = "¡La base de datos ya tiene datos! Elimínalos primero.";
@@ -163,6 +164,7 @@ async function getOne(params = {}) {
             } 
 
         const data = await res.json();
+        UniversityAcademicPerformance=data;
 
         output = JSON.stringify(data, null, 2);
         console.log(`Response received:\n${output}`);
@@ -305,6 +307,7 @@ async function deleteAll() {
 
             console.log("All demands deleted");
             successMessage = "¡Demandas borradas con éxito!";
+            await(getUniversityAcademicPerformance());
 
             // Ocultar el mensaje después de unos segundos
             setTimeout(() => {
@@ -400,6 +403,9 @@ async function deleteDemands(degree, location, academicYear){
     getOne(params);
   }
 
+  function getRowClass(index) {
+    return index % 2 === 0 ? "row-even" : "row-odd";
+  }
 
 
 
@@ -416,7 +422,7 @@ async function deleteDemands(degree, location, academicYear){
 {/if}
 
 
-<div>
+<div class="container">
     <button class="btn-morado" on:click={getLoadInitialData}>
         Cargar datos iniciales
     </button>
@@ -551,39 +557,169 @@ async function deleteDemands(degree, location, academicYear){
 </div>
 
 
+<Table class="table">
+    <tbody>
+        <tr>
+            <th class="titles-big">Grado</th>
+            <th class="titles-big">Ciudad</th>
+            <th class="titles-small">Año academico</th>
+            <th class="titles-small">Número de abandonos 1er curso</th>
+            <th class="titles-small">Número de abandonos 2er curso</th>
+            <th class="titles-small">Número de abandonos 3er curso</th>
+            <th class="titles-small">Tasa de abandono 1er curso</th>
+            <th class="titles-small">Tasa de abandono 2er curso</th>
+            <th class="titles-small">Tasa de abandono 3er curso</th>
+            <th class="titles-small">Tasa de abandono</th>
+            <th class="titles-small">Nivel de progreso</th>
+            <th class="titles-small">Tasa de rendimiento</th>
+            <th class="titles-small">Cohorte</th>
+            <th class="titles-small">Tasa de graduacion</th>
+        </tr>
+        
+        <!-- Esto ejecuta tantos tr como contacts haya -->
+        {#each UniversityAcademicPerformance as universityD,index}
+            <tr class={getRowClass(index)}>
+                <td class="transparent">
+                    {universityD.degree}
+                </td>
+                <td class="transparent">
+                    {universityD.location}
+                </td>
+                <td class="transparent">
+                    {universityD.academicYear}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutFirstCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutSecondCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutThirdCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsFirstCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsSecondCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsThirdCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutRate}
+                </td>
+                <td class="transparent">
+                    {universityD.progressNormalized}
+                </td>
+                <td class="transparent">
+                    {universityD.performanceRate}
+                </td>
+                <td class="transparent">
+                    {universityD.cohortStudents}
+                </td>
+                <td class="transparent">
+                    {universityD.graduationRate}
+                </td>
+                <td class="btns-table">
+                    <button class="btn-rojo" on:click={() => {deleteDemands(universityD.degree, universityD.location, universityD.academicYear)}}>Borrar</button>
+                    <button class="btn-azul" on:click={() => updateUniversityAcademicPerformance()}>Editar</button>
+                </td>
+            </tr>
+        {/each}
+
+    </tbody>
+</Table>
+  
+
 <style>
+.container{
+
+    margin-bottom: 5px; /* Espacio entre los botones y la tabla */
+    padding: 10px;
+
+}
+.table{
+    border: 2px solid black;   /* Opcional: borde superior para la celda de los botones */
+    width: 100%;
+
+}
+.btns-table{
+  background-color: transparent;
+  gap: 8px;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+
+  margin: 8px; /* Separación entre botones */
+}
+.titles-big{
+    background-color: orange;
+    border: 2px solid black;
+    width: 150px; /* Ancho fijo para cada botón */
+}
+.titles-small{
+    width: 50px; /* Ancho fijo para cada botón */
+    background-color: orange;
+    border: 2px solid black;
+
+}
+.transparent{
+    background-color: transparent;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+.row-even {
+    background-color: #57fda2; /* gris clarito */
+    
+}
+
+.row-odd {
+    background-color: #bde844; /* blanco */
+}
 
 .btn-verde {
     background-color: #4CAF50; /* verde */
     color: white;
+    cursor: pointer;
+    text-align: center;
 }
 
 .btn-rojo {
     background-color: #f44336; /* rojo */
     color: white;
+    cursor: pointer;
+    text-align: center;
 }
 
 .btn-amarillo {
     background-color: #FFC107; /* amarillo */
     color: black;
+    cursor: pointer;
+    text-align: center;
 }
 
 .btn-azul {
     background-color: #2196F3; /* azul */
     color: white;
+    cursor: pointer;
+    text-align: center;
 }
 
 .btn-naranja {
     background-color: #e17110; /* azul */
     color: white;
+    cursor: pointer;
+    text-align: center;
 }
 .btn-morado {
     background-color: #950d7e; /* azul */
     color: white;
+    cursor: pointer;
+    text-align: center;
 }
 
 </style>
 
 
-<!-- Muestra el resultado -->
-<pre>{output}</pre>

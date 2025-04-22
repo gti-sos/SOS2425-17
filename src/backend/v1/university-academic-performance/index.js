@@ -104,9 +104,19 @@ const university_academic_performance = [
             if (progressNormalized !== undefined) query.progressNormalized = Number(progressNormalized);
             if (graduationRate !== undefined) query.graduationRate = Number(graduationRate);
             if (cohortStudents !== undefined) query.cohortStudents = Number(cohortStudents);
-
+            
+            let sortOptions = {};
+            let {sortBy,order}=request.query
+                // Si sortBy no está definido, se utiliza academicYear y degree como por defecto
+            if (sortBy && typeof sortBy === "string") {
+                // Si el parámetro sortBy está presente, ordenar por ese campo
+                sortOptions[sortBy] = order === "desc" ? -1 : 1;
+            } else {
+                // Orden por defecto: primero academicYear, luego degree
+                sortOptions = { academicYear: 1, degree: 1 ,location: 1};
+            }
         
-            university_academic_performance_db.find(query, (err, data) => {
+            university_academic_performance_db.find(query).sort(sortOptions).exec((err, data) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
                 }
@@ -308,22 +318,25 @@ const university_academic_performance = [
             
                 if (docs.length === 0) {
                     return response.status(409).json({ error: "Database is empty, nothing to delete" });
-                }})
+                }
+            else{
+                university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Database error" });
+                    }
+                    
+                    else {
+    
+    
+                        
+                        return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
+                    }
+                    
+                });
+            }})
 
         
-            university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
-                if (err) {
-                    return response.status(500).json({ error: "Database error" });
-                }
-                
-                else {
-
-
-                    
-                    return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
-                }
-                
-            });
+            
         });
         
 
