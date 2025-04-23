@@ -3,10 +3,10 @@
 </svelte:head>
 
 <script>
-    import { Table } from '@sveltestrap/sveltestrap'; 
+    import { Fade, Table } from '@sveltestrap/sveltestrap'; 
     import { dev } from '$app/environment';
     import { onMount } from "svelte";
-    import { Button } from '@sveltestrap/sveltestrap';
+	import { fade } from 'svelte/transition';
 
 
     let ruta_host = "http://localhost:16078";
@@ -31,6 +31,10 @@
     let UniversityAcademicPerformanceAcademicYear;
     let output = "";
     let status = "";
+    let sortDirection;
+    let sortColumn;
+    let lastSearch;
+    let lastParams;
 
 
 
@@ -103,6 +107,7 @@
             let data = await fetch(ruta_api, { method: "GET" }).then(response => response.json());
             UniversityAcademicPerformance = data;
             output = JSON.stringify(data, null, 2);
+            lastSearch=ruta_api
             console.log(`Response received: ${output}`);
         } catch (error) {
             console.log(`Error: Get from ${ruta_api} : ${error}`);
@@ -117,6 +122,7 @@
                 console.log("Datos iniciales insertados correctamente");
                 successMessage = "¡Datos iniciales insertados correctamente!";
                 setTimeout(() => { successMessage = ""; }, 6000);
+                lastSearch="/api/v1/university-academic-performance/loadInitialData"
                 getUniversityAcademicPerformance();
             } else if (response.status === 409) {
                 console.log("La base de datos ya tiene datos. Elimínalos primero.");
@@ -140,43 +146,76 @@
 
 async function getOne(params = {}) {
     status = output = "";
-    
+    if (params.degree != null && params.location && params.academicYear != null){
+        console.log("la ruta es ",ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear)
 
-
-    try {
-        const filteredParams = Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => value !== undefined));
-        const queryString = new URLSearchParams(filteredParams).toString();
-        const url = `${ruta_api}?${queryString}`;
-        console.log(url)
-
+        try {
+            const url=ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear
             const res = await fetch(url, { method: "GET" });
-            console.log("La URL es:", url);
-
-        status = res.status;
-
+            status = res.status;
             if (status === 404) {
-                const firstParamKey = Object.keys(params)[0];
-                const firstParamValue = params[firstParamKey];
-                errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
-                setTimeout(() => {
+                    errorMessage = `No se encontró ningún resultado`;
+                    setTimeout(() => {
+                    errorMessage = "";
+                    }, 6000);
+                }
+
+            const data = await res.json();
+            UniversityAcademicPerformance=[data];
+            output = JSON.stringify(data, null, 2);
+            lastSearch=url;
+            console.log(`Response received:\n${output}`);
+
+
+        }
+        catch (error) {
+            console.log(`Error: GET from ${ruta_api} - ${error}`);
+            errorMessage = "Error al obtener los datos.";
+
+            // Oculta el mensaje después de unos segundos
+            setTimeout(() => {
                 errorMessage = "";
-                }, 6000);
-            } 
+            }, 6000);
+        }
+    }
+    else{
+        try {
+            const filteredParams = Object.fromEntries(
+            Object.entries(params).filter(([_, value]) => value !== undefined));
+            console.log("PARAMETROS FILRADOS",filteredParams)
+            const queryString = new URLSearchParams(filteredParams).toString();
+            const url = `${ruta_api}?${queryString}`;
+            console.log(url)
 
-        const data = await res.json();
-        UniversityAcademicPerformance=data;
+                const res = await fetch(url, { method: "GET" });
+                console.log("La URL es:", url);
 
-        output = JSON.stringify(data, null, 2);
-        console.log(`Response received:\n${output}`);
-    } catch (error) {
-        console.log(`Error: GET from ${ruta_api} - ${error}`);
-        errorMessage = "Error al obtener los datos.";
+            status = res.status;
 
-        // Oculta el mensaje después de unos segundos
-        setTimeout(() => {
-            errorMessage = "";
-        }, 6000);
+                if (status === 404) {
+                    const firstParamKey = Object.keys(params)[0];
+                    const firstParamValue = params[firstParamKey];
+                    errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
+                    setTimeout(() => {
+                    errorMessage = "";
+                    }, 6000);
+                } 
+
+            const data = await res.json();
+            UniversityAcademicPerformance=data;
+
+            output = JSON.stringify(data, null, 2);
+            lastSearch=url;
+            console.log(`Response received:\n${output}`);
+        } catch (error) {
+            console.log(`Error: GET from ${ruta_api} - ${error}`);
+            errorMessage = "Error al obtener los datos.";
+
+            // Oculta el mensaje después de unos segundos
+            setTimeout(() => {
+                errorMessage = "";
+            }, 6000);
+        }
     }
 }
 
@@ -212,7 +251,7 @@ async function createUniversityAcademicPerformance() {
 
         if (res.status === 201) {
             successMessage = "¡Registro creado correctamente!";
-            await getUniversityAcademicPerformance();
+            await checkSearch();
             showCreateForm = false;
 
         } else if (res.status === 409) {
@@ -268,7 +307,7 @@ async function updateUniversityAcademicPerformance() {
 
         if (res.status === 200) {
             successMessage = "¡Registro actualizado correctamente!";
-            await getUniversityAcademicPerformance();
+            await checkSearch();
             showEditForm = false;
 
             // Limpiar los campos si quieres
@@ -357,7 +396,7 @@ async function deleteDemands(degree, location, academicYear){
 
             if (status === 200) {
                 console.log(`Demand ${degree} in ${location} in ${academicYear} deleted`);
-                getUniversityAcademicPerformance(); // más lógico que recargar los datos con loadInitialData
+                checkSearch();
                 successMessage = "¡Demanda borrada con éxito!";
 
                 // Oculta el mensaje después de unos segundos
@@ -402,14 +441,14 @@ async function deleteDemands(degree, location, academicYear){
       graduationRate: UniversityAcademicPerformanceGraduationRate
     };
     getOne(params);
+    lastParams=params;
   }
 
   function getRowClass(index) {
     return index % 2 === 0 ? "color-green" : "color-ligthgreen";
   }
 
-let sortDirection;
-let sortColumn;
+
 
 
   function handleClick(column) {
@@ -422,6 +461,25 @@ let sortColumn;
     getOne({ sortBy: sortColumn, order: sortDirection });
   }
 
+
+
+
+  
+    function checkSearch(){
+        console.log("La última busqueda fue a  ",lastSearch)
+        if (lastSearch===null){
+            getUniversityAcademicPerformance()
+        }
+        else if(lastSearch===ruta_api || lastSearch===ruta_api+"/loadInitialData"){
+                getUniversityAcademicPerformance()
+            }
+        else{
+        getOne(lastParams)
+        }
+
+
+
+    }
 </script>
 
 
@@ -445,8 +503,10 @@ let sortColumn;
     </button>
 
 <!-- Botón que muestra/oculta el formulario -->
-<button class="btn-verde" on:click={() => showfilterForm = !showfilterForm}>
-    {showfilterForm ? "cancelar" : "filtrado"}
+<button class="btn-verde" on:click={() => { UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
+ showfilterForm = !showfilterForm
+}}>
+    {showfilterForm ? "Cancelar" : "Filtrado"}
   </button>
   
   {#if showfilterForm}
@@ -470,14 +530,16 @@ let sortColumn;
       <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
   
       <!-- 4) Botón que llama a handleActualizar -->
-      <button class="btn-verde" on:click={handleActualizar}>
-        Actualizar
+      <button class="btn-verde" on:click={() =>{showfilterForm=false
+      handleActualizar}}>
+        Filtrar
       </button>
     </div>
   {/if}
 
     <!-- Botón para mostrar el formulario -->
-    <button class="btn-amarillo" on:click={() => showCreateForm = !showCreateForm}>
+    <button class="btn-amarillo" on:click={() => {UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
+    showCreateForm = !showCreateForm}}>
         {showCreateForm ? "Cancelar" : "Crear nuevo registro"}
     </button>
     
@@ -501,15 +563,17 @@ let sortColumn;
             <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
             <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
     
-            <button class="btn-amarillo" on:click={createUniversityAcademicPerformance}>
+            <button class="btn-amarillo"on:click={() =>{showCreateForm=false
+            createUniversityAcademicPerformance}}>
                 Guardar
             </button>
         </div>
     {/if}
 
 <!-- Botón para mostrar/ocultar el formulario de edición -->
-<button class="btn-azul" on:click={() => showEditForm = !showEditForm}>
-    {showEditForm ? "Cancelar edición" : "Editar registro"}
+<button class="btn-azul" on:click={() =>{UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
+     showEditForm = !showEditForm}}>
+    {showEditForm ? "Cancelar" : "Editar registro"}
 </button>
 
 <!-- Formulario de edición -->
@@ -532,7 +596,8 @@ let sortColumn;
         <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
         <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
 
-        <button class="btn-verde" on:click={updateUniversityAcademicPerformance}>
+        <button class="btn-azul" on:click={() =>{showEditForm=false
+        updateUniversityAcademicPerformance}}>
             Actualizar
         </button>
     </div>
@@ -545,7 +610,7 @@ let sortColumn;
 
 
     <button class="btn-rojo" on:click={deleteAll}>
-        borra todo
+        Borra todo
     </button>
 
 <!-- Botón para mostrar/ocultar el formulario de borrado -->
@@ -560,7 +625,9 @@ let sortColumn;
         <input placeholder="Localización" bind:value={deleteLocation} />
         <input placeholder="Año académico" bind:value={deleteAcademiYear} />
 
-        <button class="btn-verde" on:click={() => deleteDemands(deleteDegree, deleteLocation, deleteAcademiYear)}>
+        <button class="btn-verde" on:click={() => {deleteDemands(deleteDegree, deleteLocation, deleteAcademiYear)
+        showDeleteForm=false;    
+        }}>
             Borrar Uno
         </button>
     </div>
