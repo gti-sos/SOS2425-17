@@ -146,7 +146,7 @@
 
 async function getOne(params = {}) {
     status = output = "";
-    if (params.degree != null && params.location && params.academicYear != null){
+    if (params.degree != null && params.location != null && params.academicYear != null){
         console.log("la ruta es ",ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear)
 
         try {
@@ -181,7 +181,7 @@ async function getOne(params = {}) {
     else{
         try {
             const filteredParams = Object.fromEntries(
-            Object.entries(params).filter(([_, value]) => value !== undefined));
+            Object.entries(params).filter(([_, value]) => value !== undefined && value !==null));
             console.log("PARAMETROS FILRADOS",filteredParams)
             const queryString = new URLSearchParams(filteredParams).toString();
             const url = `${ruta_api}?${queryString}`;
@@ -530,8 +530,8 @@ async function deleteDemands(degree, location, academicYear){
       <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
   
       <!-- 4) Botón que llama a handleActualizar -->
-      <button class="btn-verde" on:click={() =>{showfilterForm=false
-      handleActualizar}}>
+      <button class="btn-verde" on:click={() =>{showfilterForm=false;
+       handleActualizar()}}>
         Filtrar
       </button>
     </div>
@@ -564,7 +564,7 @@ async function deleteDemands(degree, location, academicYear){
             <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
     
             <button class="btn-amarillo"on:click={() =>{showCreateForm=false
-            createUniversityAcademicPerformance}}>
+            createUniversityAcademicPerformance()}}>
                 Guardar
             </button>
         </div>
@@ -597,7 +597,7 @@ async function deleteDemands(degree, location, academicYear){
         <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
 
         <button class="btn-azul" on:click={() =>{showEditForm=false
-        updateUniversityAcademicPerformance}}>
+        updateUniversityAcademicPerformance()}}>
             Actualizar
         </button>
     </div>
