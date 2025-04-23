@@ -116,22 +116,22 @@
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
                 successMessage = "¡Datos iniciales insertados correctamente!";
-                setTimeout(() => { successMessage = ""; }, 3000);
+                setTimeout(() => { successMessage = ""; }, 6000);
                 getUniversityAcademicPerformance();
             } else if (response.status === 409) {
                 console.log("La base de datos ya tiene datos. Elimínalos primero.");
                 errorMessage = "¡La base de datos ya tiene datos! Elimínalos primero.";
-                setTimeout(() => { errorMessage = ""; }, 3000);
+                setTimeout(() => { errorMessage = ""; }, 6000);
             } else {
                 console.log("Error al insertar los datos");
                 errorMessage = "Error al insertar los datos";
-                setTimeout(() => { errorMessage = ""; }, 3000);
+                setTimeout(() => { errorMessage = ""; }, 6000);
             }
         })
         .catch(error => {
             console.error("Error:", error);
             errorMessage = "Error al cargar los datos iniciales";
-            setTimeout(() => { errorMessage = ""; }, 3000);
+            setTimeout(() => { errorMessage = ""; }, 6000);
         });
 }
 
@@ -148,6 +148,7 @@ async function getOne(params = {}) {
         Object.entries(params).filter(([_, value]) => value !== undefined));
         const queryString = new URLSearchParams(filteredParams).toString();
         const url = `${ruta_api}?${queryString}`;
+        console.log(url)
 
             const res = await fetch(url, { method: "GET" });
             console.log("La URL es:", url);
@@ -160,7 +161,7 @@ async function getOne(params = {}) {
                 errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
                 setTimeout(() => {
                 errorMessage = "";
-                }, 3000);
+                }, 6000);
             } 
 
         const data = await res.json();
@@ -175,7 +176,7 @@ async function getOne(params = {}) {
         // Oculta el mensaje después de unos segundos
         setTimeout(() => {
             errorMessage = "";
-        }, 3000);
+        }, 6000);
     }
 }
 
@@ -228,7 +229,7 @@ async function createUniversityAcademicPerformance() {
 
     setTimeout(() => {
         errorMessage = successMessage = "";
-    }, 3000);
+    }, 6000);
 }
 
 
@@ -285,7 +286,7 @@ async function updateUniversityAcademicPerformance() {
 
     setTimeout(() => {
         errorMessage = successMessage = "";
-    }, 3000);
+    }, 6000);
 }
 
 
@@ -312,7 +313,7 @@ async function deleteAll() {
             // Ocultar el mensaje después de unos segundos
             setTimeout(() => {
                 successMessage = "";
-            }, 3000);
+            }, 6000);
         } else {
             console.error("ERROR deleting demands", res);
             errorMessage = "Error al borrar todos los datos: " + (await res.text());
@@ -320,7 +321,7 @@ async function deleteAll() {
             // Ocultar el mensaje después de unos segundos
             setTimeout(() => {
                 errorMessage = "";
-            }, 3000);
+            }, 6000);
         }
     } catch (error) {
         console.log(`ERROR: DELETE from ${ruta_api}: ${error}`);
@@ -329,7 +330,7 @@ async function deleteAll() {
         // Ocultar el mensaje después de unos segundos
         setTimeout(() => {
             errorMessage = "";
-        }, 3000);
+        }, 6000);
     }
 }
 
@@ -362,14 +363,14 @@ async function deleteDemands(degree, location, academicYear){
                 // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     successMessage = "";
-                }, 3000);
+                }, 6000);
             } else {
                 console.error(`ERROR deleting demand: status ${status} - response: ${Text}`);
                 errorMessage = "Error al eliminar los datos";
                 // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
-                }, 3000);
+                }, 6000);
             }
 
 
@@ -404,21 +405,32 @@ async function deleteDemands(degree, location, academicYear){
   }
 
   function getRowClass(index) {
-    return index % 2 === 0 ? "row-even" : "row-odd";
+    return index % 2 === 0 ? "color-green" : "color-ligthgreen";
   }
 
+let sortDirection;
+let sortColumn;
 
 
+  function handleClick(column) {
+    if (sortColumn === column) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn = column;
+      sortDirection = 'asc';
+    }
+    getOne({ sortBy: sortColumn, order: sortDirection });
+  }
 
 </script>
 
 
 
 {#if successMessage}
-<div class="success">{successMessage}</div>
+<div class="sucess-message">{successMessage}</div>
 {/if}
 {#if errorMessage}
-<div class="error">{errorMessage}</div>
+<div class="error-message">{errorMessage}</div>
 {/if}
 
 
@@ -560,20 +572,20 @@ async function deleteDemands(degree, location, academicYear){
 <Table class="table">
     <tbody>
         <tr>
-            <th class="titles-big">Grado</th>
-            <th class="titles-big">Ciudad</th>
-            <th class="titles-small">Año academico</th>
-            <th class="titles-small">Número de abandonos 1er curso</th>
-            <th class="titles-small">Número de abandonos 2er curso</th>
-            <th class="titles-small">Número de abandonos 3er curso</th>
-            <th class="titles-small">Tasa de abandono 1er curso</th>
-            <th class="titles-small">Tasa de abandono 2er curso</th>
-            <th class="titles-small">Tasa de abandono 3er curso</th>
-            <th class="titles-small">Tasa de abandono</th>
-            <th class="titles-small">Nivel de progreso</th>
-            <th class="titles-small">Tasa de rendimiento</th>
-            <th class="titles-small">Cohorte</th>
-            <th class="titles-small">Tasa de graduacion</th>
+            <th class="titles-big" on:click={() => handleClick('degree')}>Grado</th>
+            <th class="titles-big" on:click={() => handleClick('location')}>Ciudad</th>
+            <th class="titles-small" on:click={() => handleClick('academicYear')}>Año academico</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutFirstCourse')}>Número de abandonos 1er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutSecondCourse')}>Número de abandonos 2er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutThirdCourse')}>Número de abandonos 3er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutsFirstCourse')}>Tasa de abandono 1er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutsSecondCourse')}>Tasa de abandono 2er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutsThirdCourse')}>Tasa de abandono 3er curso</th>
+            <th class="titles-small" on:click={() => handleClick('dropoutRate')}>Tasa de abandono</th>
+            <th class="titles-small" on:click={() => handleClick('progressNormalized')}>Nivel de progreso</th>
+            <th class="titles-small" on:click={() => handleClick('performanceRate')}>Tasa de rendimiento</th>
+            <th class="titles-small" on:click={() => handleClick('cohortStudents')}>Cohorte</th>
+            <th class="titles-small" on:click={() => handleClick('graduationRate')}>Tasa de graduacion</th>
         </tr>
         
         <!-- Esto ejecuta tantos tr como contacts haya -->
@@ -633,6 +645,28 @@ async function deleteDemands(degree, location, academicYear){
   
 
 <style>
+.error-message{
+  background-color: #ffe5e5;
+  color: #d8000c;
+  border: 1px solid #d8000c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
+}
+.sucess-message{
+  background-color: #ffe5e5;
+  color: #00d80e;
+  border: 1px solid #00d80e;;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
+}
 .container{
 
     margin-bottom: 5px; /* Espacio entre los botones y la tabla */
@@ -651,31 +685,44 @@ async function deleteDemands(degree, location, academicYear){
   border-bottom: 2px solid black;
   border-right: 2px solid black;
   border-left: 2px solid black;
-
   margin: 8px; /* Separación entre botones */
 }
 .titles-big{
     background-color: orange;
     border: 2px solid black;
     width: 150px; /* Ancho fijo para cada botón */
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.titles-big:hover {
+    background-color: #ddd;
 }
 .titles-small{
     width: 50px; /* Ancho fijo para cada botón */
     background-color: orange;
     border: 2px solid black;
-
+    transition: background-color 0.2s;
+    cursor: pointer;
 }
+
+.titles-small:hover {
+    background-color: #ddd;
+}
+
+
+
 .transparent{
     background-color: transparent;
     border-top: 2px solid black;
     border-bottom: 2px solid black;
 }
-.row-even {
+.color-green {
     background-color: #57fda2; /* gris clarito */
     
 }
 
-.row-odd {
+.color-ligthgreen {
     background-color: #bde844; /* blanco */
 }
 
@@ -721,5 +768,3 @@ async function deleteDemands(degree, location, academicYear){
 }
 
 </style>
-
-
