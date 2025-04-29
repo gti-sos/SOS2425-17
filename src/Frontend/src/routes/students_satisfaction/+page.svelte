@@ -6,12 +6,23 @@
 
 
 <script>
-    import {dev} from '$app/environment';
-    let DEVEL_HOST = "http://localhost:16078";
-    let Api = "/api/v2/students_satisfaction";
-    if (dev){
-        Api = DEVEL_HOST + Api;
-    }
+   import { dev } from '$app/environment';
+
+let DEVEL_HOST = "http://localhost:16078";
+let PROD_HOST = "https://sos2425-17.onrender.com";
+
+let Api = "/api/v2/students_satisfaction";
+
+if (dev) {
+    Api = DEVEL_HOST + Api;
+} else {
+    Api = PROD_HOST + Api;
+}
+
+// Usar API para loadInitialData
+await fetch(`${Api}/loadInitialData`);
+
+
 
 
     import {onMount} from "svelte";
@@ -76,7 +87,8 @@
 
 
     function getLoadInitialData() {
-        fetch(`${DEVEL_HOST}/api/v2/students_satisfaction/loadInitialData`)
+
+        fetch(`${Api}/loadInitialData`)
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
