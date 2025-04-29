@@ -64,71 +64,83 @@ const university_academic_performance = [
     { degree: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", location: "MÉRIDA", dropoutFirstCourse: 10.26, efficiencyRate: 84.62, dropoutSecondCourse: 6.41, successRate: 79.95, dropoutThirdCourse: 20.51, dropoutsThirdCourse: 5, progressNormalized: 1.00, dropoutsFirstCourse: 16, performanceRate: 68.53, cohortStudents: 78, dropoutsSecondCourse: 8, dropoutRate: 36.49, graduationRate: 33.78, academicYear: "2018-2019" },
     ];
 
-    const BASE_API = "/api/v1";
+    const BASE_API = "/api/v2";
     let university_academic_performance_db = new dataStore(); 
     import dataStore from "nedb";
 
 
 
-    function loadBackendPabloV1(app){
-
-
-        app.get(BASE_API + "/university-academic-performance/paginated", (req, res) => {
-            let {
-                degree, location, academicYear,
-                dropoutRate, successRate, performanceRate,
-                limit, offset
-            } = req.query;
-        
-            db.find({}, (err, data) => {
-                if (err) {
-                    return res.status(500).json({ error: "Database error" });
-                }
-        
-                let results = data.filter((entry) => {
-                    if (degree && !new RegExp("^" + degree + "$", "i").test(entry.degree)) return false;
-                    if (location && !new RegExp("^" + location + "$", "i").test(entry.location)) return false;
-                    if (academicYear && entry.academicYear !== academicYear) return false;
-                    if (dropoutRate && Number(entry.dropoutRate) !== Number(dropoutRate)) return false;
-                    if (successRate && Number(entry.successRate) !== Number(successRate)) return false;
-                    if (performanceRate && Number(entry.performanceRate) !== Number(performanceRate)) return false;
-                    return true;
-                });
-        
-                if (offset !== undefined) {
-                    results = results.slice(Number(offset));
-                }
-        
-                if (limit !== undefined) {
-                    results = results.slice(0, Number(limit));
-                }
-        
-                results = results.map(r => {
-                    delete r._id;
-                    return r;
-                });
-        
-                res.json(results);
-            });
-        });
+    function loadBackendPabloV2(app){
         
     
 
-        //GET Todo lo que haya
-
-
         app.get(BASE_API + "/university-academic-performance", (request, response) => {
-            console.log("GET /university-academic-performance");
+            console.log("--------------------------------------------------------------------")
+            const url = `/university-academic-performance?${new URLSearchParams(request.query).toString()}`;
+            console.log("NEW GET ", url);
+            
         
-            university_academic_performance_db.find({}, (err, docs) => {
+            // Extraer los parámetros de búsqueda
+            let {
+                degree, location, dropoutFirstCourse, efficiencyRate,dropoutSecondCourse, successRate, dropoutThirdCourse, dropoutsThirdCourse, progressNormalized, dropoutsFirstCourse, performanceRate, cohortStudents, dropoutsSecondCourse, dropoutRate, graduationRate, academicYear,
+                year_small,year_big,
+                limit, offset} = request.query;
+        
+            // Crear el filtro dinámicamente
+            let query = {};
+        
+            if (degree !== undefined) query.degree = new RegExp("^" + degree + "$", "i");
+            if (location !== undefined) query.location = new RegExp("^" + location + "$", "i");
+            if (academicYear !== undefined) query.academicYear = academicYear;
+            if (dropoutRate !== undefined) query.dropoutRate = Number(dropoutRate);
+            if (dropoutFirstCourse !== undefined) query.dropoutFirstCourse = Number(dropoutFirstCourse);
+            if (dropoutsFirstCourse !== undefined) query.dropoutsFirstCourse = Number(dropoutsFirstCourse);
+            if (dropoutSecondCourse !== undefined) query.dropoutSecondCourse = Number(dropoutSecondCourse);
+            if (dropoutsSecondCourse !== undefined) query.dropoutsSecondCourse = Number(dropoutsSecondCourse);
+            if (dropoutThirdCourse !== undefined) query.dropoutThirdCourse = Number(dropoutThirdCourse);
+            if (dropoutsThirdCourse !== undefined) query.dropoutsThirdCourse = Number(dropoutsThirdCourse);
+            if (efficiencyRate !== undefined) query.efficiencyRate = Number(efficiencyRate);
+            if (successRate !== undefined) query.successRate = Number(successRate);
+            if (performanceRate !== undefined) query.performanceRate = Number(performanceRate);
+            if (progressNormalized !== undefined) query.progressNormalized = Number(progressNormalized);
+            if (graduationRate !== undefined) query.graduationRate = Number(graduationRate);
+            if (cohortStudents !== undefined) query.cohortStudents = Number(cohortStudents);
+
+            if (year_small || year_big) {
+                query.academicYear = {};
+                if (year_small) query.academicYear.$gte = year_small;
+                if (year_big) query.academicYear.$lte = year_big;
+            }
+            
+            let sortOptions = {};
+            let {sortBy,order}=request.query
+                // Si sortBy no está definido, se utiliza academicYear y degree como por defecto
+            if (sortBy && typeof sortBy === "string") {
+                // Si el parámetro sortBy está presente, ordenar por ese campo
+                sortOptions[sortBy] = order === "desc" ? -1 : 1;
+            } else {
+                // Orden por defecto: primero academicYear, luego degree
+                sortOptions = { academicYear: 1, degree: 1 ,location: 1};
+            }
+        
+            university_academic_performance_db.find(query).sort(sortOptions).exec((err, data) => {
                 if (err) {
-                    return response.status(500).send({ error: "Database error" });
+                    return response.status(500).json({ error: "Database error" });
                 }
         
-                // Eliminar el campo _id de cada documento
-                const cleanedDocs = docs.map(({ _id, ...rest }) => rest);
+                // Aplicar paginación si se requiere
+                if (offset !== undefined) {
+                    data = data.slice(Number(offset));
+                }
         
-                return response.json(cleanedDocs);
+                if (limit !== undefined) {
+                    data = data.slice(0, Number(limit));
+                }
+        
+                // Limpiar los documentos (_id)
+                const cleaned = data.map(({ _id, ...rest }) => rest);
+        
+                return response.status(200).json(cleaned);
             });
         });
         
@@ -138,7 +150,8 @@ const university_academic_performance = [
 
         
         app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request, response) => {
-            console.log("GET /university-academic-performance/:degree/:location/:academicYear");
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW GET /university-academic-performance/:degree/:location/:academicYear");
         
             const degree = request.params.degree;
             const location = request.params.location;
@@ -164,7 +177,8 @@ const university_academic_performance = [
         //LOAD INITIAL DATA
 
         app.get(BASE_API + "/university-academic-performance/loadInitialData", (request, response) => {
-            console.log("GET /university-academic-performance/loadInitialData");
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW GET /university-academic-performance/loadInitialData");
         
             // Verificar si la base de datos ya tiene datos
             university_academic_performance_db.count({}, (err, count) => {
@@ -203,18 +217,19 @@ const university_academic_performance = [
         //POST PABLO
 
         app.post(BASE_API + "/university-academic-performance", (request, response) => {
-            console.log("POST to /university-academic-performance");
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW POST to /university-academic-performance");
 
             const body = request.body;
-        
+            console.log("EL BODY ES ", body.degree )
             // Verificar si algún campo obligatorio está vacío o no definido
             if ([
-                body.degree!= body.location, body.dropoutFirstCourse, body.efficiencyRate, 
+                body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
                 body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
                 body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, 
                 body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, 
                 body.dropoutRate, body.graduationRate, body.academicYear
-            ].some(value => value === undefined)) {
+            ].some(value => value === undefined || value === null)) {
                 return response.status(400).json({ error: "All fields needs a value" });
             }
             
@@ -242,15 +257,17 @@ const university_academic_performance = [
          // POST a uno
 
         app.post(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response) => {   
-            console.log("POST /university-academic-performance/:degree/:location/:academicYear") 
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW POST /university-academic-performance/:degree/:location/:academicYear") 
             return response.sendStatus(405); 
         });
     
 
         // PUT a todo
 
-        app.put(BASE_API + "/university-academic-performance", (request,response) => {   
-            console.log("PUT /university-academic-performance")
+        app.put(BASE_API + "/university-academic-performance", (request,response) => {
+            console.log("--------------------------------------------------------------------")   
+            console.log("NEW PUT /university-academic-performance")
             return response.sendStatus(405);
         });
 
@@ -258,7 +275,8 @@ const university_academic_performance = [
         // PUT a uno
 
         app.put(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request,response) => {
-            console.log("PUT /university-academic-performance/:degree/:location/:academicYear")
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW PUT /university-academic-performance/:degree/:location/:academicYear")
 
             const degree= request.params.degree
             const location = request.params.location;
@@ -298,7 +316,8 @@ const university_academic_performance = [
         // Elimina todo
 
         app.delete(BASE_API + "/university-academic-performance", (request,response) => {
-            console.log("DELETE /university-academic-performance")
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW DELETE /university-academic-performance")
             university_academic_performance_db.find({}, (err, docs) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
@@ -306,35 +325,39 @@ const university_academic_performance = [
             
                 if (docs.length === 0) {
                     return response.status(409).json({ error: "Database is empty, nothing to delete" });
-                }})
+                }
+            else{
+                university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
+                    if (err) {
+                        return response.status(500).json({ error: "Database error" });
+                    }
+                    
+                    else {
+    
+    
+                        
+                        return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
+                    }
+                    
+                });
+            }})
 
         
-            university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
-                if (err) {
-                    return response.status(500).json({ error: "Database error" });
-                }
-                
-                else {
-
-
-                    
-                    return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
-                }
-                
-            });
+            
         });
         
 
         // Eliminar un registro existente
 
         app.delete(BASE_API+"/university-academic-performance/:degree/:location/:academicYear",(request,response)=>{
-            console.log("DELETE /university-academic-performance/:degree/:location/:academicYear")
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW DELETE /university-academic-performance/:degree/:location/:academicYear")
 
             const degree= request.params.degree;
             const location = request.params.location;
             const academicYear = request.params.academicYear;
     
-    
+            
             university_academic_performance_db.remove({"degree" : degree , "location" : location , "academicYear" : academicYear},{},(err,numRemoved)=>{
                 if(err){
                     return response.status(500).json({ error: "Database error" });
@@ -351,11 +374,12 @@ const university_academic_performance = [
 
 
         app.get(BASE_API+"/university-academic-performance/docs",(request,response)=>{
-            console.log("GET /university-academic-performance/docs")
+            console.log("--------------------------------------------------------------------")
+            console.log("NEW GET /university-academic-performance/docs")
 
            return response.redirect("https://documenter.getpostman.com/view/43694449/2sB2cUBica");
         });
         
     }
 
-    export {loadBackendPabloV1}
+    export {loadBackendPabloV2}

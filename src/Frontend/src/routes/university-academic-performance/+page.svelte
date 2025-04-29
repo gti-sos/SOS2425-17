@@ -3,13 +3,13 @@
 </svelte:head>
 
 <script>
+    import { Table } from '@sveltestrap/sveltestrap'; 
     import { dev } from '$app/environment';
     import { onMount } from "svelte";
-    import { Button } from '@sveltestrap/sveltestrap';
 
 
     let ruta_host = "http://localhost:16078";
-    let ruta_api = "/api/v1/university-academic-performance";
+    let ruta_api = "/api/v2/university-academic-performance";
 
     let UniversityAcademicPerformance = [];
     let UniversityAcademicPerformanceDegree;
@@ -30,6 +30,12 @@
     let UniversityAcademicPerformanceAcademicYear;
     let output = "";
     let status = "";
+    let sortDirection;
+    let sortColumn;
+    let lastSearch;
+    let lastParams;
+    let newTimeOut;
+
 
 
 
@@ -37,145 +43,148 @@
     let showfilterForm = false; 
     let showDeleteForm = false;
     let showEditForm = false;
-    let showSearchForm = false;
-    let showFilterForm = false; // Para mostrar/ocultar el formulario
     let showCreateForm = false;
-    let showUpdateForm = false;
     let successMessage = "";
     let errorMessage = "";
-    let fromYear = '';
-    let toYear = '';
-    let searchParamKey = "";
-    let searchParamValue = "";
     let deleteDegree="";
     let deleteLocation="";
     let deleteAcademiYear="";
-
-    
-
-
-
-    
-
-
-    // Campos del filtro (diferente de los de creación)
-    let filterUniversityAcademicPerformanceDegree="";
-    let filterUniversityAcademicPerformanceLocation=""
-    let filterUniversityAcademicPerformanceDropoutSecondCourse="";
-    let filterUniversityAcademicPerformanceEfficiencyRate="";
-    let filterUniversityAcademicPerformanceDropoutThirdCourse="";
-    let filterUniversityAcademicPerformanceSuccessRate="";
-    let filterUniversityAcademicPerformanceDropoutFirstCourse="";
-    let filterUniversityAcademicPerformanceDropoutsThirdCourse="";
-    let filterUniversityAcademicPerformanceProgressNormalized="";
-    let filterUniversityAcademicPerformanceDropoutsFirstCourse="";
-    let filterUniversityAcademicPerformancePerformanceRate="";
-    let filterUniversityAcademicPerformanceCohortStudents="";
-    let filterUniversityAcademicPerformanceDropoutsSecondCourse="";
-    let filterUniversityAcademicPerformanceDropoutRate="";
-    let filterUniversityAcademicPerformanceGraduationRate="";
-    let filterUniversityAcademicPerformanceAcademicYear="";
-
-
-
-
-
-
-
-
+    let fromYear;
+    let toYear;
 
     if (dev) {
         ruta_api = ruta_host + ruta_api;
     }
 
+    //CARGAR DATOS AL INICIAR LA PÁGINA
 
-    //  Cargar datos al iniciar la página
     onMount(async () => {
-        await getUniversityAcademicPerformance();
+        await deleteAll();
+        await getLoadInitialData();
     });
 
-    //  Obtener datos de la API
+    //  MIRAR TODOS LOS DATOS
+
     async function getUniversityAcademicPerformance() {
         output = "";
         status = "";
+        errorMessage= "";
+        successMessage= "";
+        stopTimer();
+
         try {
-            let res = await fetch(ruta_api, { method: "GET" });
-            let data = await res.json();
+            let data = await fetch(ruta_api, { method: "GET" }).then(response => response.json());
             UniversityAcademicPerformance = data;
             output = JSON.stringify(data, null, 2);
-            console.log(`Response received: ${output}`);
+            lastSearch=ruta_api
+            successMessage = "Datos cargados con éxito.";
+            newTimeOut= newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
+            console.log("response received:\n" + output);
         } catch (error) {
-            console.log(`Error: Get from ${ruta_api} : ${error}`);
+            errorMessage = "No se han podido cargar correctamente los datos.";
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         }
     }
 
-    // Cargar datos iniciales
-    function getLoadInitialData() {
-        fetch("/api/v1/university-academic-performance/loadInitialData")
-            .then(response => {
-                if (response.status === 201) {
-                    console.log("Datos iniciales insertados correctamente");
-                    successMessage = "¡Datos iniciales insertados correctamente!";
-                    setTimeout(() => { successMessage = ""; }, 3000);
-                } else if (response.status === 409) {
-                    console.log("La base de datos ya tiene datos. Elimínalos primero.");
-                    errorMessage = "¡La base de datos ya tiene datos! Elimínalos primero.";
-                    setTimeout(() => { errorMessage = ""; }, 3000);
-                } else {
-                    console.log("Error al insertar los datos");
-                    errorMessage = "Error al insertar los datos";
-                    setTimeout(() => { errorMessage = ""; }, 3000);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                errorMessage = "Error al cargar los datos iniciales";
-                setTimeout(() => { errorMessage = ""; }, 3000);
-            });
-    }
+    // LOAD INITIAL DATA
 
-    //Filtrar por un dato 
+    async function getLoadInitialData() {
+        errorMessage= "";
+        successMessage= "";
+        await stopTimer();
+
+    await fetch("/api/v2/university-academic-performance/loadInitialData")
+        .then(response => {
+            if (response.status === 201) {
+                successMessage = "Datos cargados con éxito.";
+                newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
+                lastSearch="/api/v2/university-academic-performance/loadInitialData";
+                getUniversityAcademicPerformance();
+            } else if (response.status === 409) {
+                errorMessage = "La página ya contiene datos; para insertar datos nuevos, borre los actuales.";
+                newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            } else {
+                errorMessage = "Hubo un error inesperado al cargar los datos.";
+                newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            }
+        })
+        .catch( error=> {
+            errorMessage = "Hubo un error inesperado al cargar los datos.";
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+        });
+}
+
+    //FILTRO
 
 
 async function getOne(params = {}) {
-    status = output = "";
-    try {
-        const queryString = new URLSearchParams(params).toString(); 
-        const url = `${ruta_api}?${queryString}`;
-        const res = await fetch(url, { method: "GET" });
-        console.log("La URL es:", url);
-        console.log("params", params);
-        console.log("query", queryString);
+    status = "" ;
+    output = "" ;
+    errorMessage= "";
+    successMessage= "";
+    await stopTimer();
 
-        status = res.status;
+    if (params.degree != null && params.location != null && params.academicYear != null){
+        console.log("la ruta es ",ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear)
 
+        try {
+            const url=ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear
+            const res = await fetch(url, { method: "GET" });
+            status = res.status;
             if (status === 404) {
-                const firstParamKey = Object.keys(params)[0];
-                const firstParamValue = params[firstParamKey];
-                errorMessage = `No se encontró ningún resultado con ${firstParamKey} = ${firstParamValue}`;
-                setTimeout(() => {
-                errorMessage = "";
-                }, 3000);
-            } 
+                errorMessage = "No se encontraron datos con los parámetros especificados.";
+                newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+                }
+            const data = await res.json();
+            UniversityAcademicPerformance=[data];
+            output = JSON.stringify(data, null, 2);
+            lastSearch=url;
+            successMessage = "El registro fue filtrado con éxito.";
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
 
-        const data = await res.json();
+            console.log("Response received:\n",output);
+        }
+        catch (error) {
+             errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+        }
+    }
+    
+    else{
+        try {
+            const filteredParams = Object.fromEntries(
+            Object.entries(params).filter(([_, value]) => value !== undefined && value !==null));
 
-        output = JSON.stringify(data, null, 2);
-        console.log(`Response received:\n${output}`);
-    } catch (error) {
-        console.log(`Error: GET from ${ruta_api} - ${error}`);
-        errorMessage = "Error al obtener los datos.";
+            console.log("PARAMETROS FILRADOS",filteredParams)
+            const queryString = new URLSearchParams(filteredParams).toString();
+            const url = ruta_api + "?" + queryString;
+            const res = await fetch(url, { method: "GET" });
+            status = res.status;
 
-        // Oculta el mensaje después de unos segundos
-        setTimeout(() => {
-            errorMessage = "";
-        }, 3000);
+                if (status === 404) {
+                     errorMessage = "No se encontraron datos con los parámetros especificados." ;
+                    newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+                } 
+
+            const data = await res.json();
+            UniversityAcademicPerformance=data;
+            output = JSON.stringify(data, null, 2);
+            lastSearch=url;
+            successMessage = "Los datos fueron filtrados con éxito.";
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            console.log("Response received:\n",output);
+        } catch (error) {
+             errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+        }
     }
 }
 
 
 async function createUniversityAcademicPerformance() {
-    errorMessage = successMessage = "";
+    errorMessage = "";
+    successMessage = "";
+    await stopTimer();
 
     const newRecord = {
         degree: UniversityAcademicPerformanceDegree,
@@ -197,32 +206,33 @@ async function createUniversityAcademicPerformance() {
     };
 
     try {
-        const res = await fetch("/api/v1/university-academic-performance", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newRecord)
+        const res = await fetch("/api/v2/university-academic-performance", {method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newRecord)
         });
 
         if (res.status === 201) {
-            successMessage = "¡Registro creado correctamente!";
-            await getUniversityAcademicPerformance();
-            showCreateForm = false;
+            successMessage = "Nuevo registro creado con éxito." ;
+            newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
+            output=JSON.stringify(newRecord)
+            console.log("Response recived:\n",output)
+            await checkSearch();
 
         } else if (res.status === 409) {
-            errorMessage = "El registro ya existe.";
+             errorMessage = "Ya existe un registro con el mismo Grado, Ciudad y Año académico." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         } else if (res.status === 400) {
-            errorMessage = "Faltan campos obligatorios.";
+             errorMessage = "Todos los campos deben estar rellenos." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         } else {
-            errorMessage = "Error desconocido al crear el registro.";
+             errorMessage = "Ha ocurrido un error inesperado al crear el registro." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         }
     } catch (err) {
         console.error("Error al hacer POST:", err);
-        errorMessage = "Error de conexión o servidor.";
+        errorMessage = "Ha ocurrido un error inesperado al crear el registro.";
+        newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
     }
-
-    setTimeout(() => {
-        errorMessage = successMessage = "";
-    }, 3000);
 }
 
 
@@ -231,7 +241,9 @@ async function createUniversityAcademicPerformance() {
 
 
 async function updateUniversityAcademicPerformance() {
-    errorMessage = successMessage = "";
+    errorMessage =  "";
+    successMessage = "";
+    await stopTimer();
 
     const updatedRecord = {
         degree: UniversityAcademicPerformanceDegree,
@@ -253,33 +265,34 @@ async function updateUniversityAcademicPerformance() {
     };
 
     try {
-        const res = await fetch(`/api/v1/university-academic-performance/${UniversityAcademicPerformanceDegree}/${UniversityAcademicPerformanceLocation}/${UniversityAcademicPerformanceAcademicYear}`, {
+        const res = await fetch(`/api/v2/university-academic-performance/${UniversityAcademicPerformanceDegree}/${UniversityAcademicPerformanceLocation}/${UniversityAcademicPerformanceAcademicYear}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedRecord)
         });
 
         if (res.status === 200) {
-            successMessage = "¡Registro actualizado correctamente!";
-            await getUniversityAcademicPerformance();
-            showEditForm = false;
+            console.log("Response recived: \n",JSON.stringify(updatedRecord))
+            await checkSearch();
+            successMessage = "Registro actualizado con éxito."; 
+            newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
 
-            // Limpiar los campos si quieres
         } else if (res.status === 400) {
-            errorMessage = "Campos obligatorios incompletos o modificación no permitida.";
+             errorMessage = "El Grado, Localizacion y/o Año Academico debe estar rellenos." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         } else if (res.status === 404) {
-            errorMessage = "Registro no encontrado.";
+             errorMessage = "No existe ningún registro con ese Grado, Ciudad y/o Año Académico." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+
         } else {
-            errorMessage = "Error desconocido al actualizar.";
+             errorMessage = "Ha ocurrido un error desconocido." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+
         }
     } catch (err) {
-        console.error("Error al hacer PUT:", err);
-        errorMessage = "Error de conexión o servidor.";
+         errorMessage = "Ha ocurrido un error desconocido." ;
+        newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
     }
-
-    setTimeout(() => {
-        errorMessage = successMessage = "";
-    }, 3000);
 }
 
 
@@ -289,40 +302,27 @@ async function updateUniversityAcademicPerformance() {
 async function deleteAll() {
     successMessage = "";
     errorMessage = "";
+    await stopTimer();
 
     try {
         const res = await fetch(ruta_api, { method: "DELETE" });
 
-        console.log("Status Code:", res.status);  // Muestra el status code de la respuesta
+        console.log("Status Code:", res.status);
 
         if (res.status === 200) {
-            const responseBody = await res.json();  // Obtener la respuesta JSON
-            console.log(responseBody);  // Mostrar la respuesta completa
-
-            console.log("All demands deleted");
-            successMessage = "¡Demandas borradas con éxito!";
-
-            // Ocultar el mensaje después de unos segundos
-            setTimeout(() => {
-                successMessage = "";
-            }, 3000);
+            const responseBody = await res.json(); 
+            console.log("Response recived\n",responseBody);
+            await(getUniversityAcademicPerformance());  
+            successMessage = "Se han Borrado los registros con éxito." ;
+            newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
         } else {
-            console.error("ERROR deleting demands", res);
-            errorMessage = "Error al borrar todos los datos: " + (await res.text());
-
-            // Ocultar el mensaje después de unos segundos
-            setTimeout(() => {
-                errorMessage = "";
-            }, 3000);
+            errorMessage = "Error borrando los datos."
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         }
-    } catch (error) {
-        console.log(`ERROR: DELETE from ${ruta_api}: ${error}`);
-        errorMessage = "Error de conexión o servidor";
 
-        // Ocultar el mensaje después de unos segundos
-        setTimeout(() => {
-            errorMessage = "";
-        }, 3000);
+    } catch (error) {
+         errorMessage = "Error inesperado al contactar con el servidor." ;
+        newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
     }
 }
 
@@ -331,71 +331,40 @@ async function deleteAll() {
 //BORRA UNO
 
 
-async function deleteDemands(degree, location, academicYear){
+async function deleteOne(degree, location, academicYear){
         output = "";
         status = "";
+        errorMessage= "";
+        successMessage= "";
+        await stopTimer();
         
         try {
-            //Basicamente lo que llamo es a api/v1/university-demands/degree/location/academicYear que es donde tengo el 
-            //delete especifico
-            
-
-            console.log("Intentando borrar URL:", ruta_api + "/" + degree + "/" + location + "/" + academicYear);
-
+            console.log("NEW DELETE /", ruta_api + "/" + degree + "/" + location + "/" + academicYear);
             const res = await fetch(`${ruta_api}/${encodeURIComponent(degree)}/${encodeURIComponent(location)}/${encodeURIComponent(academicYear)}`, {method: "DELETE"});
-            
-
             status = res.status;
 
             if (status === 200) {
-                console.log(`Demand ${degree} in ${location} in ${academicYear} deleted`);
-                getUniversityAcademicPerformance(); // más lógico que recargar los datos con loadInitialData
-                successMessage = "¡Demanda borrada con éxito!";
-
-                // Oculta el mensaje después de unos segundos
-                setTimeout(() => {
-                    successMessage = "";
-                }, 3000);
-            } else {
-                console.error(`ERROR deleting demand: status ${status} - response: ${Text}`);
-                errorMessage = "Error al eliminar los datos";
-                // Oculta el mensaje después de unos segundos
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
+                await checkSearch()
+                successMessage = "Registo borrado con éxito." ;
+                newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
             }
 
+            else if(status === 404) {
+                 errorMessage = "No se ha encontrado ningún registro con ese Grado, Localización y/o Año Académico." ;
+                 newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            }
 
-
+             else {
+                console.error(`ERROR deleting demand: status ${status} - response: ${Text}`);
+                 errorMessage = "Error al eliminar el registro." ;
+                newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            }
         } catch (error){
             console.log(`ERROR:  GET from ${ruta_api}: ${error}`);
+             errorMessage = "Error inesperado al contactar con el servidor." ;
+            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         }
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     function handleActualizar() {
     const params = {
@@ -414,31 +383,82 @@ async function deleteDemands(degree, location, academicYear){
       performanceRate: UniversityAcademicPerformancePerformanceRate,
       cohortStudents: UniversityAcademicPerformanceCohortStudents,
       dropoutRate: UniversityAcademicPerformanceDropoutRate,
-      graduationRate: UniversityAcademicPerformanceGraduationRate
+      graduationRate: UniversityAcademicPerformanceGraduationRate,
+      year_small: fromYear,
+      year_big: toYear
     };
     getOne(params);
+    lastParams=params;
+  }
+
+  function getcolorClass(index) {
+    return index % 2 === 0 ? "color-green" : "color-ligthgreen";
   }
 
 
 
 
+  function handleClick(column) {
+    if (sortColumn === column) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn = column;
+      sortDirection = 'asc';
+    }
+    getOne({ sortBy: sortColumn, order: sortDirection });
+  }
+
+
+
+
+  
+    function checkSearch(){
+        console.log("La última busqueda fue a  ",lastSearch)
+        if (lastSearch===null){
+            getUniversityAcademicPerformance()
+        }
+        else if(lastSearch===ruta_api || lastSearch===ruta_api+"/loadInitialData"){
+                getUniversityAcademicPerformance()
+            }
+        else{
+        getOne(lastParams)
+        }
+
+
+
+    }
+
+    function stopTimer() {
+    clearTimeout(newTimeOut);
+}
 
 </script>
 
 
-<div>
-    <button class="btn-morado" on:click={getLoadInitialData}>
+
+{#if successMessage}
+<div class="sucess-message">{successMessage}</div>
+{/if}
+{#if errorMessage}
+<div class="error-message">{errorMessage}</div>
+{/if}
+
+
+<div class="container">
+    <button class="btn-purple" on:click={getLoadInitialData}>
         Cargar datos iniciales
     </button>
 
 
-    <button class="btn-verde" on:click={getUniversityAcademicPerformance}>
+    <button class="btn-green" on:click={getUniversityAcademicPerformance}>
         Mira datos
     </button>
 
 <!-- Botón que muestra/oculta el formulario -->
-<button class="btn-verde" on:click={() => showfilterForm = !showfilterForm}>
-    {showfilterForm ? "cancelar" : "filtrado"}
+<button class="btn-green" on:click={() => {UniversityAcademicPerformanceDropoutThirdCourse=null;UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;toYear=null,fromYear=null;
+ showfilterForm = !showfilterForm
+}}>
+    {showfilterForm ? "Cancelar" : "Filtrado"}
   </button>
   
   {#if showfilterForm}
@@ -460,16 +480,20 @@ async function deleteDemands(degree, location, academicYear){
       <input placeholder="Estudiantes cohorte" type="number" bind:value={UniversityAcademicPerformanceCohortStudents} />
       <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
       <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
-  
+      <div>
+        <input class=inputs-years placeholder="Desde el año" bind:value={fromYear} />
+        <input class=inputs-years placeholder="Hasta el año" bind:value={toYear} />
+    </div>
       <!-- 4) Botón que llama a handleActualizar -->
-      <button class="btn-verde" on:click={handleActualizar}>
-        Actualizar
+      <button class="btn-green" on:click={() =>{showfilterForm=false;handleActualizar()}}>
+        Filtrar
       </button>
     </div>
   {/if}
 
     <!-- Botón para mostrar el formulario -->
-    <button class="btn-amarillo" on:click={() => showCreateForm = !showCreateForm}>
+    <button class="btn-yellow" on:click={() => {UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
+    showCreateForm = !showCreateForm}}>
         {showCreateForm ? "Cancelar" : "Crear nuevo registro"}
     </button>
     
@@ -493,15 +517,17 @@ async function deleteDemands(degree, location, academicYear){
             <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
             <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
     
-            <button class="btn-amarillo" on:click={createUniversityAcademicPerformance}>
+            <button class="btn-yellow"on:click={() =>{showCreateForm=false
+            createUniversityAcademicPerformance()}}>
                 Guardar
             </button>
         </div>
     {/if}
 
 <!-- Botón para mostrar/ocultar el formulario de edición -->
-<button class="btn-azul" on:click={() => showEditForm = !showEditForm}>
-    {showEditForm ? "Cancelar edición" : "Editar registro"}
+<button class="btn-blue" on:click={() =>{UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
+     showEditForm = !showEditForm}}>
+    {showEditForm ? "Cancelar" : "Editar registro"}
 </button>
 
 <!-- Formulario de edición -->
@@ -524,7 +550,7 @@ async function deleteDemands(degree, location, academicYear){
         <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
         <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
 
-        <button class="btn-verde" on:click={updateUniversityAcademicPerformance}>
+        <button class="btn-blue" on:click={() =>{showEditForm=false,updateUniversityAcademicPerformance()}}>
             Actualizar
         </button>
     </div>
@@ -536,12 +562,13 @@ async function deleteDemands(degree, location, academicYear){
 
 
 
-    <button class="btn-rojo" on:click={deleteAll}>
-        borra todo
+    <button class="btn-red" on:click={deleteAll}>
+        Borra todo
     </button>
 
 <!-- Botón para mostrar/ocultar el formulario de borrado -->
-<button class="btn-rojo" on:click={() => showDeleteForm = !showDeleteForm}>
+<button class="btn-red" on:click={() => {deleteDegree="";deleteLocation="";deleteAcademiYear="";
+    showDeleteForm = !showDeleteForm}}>
     {showDeleteForm ? "Cancelar" : "Borrar registro"}
 </button>
 
@@ -552,7 +579,9 @@ async function deleteDemands(degree, location, academicYear){
         <input placeholder="Localización" bind:value={deleteLocation} />
         <input placeholder="Año académico" bind:value={deleteAcademiYear} />
 
-        <button class="btn-verde" on:click={() => deleteDemands(deleteDegree, deleteLocation, deleteAcademiYear)}>
+        <button class="btn-green" on:click={() => {deleteOne(deleteDegree, deleteLocation, deleteAcademiYear)
+        showDeleteForm=false;    
+        }}>
             Borrar Uno
         </button>
     </div>
@@ -561,39 +590,215 @@ async function deleteDemands(degree, location, academicYear){
 </div>
 
 
+<Table class="table">
+    <tbody>
+        <tr>
+            <th class="title" on:click={() => handleClick('degree')}>Grado</th>
+            <th class="title" on:click={() => handleClick('location')}>Ciudad</th>
+            <th class="title" on:click={() => handleClick('academicYear')}>Año academico</th>
+            <th class="title" on:click={() => handleClick('dropoutFirstCourse')}>Número de abandonos 1er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutSecondCourse')}>Número de abandonos 2er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutThirdCourse')}>Número de abandonos 3er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsFirstCourse')}>Tasa de abandono 1er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsSecondCourse')}>Tasa de abandono 2er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsThirdCourse')}>Tasa de abandono 3er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutRate')}>Tasa de abandono</th>
+            <th class="title" on:click={() => handleClick('progressNormalized')}>Nivel de progreso</th>
+            <th class="title" on:click={() => handleClick('performanceRate')}>Tasa de rendimiento</th>
+            <th class="title" on:click={() => handleClick('cohortStudents')}>Cohorte</th>
+            <th class="title" on:click={() => handleClick('graduationRate')}>Tasa de graduacion</th>
+        </tr>
+        
+        <!-- Esto ejecuta tantos tr como contacts haya -->
+        {#each UniversityAcademicPerformance as universityD,index}
+            <tr class={getcolorClass(index)}>
+                <td class="transparent">
+                    {universityD.degree}
+                </td>
+                <td class="transparent">
+                    {universityD.location}
+                </td>
+                <td class="transparent">
+                    {universityD.academicYear}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutFirstCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutSecondCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutThirdCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsFirstCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsSecondCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutsThirdCourse}
+                </td>
+                <td class="transparent">
+                    {universityD.dropoutRate}
+                </td>
+                <td class="transparent">
+                    {universityD.progressNormalized}
+                </td>
+                <td class="transparent">
+                    {universityD.performanceRate}
+                </td>
+                <td class="transparent">
+                    {universityD.cohortStudents}
+                </td>
+                <td class="transparent">
+                    {universityD.graduationRate}
+                </td>
+                <td class="last-td">
+                    <div class="btns-table">
+                    <button class="btn-red" on:click={() => {deleteOne(universityD.degree, universityD.location, universityD.academicYear)}}>Borrar</button>
+                    <button class="btn-green" on:click={() => getOne({degree:universityD.degree, location:universityD.location,academicYear: universityD.academicYear})}>Mirar</button>
+                </div>
+                </td>
+            </tr>
+        {/each}
+
+    </tbody>
+</Table>
+  
+
 <style>
 
-.btn-verde {
+.last-td{
+  background-color: transparent;
+  border: 2px solid black;
+}
+
+.error-message{
+  background-color: #ffe5e5;
+  color: #d8000c;
+  border: 1px solid #d8000c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
+}
+
+.sucess-message{
+  background-color: #ffe5e5;
+  color: #00d80e;
+  border: 1px solid #00d80e;;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
+}
+
+.inputs-years{
+  width: 100px;           /* Ancho reducido */
+  padding: 4px 8px;       /* Relleno ajustado */
+  font-size: 12px;        /* Tamaño de fuente pequeño */
+  line-height: 1.2;        /* Altura de línea compacta */
+  border: 1px solid #ccc; /* Borde ligero */
+  border-radius: 4px;     /* Esquinas redondeadas */
+  box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
+.container{
+    margin-bottom: 5px; /* Espacio entre los botones y la tabla */
+    padding: 10px;
+    display: flex;
+    justify-content: center;  /* Centra horizontalmente */
+    align-items: center;      /* Centra verticalmente si hace falta */
+    flex-wrap: wrap;          /* Por si hay muchos botones */
+    gap: 19px;                /* Espacio entre botones */
+}
+
+.table{
+    border: 2px solid black;   /* Opcional: borde superior para la celda de los botones */
+    width: 100%;
+}
+
+.btns-table{
+  display: flex;
+  flex-direction: column; /* Coloca los botones en columna */
+  gap: 8px;                /* Espacio entre los botones */
+  align-items: center;     /* Centra horizontalmente */
+  margin-top: 8px;
+  font-family: "Merriweather", serif;
+}
+.title{
+    background-color: orange;
+    border: 2px solid black;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+}
+
+.title:hover {
+    background-color: #ddd;
+}
+
+
+
+.transparent{
+    background-color: transparent;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    font-family: "Playfair Display", serif;
+}
+
+.color-green {
+    background-color: #57fda2; /* gris clarito */
+    
+}
+
+.color-ligthgreen {
+    background-color: #bde844; /* blanco */
+}
+
+.btn-green {
     background-color: #4CAF50; /* verde */
     color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Merriweather", serif;
 }
 
-.btn-rojo {
+.btn-red {
     background-color: #f44336; /* rojo */
     color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Merriweather", serif;
 }
 
-.btn-amarillo {
-    background-color: #FFC107; /* amarillo */
-    color: black;
+.btn-yellow {
+    background-color: 	#ebca60; /* amarillo */
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Merriweather", serif;
 }
 
-.btn-azul {
+.btn-blue {
     background-color: #2196F3; /* azul */
     color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Merriweather", serif;
 }
 
-.btn-naranja {
-    background-color: #e17110; /* azul */
-    color: white;
-}
-.btn-morado {
+.btn-purple {
     background-color: #950d7e; /* azul */
     color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: "Merriweather", serif;
 }
 
 </style>
-
-
-<!-- Muestra el resultado -->
-<pre>{output}</pre>
