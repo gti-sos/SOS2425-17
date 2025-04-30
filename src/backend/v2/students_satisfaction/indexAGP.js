@@ -1,7 +1,14 @@
 import dataStore from "nedb";
 
+import express from 'express';
 import cors from 'cors';
-app.use(cors());
+
+const app = express(); // <- Aquí defines app primero
+
+app.use(cors());       // <- Luego le aplicas CORS
+
+// El resto de tus rutas...
+
 
 const BASE_API = "/api/v2";
 let db = new dataStore();
