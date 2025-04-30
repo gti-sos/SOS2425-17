@@ -35,6 +35,7 @@ if (dev) {
     let newSatisfaccion_total="";
     let newSat_estudiantes="";
     let newSatisfaccion_pdi="";
+    let newAñoAcademico = "";
 
 
     let showFilterForm = false; 
@@ -49,7 +50,7 @@ if (dev) {
     let filterSatisfaccion_total = "";
     let filterSat_estudiantes = "";
     let filterSatisfaccion_pdi = "";
-
+    let filterAñoAcademico = "";
 
     let fromSat="";
     let toSat="";
@@ -149,7 +150,6 @@ async function getSatisfactionEspecifico(params = {}) {
 function applyFilters() {
     const params = {};
 
-
     if (filterCarrera) params.carrera = filterCarrera;
     if (filterCiudad) params.ciudad = filterCiudad;
     if (filterSatisfaccion_total) params.satisfaccion_total = filterSatisfaccion_total;
@@ -157,7 +157,6 @@ function applyFilters() {
     if (filterSatisfaccion_pdi) params.satisfaccion_pdi = filterSatisfaccion_pdi;
     if (fromSat) params.from = fromSat;
     if (toSat) params.to = toSat;
-
 
     getSatisfactionEspecifico(params);
     showFilterForm = false; 
@@ -173,6 +172,7 @@ function clearFilters() {
     newSatisfaccion_total = "";
     newSat_estudiantes = "";
     newSatisfaccion_pdi = "";
+    newAñoAcademico = ""; // Limpiar el nuevo campo
     resultStatus = "";
 }
 
@@ -184,9 +184,9 @@ function clearFilterFields() {
     filterSatisfaccion_total = "";
     filterSat_estudiantes = "";
     filterSatisfaccion_pdi = "";
-    fromSat="";
-    toSat="";
-   
+    filterAñoAcademico = ""; // Limpiar el nuevo campo
+    fromSat = "";
+    toSat = "";
 }
 
 
@@ -199,85 +199,73 @@ function resetFilters() {
 
 
 
-    async function createStudentsSatisfaction() {
-        resultStatus = result = "";
-       
-        try{
-
-
-            const res  = await fetch(Api,{
-                method: "POST",
-                headers:{
-                    "Content-type": "application/json"
-                },
-                body:JSON.stringify({
-                    carrera: newCarrera,
-                    ciudad: newCiudad,
-                    satisfaccion_total: newSatisfaccion_total,
-                    sat_estudiantes: newSat_estudiantes,
-                    satisfaccion_pdi: newSatisfaccion_pdi
-                })
-            });
-            const status = res.status;
-            resultStatus=status.toString();
-            if(status==201){
-                console.log(`Satisfaction created:`);
-                getStudentsSatisfaction();
-                showCreateForm = false;
-                successMessage = "¡Demanda creada con éxito!";
-                setTimeout(() => {
-                    successMessage = "";
-                }, 3000);
-            }
-            else if(status == 409){
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Esta demanda ya existe!";
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-            else if(status == 400){
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Tienes que rellenar todos los campos!";
-
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-            else {
-                console.log(`ERROR creating demand: status received\n${status}`);
-                errorMessage = "¡Error al crear la demanda!";
-
-
-                setTimeout(() => {
-                    errorMessage = "";
-                }, 3000);
-            }
-           
-
-
-        } catch (error){
-            console.log(`ERROR:  GET from ${Api}: ${error}`);
+async function createStudentsSatisfaction() {
+    resultStatus = result = "";
+    try {
+        const res = await fetch(Api, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                carrera: newCarrera,
+                ciudad: newCiudad,
+                satisfaccion_total: newSatisfaccion_total,
+                sat_estudiantes: newSat_estudiantes,
+                satisfaccion_pdi: newSatisfaccion_pdi,
+                año_academico: newAñoAcademico // Nuevo campo
+            })
+        });
+        const status = res.status;
+        resultStatus = status.toString();
+        if (status == 201) {
+            console.log(`Satisfaction created:`);
+            getStudentsSatisfaction();
+            showCreateForm = false;
+            successMessage = "Satisfaccion creada con éxito!";
+            setTimeout(() => {
+                successMessage = "";
+            }, 3000);
+        } else if (status == 409) {
+            console.log(`ERROR creating satisfaction: status received\n${status}`);
+            errorMessage = "¡Esta satisfaccion ya existe!";
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
+        } else if (status == 400) {
+            console.log(`ERROR creating satisfaction: status received\n${status}`);
+            errorMessage = "¡Tienes que rellenar todos los campos!";
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
+        } else {
+            console.log(`ERROR creating satisfaction: status received\n${status}`);
+            errorMessage = `¡Error al crear la satisfaccion! (Código: ${status})`;
+            setTimeout(() => {
+                errorMessage = "";
+            }, 3000);
         }
-
-
-
-
+    } catch (error) {
+        console.log(`ERROR: POST to ${Api}: ${error}`);
+        errorMessage = "Error de red al crear la satisfaccion.";
+        setTimeout(() => {
+            errorMessage = "";
+        }, 3000);
     }
-    async function updateUniversityDemand() {
+}
+async function updateUniversityDemand() {
     resultStatus = result = "";
     try {
         const url = `${Api}/${encodeURIComponent(newCarrera)}/${encodeURIComponent(newCiudad)}`;
-
 
         const updatedData = {
             carrera: newCarrera,
             ciudad: newCiudad,
             satisfaccion_total: newSatisfaccion_total,
             sat_estudiantes: newSat_estudiantes,
-            satisfaccion_pdi: newSatisfaccion_pdi
+            satisfaccion_pdi: newSatisfaccion_pdi,
+            año_academico: newAñoAcademico // Nuevo campo
         };
-
 
         const res = await fetch(url, {
             method: "PUT",
@@ -287,48 +275,47 @@ function resetFilters() {
             body: JSON.stringify(updatedData)
         });
 
-
         const status = res.status;
         resultStatus = status.toString();
 
-
         if (status === 200) {
-            console.log("Demanda actualizada correctamente.");
+            console.log("Satisfacción actualizada correctamente.");
             getStudentsSatisfaction();
-            successMessage = "¡Demanda actualizada con éxito!";
+            successMessage = "¡Satisfacción actualizada con éxito!";
             showUpdateForm = false;
-
 
             setTimeout(() => {
                 successMessage = "";
             }, 3000);
         } else if (status === 404) {
-            errorMessage = "No se encontró la demanda a actualizar.";
+            errorMessage = "No se encontró la satisfacción a actualizar.";
         } else if (status === 400) {
             errorMessage = "Datos incompletos o no coinciden con los parámetros de la URL.";
         } else {
-            errorMessage = "Error al actualizar la demanda.";
+            errorMessage = `Error al actualizar la satisfacción (Código: ${status}).`;
         }
-
 
         setTimeout(() => {
             errorMessage = "";
         }, 3000);
 
-
     } catch (error) {
         console.log("Error en PUT:", error);
         errorMessage = "Error de red al actualizar.";
+        setTimeout(() => {
+            errorMessage = "";
+        }, 3000);
     }
 }
 
 
 function openEditForm(sat) {
-        newCarrera = sat.carrera;
-        newCiudad = sat.ciudad;
-        newSatisfaccion_total = sat.satisfaccion_total;
-        newSat_estudiantes = sat.sat_estudiantes;
-        newSatisfaccion_pdi = sat.satisfaccion_pdi;
+    newCarrera = sat.carrera;
+    newCiudad = sat.ciudad;
+    newSatisfaccion_total = sat.satisfaccion_total;
+    newSat_estudiantes = sat.sat_estudiantes;
+    newSatisfaccion_pdi = sat.satisfaccion_pdi;
+    newAñoAcademico = sat.año_academico; // Nuevo campo
     showUpdateForm = true;
 }
 
@@ -447,6 +434,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <th>Satisfacción Total</th>
             <th>Satisfacción Estudiantes</th>
             <th>Satisfacción PDI</th>
+            <th>Año Académico</th> <!-- Nueva columna -->
         </tr>
        
         <!-- Esto ejecuta tantos tr como students_satisfaction haya -->
@@ -457,6 +445,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <td>{universityD.satisfaccion_total}</td>
             <td>{universityD.sat_estudiantes}</td>
             <td>{universityD.satisfaccion_pdi}</td>
+            <td>{universityD.año_academico}</td> <!-- Mostrar el nuevo campo -->
             <td>
                 <Button color="danger" on:click={() => {deleteStudentsSatisfaction(universityD.carrera, universityD.ciudad)}}>Borrar</Button>
                 <Button color="warning" on:click={() => openEditForm(universityD)}>Editar</Button>
@@ -467,48 +456,46 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 </Table>
 
 
-<!-- Si pulso el boton que llama a showFilterForm -->
+<!-- Si pulso el botón que llama a showFilterForm -->
 {#if showFilterForm}
     <div class="filter-overlay" on:click={() => showFilterForm = false}>
         <div class="filter-form" on:click|stopPropagation>
             <h5>Filtrar Satisfacción Estudiantil</h5>
-
 
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={filterCarrera} />
             </div>
 
-
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={filterCiudad} />
             </div>
-
 
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={filterSatisfaccion_total} />
             </div>
 
-
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={filterSat_estudiantes} />
             </div>
-
 
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={filterSatisfaccion_pdi} />
             </div>
 
+            <div class="form-group">
+                <label for="año_academico">Año Académico</label>
+                <input id="año_academico" required type="text" placeholder="Ej: 2021-2022" bind:value={filterAñoAcademico} />
+            </div>
 
             <div class="form-group">
                 <label>Desde: <input bind:value={fromSat} type="text" placeholder="Ej: 3" /></label>
                 <label>Hasta: <input bind:value={toSat} type="text" placeholder="Ej: 5" /></label>
             </div>
-
 
             <div class="filter-buttons">
                 <Button color="success" on:click={applyFilters}>Aplicar</Button>
@@ -525,36 +512,35 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         <div class="filter-form" on:click|stopPropagation>
             <h5>Crear Demanda de Satisfacción Estudiantil</h5>
 
-
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={newCarrera} />
             </div>
-
 
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={newCiudad} />
             </div>
 
-
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={newSatisfaccion_total} />
             </div>
-
 
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={newSat_estudiantes} />
             </div>
 
-
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={newSatisfaccion_pdi} />
             </div>
 
+            <div class="form-group">
+                <label for="año_academico">Año Académico</label>
+                <input id="año_academico" required type="text" placeholder="Ej: 2021-2022" bind:value={newAñoAcademico} />
+            </div>
 
             <div class="filter-buttons">
                 <Button color="primary" on:click={createStudentsSatisfaction}>Crear</Button>
@@ -566,46 +552,45 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 {/if}
 
 
-{#if showUpdateForm}
-    <div class="filter-overlay" on:click={() => showUpdateForm = false}>
+{#if showCreateForm}
+    <div class="filter-overlay" on:click={() => showCreateForm = false}>
         <div class="filter-form" on:click|stopPropagation>
-            <h5>Editar Demanda de Satisfacción Estudiantil</h5>
-
+            <h5>Crear Demanda de Satisfacción Estudiantil</h5>
 
             <div class="form-group">
                 <label for="carrera">Carrera</label>
                 <input id="carrera" required type="text" placeholder="Ej: Medicina" bind:value={newCarrera} />
             </div>
 
-
             <div class="form-group">
                 <label for="ciudad">Ciudad</label>
                 <input id="ciudad" required type="text" placeholder="Ej: Madrid" bind:value={newCiudad} />
             </div>
-
 
             <div class="form-group">
                 <label for="satisfaccion_total">Satisfacción Total</label>
                 <input id="satisfaccion_total" required type="text" placeholder="Ej: 4" bind:value={newSatisfaccion_total} />
             </div>
 
-
             <div class="form-group">
                 <label for="sat_estudiantes">Satisfacción Estudiantes</label>
                 <input id="sat_estudiantes" required type="text" placeholder="Ej: 3" bind:value={newSat_estudiantes} />
             </div>
-
 
             <div class="form-group">
                 <label for="satisfaccion_pdi">Satisfacción PDI</label>
                 <input id="satisfaccion_pdi" required type="text" placeholder="Ej: 5" bind:value={newSatisfaccion_pdi} />
             </div>
 
+            <div class="form-group">
+                <label for="año_academico">Año Académico</label>
+                <input id="año_academico" required type="text" placeholder="Ej: 2021-2022" bind:value={newAñoAcademico} />
+            </div>
 
             <div class="filter-buttons">
-                <Button color="primary" on:click={updateUniversityDemand}>Actualizar</Button>
+                <Button color="primary" on:click={createStudentsSatisfaction}>Crear</Button>
                 <Button color="danger" on:click={clearFilters}>Borrar Campos</Button>
-                <Button on:click={() => showUpdateForm = false}>Cerrar</Button>
+                <Button on:click={() => showCreateForm = false}>Cerrar</Button>
             </div>
         </div>
     </div>

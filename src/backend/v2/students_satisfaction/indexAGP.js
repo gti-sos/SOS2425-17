@@ -1,5 +1,6 @@
+import dataStore from "nedb";
+
 const BASE_API = "/api/v2";
-let dataStore = require("nedb");
 let db = new dataStore();
 
 const students_satisfaction_data = [
@@ -23,28 +24,32 @@ function loadBackendAlejandroV2(app) {
             if (count > 0) return res.status(409).json({ message: "Datos ya cargados." });
 
             db.insert(students_satisfaction_data, (err) => {
-                if (err) return res.status(500).send("Error al insertar los datos.");
-                res.status(201).json({ message: "Datos iniciales cargados correctamente." });
+                if (err) return res.status(500).send("Error insertando datos.");
+                res.status(201).json({ message: "Datos iniciales insertados correctamente." });
             });
         });
     });
 
-    // Obtener datos con paginación basada en año académico
+    // Obtener datos con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
-        let { año_academico, limit, offset } = req.query;
+        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico, limit, offset } = req.query;
 
         let query = {};
+        if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
+        if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
+        if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
+        if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
+        if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
         if (año_academico) query.año_academico = año_academico;
 
         db.find(query).sort({ año_academico: 1 }).exec((err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (results.length === 0) return res.status(404).json({ error: "Sin resultados." });
 
-            // Aplicar paginación
             if (offset) results = results.slice(Number(offset));
             if (limit) results = results.slice(0, Number(limit));
 
-            results.forEach(r => delete r._id); // Eliminar el campo `_id` de los resultados
+            results.forEach(r => delete r._id);
             res.json(results);
         });
     });
@@ -62,9 +67,9 @@ function loadBackendAlejandroV2(app) {
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
 
             db.insert(body, (err, newDoc) => {
-                if (err) return res.status(500).send("Error al insertar el registro.");
+                if (err) return res.status(500).send("Error al insertar.");
                 delete newDoc._id;
-                res.status(201).json(newDoc);
+                res.sendStatus(201);
             });
         });
     });
@@ -72,46 +77,51 @@ function loadBackendAlejandroV2(app) {
     // Actualizar un registro existente
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         const { carrera, ciudad } = req.params;
-        const { satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico } = req.body;
+        const body = req.body;
 
-        db.findOne({ carrera, ciudad }, (err, record) => {
+        if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined || !body.año_academico) {
+            return res.status(400).json({ error: "Faltan campos obligatorios." });
+        }
+
+        db.update({ carrera, ciudad }, { $set: body }, {}, (err, numUpdated) => {
             if (err) return res.status(500).send("Error en la base de datos.");
-            if (!record) return res.status(404).json({ error: "Registro no encontrado." });
-
-            const updatedRecord = {
-                ...record,
-                satisfaccion_total: satisfaccion_total || record.satisfaccion_total,
-                sat_estudiantes: sat_estudiantes || record.sat_estudiantes,
-                satisfaccion_pdi: satisfaccion_pdi || record.satisfaccion_pdi,
-                año_academico: año_academico || record.año_academico
-            };
-
-            db.update({ carrera, ciudad }, updatedRecord, {}, (err) => {
-                if (err) return res.status(500).send("Error al actualizar el registro.");
-                res.status(200).json(updatedRecord);
-            });
-        });
-    });
-
-    // Eliminar un registro
-    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-        const { carrera, ciudad } = req.params;
-
-        db.remove({ carrera, ciudad }, {}, (err, numRemoved) => {
-            if (err) return res.status(500).send("Error en la base de datos.");
-            if (numRemoved === 0) return res.status(404).json({ error: "Registro no encontrado." });
-
-            res.status(200).json({ message: "Registro eliminado correctamente." });
+            if (numUpdated === 0) return res.status(404).json({ error: "Registro no encontrado." });
+            res.sendStatus(200);
         });
     });
 
     // Eliminar todos los registros
     app.delete(BASE_API + "/students_satisfaction", (req, res) => {
         db.remove({}, { multi: true }, (err, numRemoved) => {
-            if (err) return res.status(500).send("Error en la base de datos.");
-            res.status(200).json({ message: `Se eliminaron ${numRemoved} registros.` });
+            if (err) return res.status(500).send("Error al eliminar.");
+            if (numRemoved === 0) return res.status(404).send("Nada que eliminar.");
+            res.sendStatus(200);
         });
+    });
+
+    // Eliminar un registro específico
+    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
+        const { carrera, ciudad } = req.params;
+
+        db.remove({ carrera, ciudad }, {}, (err, numRemoved) => {
+            if (err) return res.status(500).send("Error en la base de datos.");
+            if (numRemoved === 0) return res.status(404).send("Registro no encontrado.");
+            res.sendStatus(200);
+        });
+    });
+
+    // Inspeccionar datos en la base de datos (Solución 1)
+    app.get(BASE_API + "/students_satisfaction/debug", (req, res) => {
+        db.find({}, (err, docs) => {
+            if (err) return res.status(500).send("Error al consultar la base de datos.");
+            res.json(docs);
+        });
+    });
+
+    // Documentación
+    app.get(BASE_API + "/students_satisfaction/docs", (_req, res) => {
+        res.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
     });
 }
 
-module.exports = loadBackendAlejandroV2;
+export { loadBackendAlejandroV2 };
