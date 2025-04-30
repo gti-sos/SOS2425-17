@@ -37,14 +37,13 @@ if (dev) {
     let newSatisfaccion_pdi="";
 
 
-    let showFilterForm = false; // Para mostrar/ocultar el formulario
+    let showFilterForm = false; 
     let showCreateForm = false;
     let showUpdateForm = false;
     let successMessage = "";
     let errorMessage = "";
 
 
-    // Campos del filtro (diferente de los de creación)
     let filterCarrera = "";
     let filterCiudad = "";
     let filterSatisfaccion_total = "";
@@ -58,16 +57,12 @@ if (dev) {
 
 
     async function getStudentsSatisfaction() {
-        //Para que siempre que llamemos a la funcion esos campos esten vacios
         resultStatus = result = "";
-        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
-        //Se hace await por el async
        
         try{
 
 
             const res  = await fetch(Api,{method: "GET"});
-            //Para manda el resultado res en json y lo mete en data
             const data = await res.json();
             result = JSON.stringify(data,null,2);
             satisfactionData = data;
@@ -76,9 +71,7 @@ if (dev) {
             console.log(`Error : Get from ${Api} : ${(error)}`)
         }
     }
-         //Cada vez que cargue la pagina llama a get contact
     onMount(async () => {
-        //Cuando se carga la pagina se llama a la funcion getContacts
         await getStudentsSatisfaction();
     });
 
@@ -89,18 +82,16 @@ if (dev) {
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
-                getStudentsSatisfaction(); // <-- Esto recarga la tabla
+                getStudentsSatisfaction(); 
                 successMessage = "¡Datos iniciales insertados correctamente!";
 
 
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
             } else if (response.status === 409) {
                 console.log("La base de datos ya tiene datos. Elimínalos primero.");
                 errorMessage = "¡La base de datos ya tiene datos! . Elimínalos primero.";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -110,7 +101,6 @@ if (dev) {
             else {
                 console.log("Error al insertar los datos");
                 errorMessage = "Error al insertar los datos";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -120,7 +110,6 @@ if (dev) {
         .catch(error => {
             console.error("Error:", error);
             errorMessage = "Error al cargar los datos iniciales";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -133,7 +122,7 @@ async function getSatisfactionEspecifico(params = {}) {
         const queryString = new URLSearchParams(params).toString();
         const url = `${Api}?${queryString}`;
        
-        console.log("URL with parameters:", url); // Agrega esto para ver la URL generada
+        console.log("URL with parameters:", url); 
 
 
         const res = await fetch(url, { method: "GET" });
@@ -171,13 +160,13 @@ function applyFilters() {
 
 
     getSatisfactionEspecifico(params);
-    showFilterForm = false; // Oculta el formulario tras aplicar
+    showFilterForm = false; 
 }
 
 
 
 
-//Con esto vacio los campos de crear y actualizar
+
 function clearFilters() {
     newCarrera = "";
     newCiudad = "";
@@ -188,7 +177,7 @@ function clearFilters() {
 }
 
 
-//Con esto lo que hago esque vacio los campos del formulario de filtro
+
 function clearFilterFields() {
     filterCarrera = "";
     filterCiudad = "";
@@ -201,22 +190,17 @@ function clearFilterFields() {
 }
 
 
-//Con esto lo que hago es que dejo todos los campos de ambos formularios vacios y hago un get para que se actualize la tabla
-//con los campos vacios
 function resetFilters() {
     clearFilters();
     clearFilterFields();
-    getStudentsSatisfaction(); // <- Vuelve a cargar todo sin filtros
+    getStudentsSatisfaction(); 
 }
 
 
 
 
     async function createStudentsSatisfaction() {
-        //Para que siempre que llamemos a la funcion esos campos esten vacios
         resultStatus = result = "";
-        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
-        //Se hace await por el async
        
         try{
 
@@ -234,7 +218,6 @@ function resetFilters() {
                     satisfaccion_pdi: newSatisfaccion_pdi
                 })
             });
-            //Para manda el resultado res en json y lo mete en data
             const status = res.status;
             resultStatus=status.toString();
             if(status==201){
@@ -249,7 +232,6 @@ function resetFilters() {
             else if(status == 409){
                 console.log(`ERROR creating demand: status received\n${status}`);
                 errorMessage = "¡Esta demanda ya existe!";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -258,8 +240,6 @@ function resetFilters() {
                 console.log(`ERROR creating demand: status received\n${status}`);
                 errorMessage = "¡Tienes que rellenar todos los campos!";
 
-
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -269,7 +249,6 @@ function resetFilters() {
                 errorMessage = "¡Error al crear la demanda!";
 
 
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -284,7 +263,7 @@ function resetFilters() {
 
 
 
-    }//Put en el front
+    }
     async function updateUniversityDemand() {
     resultStatus = result = "";
     try {
@@ -368,9 +347,9 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         resultStatus = status.toString();
 
 
-        if (status === 200 || status === 204) {  // Verifica tanto 200 como 204
+        if (status === 200 || status === 204) {  
             console.log(`Demand ${carrera} in ${ciudad} deleted`);
-            getStudentsSatisfaction(); // Recarga los datos
+            getStudentsSatisfaction();
             successMessage = "¡Demanda borrada con éxito!";
 
 
@@ -400,7 +379,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
         resultStatus = result = "";
         try {
            
-            //Hago un delete en api/avi/univertity-demands
+ 
             const res = await fetch(Api, {method: "DELETE"});
            
             const status = res.status;
@@ -409,18 +388,16 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
             if (status === 200) {
                 console.log(`All demands deleted`);
-                getStudentsSatisfaction(); // más lógico que recargar los datos con loadInitialData
+                getStudentsSatisfaction(); 
                 successMessage = "¡Demandas borradas con éxito!";
 
 
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
             } else {
                 console.error(`ERROR deleting demands`);
                 errorMessage = "Error al borrar todos los datos";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -636,121 +613,144 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
 
 <style>
-    .filter-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
+    :global(body) {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
     }
 
-
-    .filter-form {
-        background-color: #fff;
-        padding: 0.4rem 0.8rem;         /* Menos espacio dentro del cuadro */
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;                   /* Menos espacio entre elementos */
-        width: 85%;
-        max-width: 400px;              /* Más estrecho */
-        font-size: 0.85rem;            /* Tamaño de texto más pequeño */
-    }
-
-
-    .filter-form input {
-        padding: 0.2rem 0.4rem;        /* Inputs más bajos y angostos */
-        font-size: 0.85rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-
-    .filter-form h5 {
-        font-size: 1rem;               /* Título más pequeño */
-        margin-bottom: 0.5rem;
+    .success-message, .error-message {
+        padding: 1rem;
+        margin: 1rem auto;
+        max-width: 500px;
+        border-radius: 8px;
         text-align: center;
+        font-weight: 600;
     }
-
-
-    .form-group {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.3rem;
-        width: 100%;
-    }
-
-
-    .form-group label {
-        font-weight: bold;       /* Hace el texto más fuerte */
-        margin-right: 0.5rem;    /* Espacio entre el label y el input */
-        width: 45%;              /* Ancho fijo del label */
-    }
-
-
-    .form-group input {
-        flex: 1;
-        padding: 0.3rem;
-        font-size: 0.85rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-
-    .filter-buttons {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.3rem;
-        margin-top: 0.5rem;
-    }
-
-
-    .filter-buttons button {
-        font-size: 0.8rem;             /* Botones más pequeños */
-        padding: 0.3rem 0.6rem;
-    }
-
 
     .success-message {
-        background-color: #d4edda;
-        color: #155724;
-        padding: 1rem;
-        border: 1px solid #c3e6cb;
-        border-radius: 5px;
-        margin: 1rem 0;
-        text-align: center;    
+        background-color: #e6f4ea;
+        color: #207a4c;
+        border: 1px solid #b6dfc4;
     }
-
 
     .error-message {
-        background-color: #f8d7da;
-        color: #721c24;
-        padding: 1rem;
+        background-color: #fdecea;
+        color: #d93025;
         border: 1px solid #f5c6cb;
-        border-radius: 5px;
-        margin: 1rem 0;
-        text-align: center;
     }
-
 
     .button-group {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 1rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
-
 
     .button-group button {
-        min-width: 140px;
+        min-width: 160px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .filter-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .filter-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 480px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .filter-form h5 {
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: #444;
+    }
+
+    .form-group input {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .filter-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .filter-buttons button {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    table {
+        width: 95%;
+        margin: auto;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background-color: #f0f2f5;
+        font-weight: 600;
+        color: #333;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    td button {
+        margin-right: 0.5rem;
     }
 </style>
+
 
