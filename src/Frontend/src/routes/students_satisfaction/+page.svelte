@@ -17,8 +17,7 @@ if (dev) {
     Api = PROD_HOST + Api;
 }
 
-// Usar API para loadInitialData
-await fetch(`${Api}/loadInitialData`);
+
 
 
 
@@ -86,14 +85,7 @@ await fetch(`${Api}/loadInitialData`);
 
     function getLoadInitialData() {
 
-        onMount(async () => {
-    try {
-        const res = await fetch(`${Api}/loadInitialData`);
-        console.log("Datos cargados:", await res.json());
-    } catch (err) {
-        console.error("Error:", err);
-    }
-});
+        fetch(`${Api}/loadInitialData`)
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
