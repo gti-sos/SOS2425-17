@@ -1,6 +1,7 @@
 import dataStore from "nedb";
 
-app.use(cors({ origin: '*' }));
+import cors from 'cors';
+app.use(cors());
 
 const BASE_API = "/api/v2";
 let db = new dataStore();
