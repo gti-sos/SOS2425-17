@@ -1,166 +1,117 @@
-import dataStore from "nedb";
-
-import express from 'express';
-import cors from 'cors';
-
-const app = express(); // <- Aquí defines app primero
-
-app.use(cors());       // <- Luego le aplicas CORS
-
-// El resto de tus rutas...
-
-
 const BASE_API = "/api/v2";
+let dataStore = require("nedb");
 let db = new dataStore();
 
-
 const students_satisfaction_data = [
-    { carrera: "GRADO EN MEDICINA", ciudad: "BADAJOZ", satisfaccion_total: 4.57, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58 },
-    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58 },
-    { carrera: "GRADO EN DERECHO", ciudad: "CÁCERES", satisfaccion_total: 8.27, sat_estudiantes: 7.41, satisfaccion_pdi: 3.89 },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89 },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ", satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77 },
-    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.55, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46 },
-    { carrera: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA", ciudad: "BADAJOZ", satisfaccion_total: 9, sat_estudiantes: null, satisfaccion_pdi: 4.59 },
-    { carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.28, sat_estudiantes: null, satisfaccion_pdi: 4.58 },
-    { carrera: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", ciudad: "CÁCERES", satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: null },
-    { carrera: "GRADO EN ENFERMERÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45 }
+    { carrera: "GRADO EN MEDICINA", ciudad: "BADAJOZ", satisfaccion_total: 4.57, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58, año_academico: "2018-2019" },
+    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
+    { carrera: "GRADO EN DERECHO", ciudad: "CÁCERES", satisfaccion_total: 8.27, sat_estudiantes: 7.41, satisfaccion_pdi: 3.89, año_academico: "2018-2019" },
+    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 4.57, sat_estudiantes: null, satisfaccion_pdi: 4.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ", satisfaccion_total: 7.75, sat_estudiantes: null, satisfaccion_pdi: 3.77, año_academico: "2018-2019" },
+    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.55, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, año_academico: "2017-2018" },
+    { carrera: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA", ciudad: "BADAJOZ", satisfaccion_total: 9, sat_estudiantes: null, satisfaccion_pdi: 4.59, año_academico: "2016-2017" },
+    { carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.28, sat_estudiantes: null, satisfaccion_pdi: 4.58, año_academico: "2018-2019" },
+    { carrera: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", ciudad: "CÁCERES", satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: null, año_academico: "2016-2017" },
+    { carrera: "GRADO EN ENFERMERÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, año_academico: "2016-2017" }
 ];
 
-
 function loadBackendAlejandroV2(app) {
-    // Load initial data
+    // Cargar datos iniciales
     app.get(BASE_API + "/students_satisfaction/loadInitialData", (req, res) => {
         db.count({}, (err, count) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (count > 0) return res.status(409).json({ message: "Datos ya cargados." });
 
-
             db.insert(students_satisfaction_data, (err) => {
-                if (err) return res.status(500).send("Error insertando datos.");
-                res.status(201).json({ message: "Datos iniciales insertados correctamente." });
+                if (err) return res.status(500).send("Error al insertar los datos.");
+                res.status(201).json({ message: "Datos iniciales cargados correctamente." });
             });
         });
     });
 
-
-    // GET con filtros y paginación
+    // Obtener datos con paginación basada en año académico
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
-        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, limit, offset, from, to } = req.query;
-
+        let { año_academico, limit, offset } = req.query;
 
         let query = {};
-        if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
-        if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
-        if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
-        if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
-        if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
+        if (año_academico) query.año_academico = año_academico;
 
-
-        if (from || to) {
-            query.satisfaccion_total = {};
-            if (from) query.satisfaccion_total.$gte = Number(from);
-            if (to) query.satisfaccion_total.$lte = Number(to);
-        } else if (satisfaccion_total) {
-            query.satisfaccion_total = Number(satisfaccion_total);
-        }
-       
-        // 👇 Este log te va a mostrar exactamente qué estás consultando
-        console.log("Query generado:", query);
-       
-
-
-        db.find(query, (err, results) => {
+        db.find(query).sort({ año_academico: 1 }).exec((err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (results.length === 0) return res.status(404).json({ error: "Sin resultados." });
 
-
+            // Aplicar paginación
             if (offset) results = results.slice(Number(offset));
             if (limit) results = results.slice(0, Number(limit));
 
-
-            results.forEach(r => delete r._id);
+            results.forEach(r => delete r._id); // Eliminar el campo `_id` de los resultados
             res.json(results);
         });
     });
 
-
-    // POST nuevo registro
+    // Crear un nuevo registro
     app.post(BASE_API + "/students_satisfaction", (req, res) => {
         const body = req.body;
 
-
-        if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined) {
+        if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined || !body.año_academico) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
 
-
         db.findOne({ carrera: body.carrera, ciudad: body.ciudad }, (err, existing) => {
-            if (err) return res.status(500).send("Error BD.");
+            if (err) return res.status(500).send("Error en la base de datos.");
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
 
-
             db.insert(body, (err, newDoc) => {
-                if (err) return res.status(500).send("Error al insertar.");
+                if (err) return res.status(500).send("Error al insertar el registro.");
                 delete newDoc._id;
-                res.sendStatus(201);
+                res.status(201).json(newDoc);
             });
         });
     });
 
-
-    app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => res.sendStatus(405));
-    app.put(BASE_API + "/students_satisfaction", (req, res) => res.sendStatus(405));
-
-
-    // PUT actualizar
+    // Actualizar un registro existente
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         const { carrera, ciudad } = req.params;
-        const body = req.body;
+        const { satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico } = req.body;
 
+        db.findOne({ carrera, ciudad }, (err, record) => {
+            if (err) return res.status(500).send("Error en la base de datos.");
+            if (!record) return res.status(404).json({ error: "Registro no encontrado." });
 
-        if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined) {
-            return res.status(400).json({ error: "Faltan campos." });
-        }
+            const updatedRecord = {
+                ...record,
+                satisfaccion_total: satisfaccion_total || record.satisfaccion_total,
+                sat_estudiantes: sat_estudiantes || record.sat_estudiantes,
+                satisfaccion_pdi: satisfaccion_pdi || record.satisfaccion_pdi,
+                año_academico: año_academico || record.año_academico
+            };
 
-
-        db.update({ carrera, ciudad }, { $set: body }, {}, (err, numUpdated) => {
-            if (err) return res.status(500).send("Error BD.");
-            if (numUpdated === 0) return res.status(404).json({ error: "No encontrado." });
-            res.sendStatus(200);
+            db.update({ carrera, ciudad }, updatedRecord, {}, (err) => {
+                if (err) return res.status(500).send("Error al actualizar el registro.");
+                res.status(200).json(updatedRecord);
+            });
         });
     });
 
-
-    // DELETE todos
-    app.delete(BASE_API + "/students_satisfaction", (req, res) => {
-        db.remove({}, { multi: true }, (err, numRemoved) => {
-            if (err) return res.status(500).send("Error al eliminar.");
-            if (numRemoved === 0) return res.status(404).send("Nada que eliminar.");
-            res.sendStatus(200);
-        });
-    });
-
-
-    // DELETE uno
+    // Eliminar un registro
     app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         const { carrera, ciudad } = req.params;
 
-
         db.remove({ carrera, ciudad }, {}, (err, numRemoved) => {
-            if (err) return res.status(500).send("Error BD.");
-            if (numRemoved === 0) return res.status(404).send("No encontrado.");
-            res.sendStatus(200);
+            if (err) return res.status(500).send("Error en la base de datos.");
+            if (numRemoved === 0) return res.status(404).json({ error: "Registro no encontrado." });
+
+            res.status(200).json({ message: "Registro eliminado correctamente." });
         });
     });
 
-
-    // Documentación
-    app.get(BASE_API + "/students_satisfaction/docs", (_req, res) => {
-        res.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
+    // Eliminar todos los registros
+    app.delete(BASE_API + "/students_satisfaction", (req, res) => {
+        db.remove({}, { multi: true }, (err, numRemoved) => {
+            if (err) return res.status(500).send("Error en la base de datos.");
+            res.status(200).json({ message: `Se eliminaron ${numRemoved} registros.` });
+        });
     });
 }
 
-
-export { loadBackendAlejandroV2 };
-
+module.exports = loadBackendAlejandroV2;
