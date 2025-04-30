@@ -141,7 +141,6 @@ async function getOne(params = {}) {
             lastSearch=url;
             successMessage = "El registro fue filtrado con éxito.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-
             console.log("Response received:\n",output);
         }
         catch (error) {
@@ -162,17 +161,19 @@ async function getOne(params = {}) {
             status = res.status;
 
                 if (status === 404) {
-                     errorMessage = "No se encontraron datos con los parámetros especificados." ;
+                    errorMessage = "No se encontraron datos con los parámetros especificados." ;
                     newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
                 } 
-
-            const data = await res.json();
-            UniversityAcademicPerformance=data;
-            output = JSON.stringify(data, null, 2);
-            lastSearch=url;
-            successMessage = "Los datos fueron filtrados con éxito.";
-            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-            console.log("Response received:\n",output);
+                else if (status === 200){
+                    const data = await res.json();
+                    UniversityAcademicPerformance=data;
+                    output = JSON.stringify(data, null, 2);
+                    lastSearch=url;
+                    successMessage = "Los datos fueron filtrados con éxito.";
+                    newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
+                    console.log("Response received:\n",output);
+                }
+            
         } catch (error) {
              errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
