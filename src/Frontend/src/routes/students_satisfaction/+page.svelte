@@ -614,31 +614,33 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
 <style>
     :global(body) {
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f4f6f8;
+        font-family: 'Roboto', sans-serif;
+        background-color: #121212; /* Fondo oscuro */
         margin: 0;
         padding: 0;
+        color: #e0e0e0; /* Texto claro */
     }
 
     .success-message, .error-message {
         padding: 1rem;
         margin: 1rem auto;
-        max-width: 500px;
+        max-width: 600px;
         border-radius: 8px;
         text-align: center;
         font-weight: 600;
+        font-size: 1rem;
     }
 
     .success-message {
-        background-color: #e6f4ea;
-        color: #207a4c;
-        border: 1px solid #b6dfc4;
+        background-color: #1b5e20; /* Verde oscuro */
+        color: #a5d6a7; /* Verde claro */
+        border: 1px solid #388e3c;
     }
 
     .error-message {
-        background-color: #fdecea;
-        color: #d93025;
-        border: 1px solid #f5c6cb;
+        background-color: #b71c1c; /* Rojo oscuro */
+        color: #ef9a9a; /* Rojo claro */
+        border: 1px solid #d32f2f;
     }
 
     .button-group {
@@ -651,19 +653,25 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
     .button-group button {
         min-width: 160px;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
         border-radius: 8px;
         border: none;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
+        background-color: #1e88e5; /* Azul */
+        color: white;
+    }
+
+    .button-group button:hover {
+        background-color: #1565c0; /* Azul más oscuro */
     }
 
     .filter-overlay {
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.8); /* Fondo semitransparente oscuro */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -671,21 +679,22 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
     }
 
     .filter-form {
-        background: white;
+        background: #1e1e1e; /* Fondo oscuro */
         padding: 2rem;
         border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         width: 90%;
-        max-width: 480px;
+        max-width: 500px;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 
     .filter-form h5 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        color: #e0e0e0; /* Texto claro */
     }
 
     .form-group {
@@ -695,15 +704,23 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
     .form-group label {
         font-weight: 600;
-        margin-bottom: 0.25rem;
-        color: #444;
+        margin-bottom: 0.5rem;
+        color: #bdbdbd; /* Texto gris claro */
     }
 
     .form-group input {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #424242; /* Borde gris oscuro */
+        border-radius: 8px;
+        background-color: #2c2c2c; /* Fondo del input */
+        color: #e0e0e0; /* Texto claro */
+        transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus {
+        border-color: #1e88e5; /* Azul */
+        outline: none;
     }
 
     .filter-buttons {
@@ -715,41 +732,76 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
     .filter-buttons button {
         flex: 1;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.85rem;
-        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border-radius: 8px;
         cursor: pointer;
         transition: background 0.2s ease;
+        background-color: #1e88e5; /* Azul */
+        color: white;
+        border: none;
+    }
+
+    .filter-buttons button:hover {
+        background-color: #1565c0; /* Azul más oscuro */
     }
 
     table {
         width: 95%;
         margin: auto;
         border-collapse: collapse;
-        background: white;
+        background: #1e1e1e; /* Fondo oscuro */
         border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         overflow: hidden;
     }
 
     th, td {
-        padding: 0.75rem 1rem;
+        padding: 1rem;
         text-align: left;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #424242; /* Línea gris oscuro */
     }
 
     th {
-        background-color: #f0f2f5;
-        font-weight: 600;
-        color: #333;
+        background-color: #2c2c2c; /* Fondo gris oscuro */
+        font-weight: 700;
+        color: #e0e0e0; /* Texto claro */
     }
 
     tr:last-child td {
         border-bottom: none;
     }
 
+    tr:hover {
+        background-color: #333333; /* Fondo más claro al pasar el cursor */
+    }
+
     td button {
         margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    td button:first-child {
+        background-color: #e53935; /* Rojo */
+        color: white;
+    }
+
+    td button:first-child:hover {
+        background-color: #b71c1c; /* Rojo más oscuro */
+    }
+
+    td button:last-child {
+        background-color: #ffb300; /* Amarillo */
+        color: white;
+    }
+
+    td button:last-child:hover {
+        background-color: #ffa000; /* Amarillo más oscuro */
     }
 </style>
 
