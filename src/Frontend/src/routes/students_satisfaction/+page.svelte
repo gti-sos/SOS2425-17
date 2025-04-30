@@ -86,7 +86,14 @@ await fetch(`${Api}/loadInitialData`);
 
     function getLoadInitialData() {
 
-        fetch(`${Api}/loadInitialData`)
+        onMount(async () => {
+    try {
+        const res = await fetch(`${Api}/loadInitialData`);
+        console.log("Datos cargados:", await res.json());
+    } catch (err) {
+        console.error("Error:", err);
+    }
+});
         .then(response => {
             if (response.status === 201) {
                 console.log("Datos iniciales insertados correctamente");
