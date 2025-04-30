@@ -70,9 +70,9 @@
         }
     }
 
-    //Cada vez que cargue la pagina llama a get contact
+    //Cada vez que cargue la pagina llama a getUniversityDemands
     onMount(async () => {
-        //Cuando se carga la pagina se llama a la funcion getContacts
+        //Cuando se carga la pagina se llama a la funcion getUniversityDemands
         await getUniversityDemands();
     });
 
