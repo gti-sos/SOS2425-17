@@ -7,11 +7,14 @@
     const miembros = [
         {
             nombre: 'Pablo Aguza Barragán',
-            frontend: '',
-            api: 'https://sos2425-17.onrender.com/api/v1/university-academic-performance/docs',
-            postman: 'https://documenter.getpostman.com/view/43694449/2sB2cUBica',
+            frontend: '/university-academic-performance',
+            api_v1: "/api/v1/university-academic-performance",
+            api_v2: "/api/v2/university-academic-performance",
+            postman_v1: '/api/v1/university-academic-performance/docs',
+            postman_v2: '/api/v2/university-academic-performance/docs',
             recurso: 'university-academic-performance',
-            github: 'https://github.com/Aguzajr'
+            github: 'https://github.com/Aguzajr',
+            vistas:"/university-academic-performance/vistas"
         },
         {
             nombre: 'Javier Guerrero Pérez',
@@ -22,7 +25,8 @@
             postman_v1: '/api/v1/university-demands/docs',
             postman_v2: '/api/v2/university-demands/docs',
             recurso: 'university-demands',
-            github: 'https://github.com/Javiigp'
+            github: 'https://github.com/Javiigp',
+            vistas: '/university-demands/vistas'
         },
         {
             nombre: 'Alejandro Gaona Penco',
@@ -30,7 +34,8 @@
             api: 'https://sos2425-17.onrender.com/api/v1/students-satisfaction/docs',
             postman: 'https://documenter.getpostman.com/view/42373237/2sB2cUBicY',
             recurso: 'students-satisfaction',
-            github: 'https://github.com/alegp2003'
+            github: 'https://github.com/alegp2003',
+            vistas:'/students_satisfaction/vistas'
         }
     ];
 
@@ -123,6 +128,22 @@
         <h2>🗃️ Repositorio del equipo en GitHub</h2>
         <ul>
             <li><a href={githubComun} target="_blank">{githubComun}</a></li>
+        </ul>
+    </div>
+
+
+    <div class="section">
+        <h2>📊 Enlaces a las vistas desarrolladas por cada miembro</h2>
+        <ul>
+            {#each miembros as miembro}
+                <li><strong>{miembro.nombre}:</strong>
+                    {#if miembro.vistas}
+                        <a href={miembro.vistas} target="_blank">{miembro.vistas}</a>
+                    {:else}
+                        <em>No disponible</em>
+                    {/if}
+                </li>
+            {/each}
         </ul>
     </div>
 
