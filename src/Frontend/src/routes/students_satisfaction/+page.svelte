@@ -7,25 +7,14 @@
    import { dev } from '$app/environment';
 
 let DEVEL_HOST = "http://localhost:16078";
-let PROD_HOST = "https://sos2425-17.onrender.com";
 
 let Api = "/api/v2/students_satisfaction";
 
 if (dev) {
     Api = DEVEL_HOST + Api;
-} else {
-    Api = PROD_HOST + Api;
-}
-
-
-
-
-
-
+} 
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
-   
-
 
     let satisfactionData = [];
     let result = "";
@@ -55,8 +44,6 @@ if (dev) {
 
     let fromSat="";
     let toSat="";
-   
-
 
     async function getStudentsSatisfaction() {
         resultStatus = result = "";
@@ -146,8 +133,6 @@ async function getSatisfactionEspecifico(params = {}) {
 }
 
 
-
-
 function applyFilters() {
     const params = {};
 
@@ -168,8 +153,6 @@ function applyFilters() {
     getSatisfactionEspecifico(params); // Llamar a la función para obtener los datos filtrados
     showFilterForm = false; // Cerrar el formulario de filtros
 }
-
-
 
 
 
@@ -619,13 +602,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
 
 
 <style>
-    :global(body) {
-        font-family: 'Roboto', sans-serif;
-        background-color: #121212; /* Fondo oscuro */
-        margin: 0;
-        padding: 0;
-        color: #e0e0e0; /* Texto claro */
-    }
+    
 
     .success-message, .error-message {
         padding: 1rem;

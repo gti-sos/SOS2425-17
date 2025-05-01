@@ -20,6 +20,7 @@ const students_satisfaction_data = [
 function loadBackendAlejandroV2(app) {
     // Cargar datos iniciales
     app.get(BASE_API + "/students_satisfaction/loadInitialData", (req, res) => {
+        console.log("Cargando datos iniciales...");
         db.count({}, (err, count) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (count > 0) return res.status(409).json({ message: "Datos ya cargados." });
@@ -33,6 +34,7 @@ function loadBackendAlejandroV2(app) {
 
     // Obtener datos con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
+        
         let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico, from, to, limit, offset } = req.query;
     
         let query = {};
