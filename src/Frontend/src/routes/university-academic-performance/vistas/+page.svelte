@@ -1,6 +1,8 @@
 <div class="chart-container">
     <canvas bind:this={canvasEl} class="chart"></canvas>
   </div>
+
+  
   <script>
     import Chart from 'chart.js/auto';
     import { onMount } from 'svelte';
@@ -12,6 +14,9 @@
     // Etiquetas que usaremos para los promedios
     const labels = [
      "efficiencyRate", "successRate", "performanceRate", "cohortStudents", "dropoutRate", "graduationRate"
+    ];
+
+    const translate_labels = ["Tasa de eficiencia","Tasa de exito","Tasa de desempeño","Cohorte","Tasa de abandono","Tasa de graduacion"
     ];
   
     // Procesa los datos por tipo de grado y devuelve promedios
@@ -93,7 +98,7 @@
       const chartConfig = {
         type: 'radar',
         data: {
-          labels,
+          labels:translate_labels,
           datasets: [
             {
               label: "Otros Grados",
@@ -110,15 +115,20 @@
           ]
         },
         options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: true,
-              text: 'Comparación de Indicadores Académicos'
-            }
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Comparación de Indicadores Académicos',
+      font: {
+        size: 25,       // Tamaño de letra más grande
+        weight: 'bold'  // Negrita
+      },
+      color: '#000'      // (opcional) Color del texto
           }
         }
-      };
+      }
+    };
   
       new Chart(canvasEl.getContext('2d'), chartConfig);
   
@@ -171,8 +181,8 @@
   
   <style>
   .chart-container {
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     margin: 2rem auto 0 auto; /* solo centrado horizontal */
     position: relative;
   }
