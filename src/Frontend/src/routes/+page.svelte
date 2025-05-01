@@ -77,6 +77,8 @@
                 <li><strong>{miembro.nombre}:</strong>
                     {#if miembro.nombre === 'Javier Guerrero Pérez'}
                         <a href="/university-demands">Front university-demands</a>
+                    {:else if miembro.nombre === 'Pablo Aguza Barragán'}
+                        <a href="/university-academic-performance">Front-end university-academic-performance</a>                    
                     {:else if miembro.frontend}
                         <a href={miembro.frontend} target="_blank">{miembro.frontend}</a>
                     {:else}
@@ -137,7 +139,11 @@
         <ul>
             {#each miembros as miembro}
                 <li><strong>{miembro.nombre}:</strong>
-                    {#if miembro.vistas}
+                    {#if miembro.nombre === 'Javier Guerrero Pérez'}
+                        <a href="/university-demands/vistas">Vistas university-demands</a>
+                    {:else if miembro.nombre === 'Pablo Aguza Barragán'}
+                        <a href="/university-academic-performance/vistas">Vistas university-academic-performance</a> 
+                    {:else if miembro.vistas}
                         <a href={miembro.vistas} target="_blank">{miembro.vistas}</a>
                     {:else}
                         <em>No disponible</em>

@@ -468,18 +468,18 @@ async function deleteOne(degree, location, academicYear){
       <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
       <input placeholder="Localización" bind:value={UniversityAcademicPerformanceLocation} />
       <input placeholder="Año académico" bind:value={UniversityAcademicPerformanceAcademicYear} />
-      <input placeholder="Abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
-      <input placeholder="Abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
-      <input placeholder="Abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
+      <input placeholder="Tasa abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
+      <input placeholder="Tasa abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
+      <input placeholder="Tasa abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
       <input placeholder="Nº abandonos 1er curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsFirstCourse} />
       <input placeholder="Nº abandonos 2º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsSecondCourse} />
       <input placeholder="Nº abandonos 3º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsThirdCourse} />
+      <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
       <input placeholder="Tasa eficiencia (%)" type="number" bind:value={UniversityAcademicPerformanceEfficiencyRate} />
       <input placeholder="Tasa éxito (%)" type="number" bind:value={UniversityAcademicPerformanceSuccessRate} />
       <input placeholder="Progreso normalizado (%)" type="number" bind:value={UniversityAcademicPerformanceProgressNormalized} />
-      <input placeholder="Rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
+      <input placeholder="Tasa de rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
       <input placeholder="Estudiantes cohorte" type="number" bind:value={UniversityAcademicPerformanceCohortStudents} />
-      <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
       <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
       <div>
         <input class=inputs-years placeholder="Desde el año" bind:value={fromYear} />
@@ -504,18 +504,18 @@ async function deleteOne(degree, location, academicYear){
             <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
             <input placeholder="Localización" bind:value={UniversityAcademicPerformanceLocation} />
             <input placeholder="Año académico" bind:value={UniversityAcademicPerformanceAcademicYear} />
-            <input placeholder="Abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
-            <input placeholder="Abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
-            <input placeholder="Abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
+            <input placeholder="Tasa abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
+            <input placeholder="Tasa abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
+            <input placeholder="Tasa abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
             <input placeholder="Nº abandonos 1er curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsFirstCourse} />
             <input placeholder="Nº abandonos 2º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsSecondCourse} />
             <input placeholder="Nº abandonos 3º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsThirdCourse} />
+            <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
             <input placeholder="Tasa eficiencia (%)" type="number" bind:value={UniversityAcademicPerformanceEfficiencyRate} />
             <input placeholder="Tasa éxito (%)" type="number" bind:value={UniversityAcademicPerformanceSuccessRate} />
             <input placeholder="Progreso normalizado (%)" type="number" bind:value={UniversityAcademicPerformanceProgressNormalized} />
-            <input placeholder="Rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
+            <input placeholder="Tasa de rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
             <input placeholder="Estudiantes cohorte" type="number" bind:value={UniversityAcademicPerformanceCohortStudents} />
-            <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
             <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
     
             <button class="btn-yellow"on:click={() =>{showCreateForm=false
@@ -537,18 +537,18 @@ async function deleteOne(degree, location, academicYear){
         <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
         <input placeholder="Localización" bind:value={UniversityAcademicPerformanceLocation} />
         <input placeholder="Año académico" bind:value={UniversityAcademicPerformanceAcademicYear} />
-        <input placeholder="Abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
-        <input placeholder="Abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
-        <input placeholder="Abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
+        <input placeholder="Tasa abandono 1er curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutFirstCourse} />
+        <input placeholder="Tasa abandono 2º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutSecondCourse} />
+        <input placeholder="Tasa abandono 3º curso (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutThirdCourse} />
         <input placeholder="Nº abandonos 1er curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsFirstCourse} />
         <input placeholder="Nº abandonos 2º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsSecondCourse} />
         <input placeholder="Nº abandonos 3º curso" type="number" bind:value={UniversityAcademicPerformanceDropoutsThirdCourse} />
+        <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
         <input placeholder="Tasa eficiencia (%)" type="number" bind:value={UniversityAcademicPerformanceEfficiencyRate} />
         <input placeholder="Tasa éxito (%)" type="number" bind:value={UniversityAcademicPerformanceSuccessRate} />
         <input placeholder="Progreso normalizado (%)" type="number" bind:value={UniversityAcademicPerformanceProgressNormalized} />
-        <input placeholder="Rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
+        <input placeholder="Tasa de rendimiento (%)" type="number" bind:value={UniversityAcademicPerformancePerformanceRate} />
         <input placeholder="Estudiantes cohorte" type="number" bind:value={UniversityAcademicPerformanceCohortStudents} />
-        <input placeholder="Tasa abandono (%)" type="number" bind:value={UniversityAcademicPerformanceDropoutRate} />
         <input placeholder="Tasa graduación (%)" type="number" bind:value={UniversityAcademicPerformanceGraduationRate} />
 
         <button class="btn-blue" on:click={() =>{showEditForm=false,updateUniversityAcademicPerformance()}}>
@@ -597,16 +597,18 @@ async function deleteOne(degree, location, academicYear){
             <th class="title" on:click={() => handleClick('degree')}>Grado</th>
             <th class="title" on:click={() => handleClick('location')}>Ciudad</th>
             <th class="title" on:click={() => handleClick('academicYear')}>Año academico</th>
-            <th class="title" on:click={() => handleClick('dropoutFirstCourse')}>Número de abandonos 1er curso</th>
-            <th class="title" on:click={() => handleClick('dropoutSecondCourse')}>Número de abandonos 2er curso</th>
-            <th class="title" on:click={() => handleClick('dropoutThirdCourse')}>Número de abandonos 3er curso</th>
-            <th class="title" on:click={() => handleClick('dropoutsFirstCourse')}>Tasa de abandono 1er curso</th>
-            <th class="title" on:click={() => handleClick('dropoutsSecondCourse')}>Tasa de abandono 2er curso</th>
-            <th class="title" on:click={() => handleClick('dropoutsThirdCourse')}>Tasa de abandono 3er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutFirstCourse')}>Tasa de abandono 1er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutSecondCourse')}>Tasa de abandono 2er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutThirdCourse')}>Tasa de abandono 3er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsFirstCourse')}>Número de abandonos 1er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsSecondCourse')}>Número de abandonos 2er curso</th>
+            <th class="title" on:click={() => handleClick('dropoutsThirdCourse')}>Número de abandonos 3er curso</th>
             <th class="title" on:click={() => handleClick('dropoutRate')}>Tasa de abandono</th>
-            <th class="title" on:click={() => handleClick('progressNormalized')}>Nivel de progreso</th>
+            <th class="title" on:click={() => handleClick('efficiencyRate')}>Tasa de eficiencia</th>
+            <th class="title" on:click={() => handleClick('successRate')}>Tasa de éxito</th>
+            <th class="title" on:click={() => handleClick('progressNormalized')}>Progreso normalizado</th>
             <th class="title" on:click={() => handleClick('performanceRate')}>Tasa de rendimiento</th>
-            <th class="title" on:click={() => handleClick('cohortStudents')}>Cohorte</th>
+            <th class="title" on:click={() => handleClick('cohortStudents')}>Estudiantes cohorte</th>
             <th class="title" on:click={() => handleClick('graduationRate')}>Tasa de graduacion</th>
         </tr>
         
@@ -642,6 +644,12 @@ async function deleteOne(degree, location, academicYear){
                 </td>
                 <td class="transparent">
                     {universityD.dropoutRate}
+                </td>
+                <td class="transparent">
+                    {universityD.efficiencyRate}
+                </td>
+                <td class="transparent">
+                    {universityD.successRate}
                 </td>
                 <td class="transparent">
                     {universityD.progressNormalized}
