@@ -16,7 +16,7 @@
      "efficiencyRate", "successRate", "performanceRate", "cohortStudents", "dropoutRate", "graduationRate"
     ];
 
-    const translate_labels = ["Tasa de eficiencia","Tasa de exito","Tasa de desempeño","Cohorte","Tasa de abandono","Tasa de graduacion"
+    const translate_labels = ["Tasa de eficiencia","Tasa de exito","Tasa de rendimiento","Estudiantes Cohorte (N)","Tasa de abandono","Tasa de graduacion"
     ];
   
     // Procesa los datos por tipo de grado y devuelve promedios
@@ -125,7 +125,21 @@
         weight: 'bold'  // Negrita
       },
       color: '#000'      // (opcional) Color del texto
-          }
+          },
+          subtitle: {
+          display: true,
+          text: "Gráfico de Angular_Chart (Radar-Chart)",
+          font: {
+        family: 'Georgia',
+        size: 11,           // Tamaño de letra más pequeño
+        weight: '200'    // Opcional: normal, si no quieres que sea negrita
+      },
+      padding: {
+        bottom: 15          // Espacio debajo del subtítulo
+      }
+          
+
+        }
         }
       }
     };
@@ -144,8 +158,13 @@
           text: "Tasa de abandono por ciudad en los últimos años",
         },
         subtitle: {
-          text: "Gráfico 3D de Highcharts",
-        },
+  text: "Gráfico de Highcharts (3D Donut Chart)",
+  style: {
+    fontFamily: 'Georgia',
+    fontSize: '11px',        // Asegúrate de incluir las unidades
+    fontWeight: '200'        // 'normal' o valores numéricos como '200'
+  }
+},
         plotOptions: {
           pie: {
             innerSize: 100,
@@ -173,10 +192,6 @@
   
   <figure class="highcharts-figure">
     <div id="container"></div>
-    <p class="highcharts-description">
-      A variation of a 3D pie chart with an inner radius added.
-      These charts are often referred to as donut charts.
-    </p>
   </figure>
   
   <style>
@@ -228,10 +243,6 @@
   
     .highcharts-data-table tr:hover {
       background: #f1f7ff;
-    }
-  
-    .highcharts-description {
-      margin: 0.3rem 10px;
     }
   </style>
   
