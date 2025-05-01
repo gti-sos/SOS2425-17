@@ -3,12 +3,23 @@
     let showFrontendsDropdown = false;
     let showAPIsDropdown = false;
     let showDocumentationDropdown = false;
+    let showViewsDropdown = false;
+
+
+    function toggleViewsDropdown() {
+    showViewsDropdown = !showViewsDropdown;
+    showGithubDropdown = false;
+    showFrontendsDropdown = false;
+    showAPIsDropdown = false;
+    showDocumentationDropdown = false;
+}
 
     function toggleGithubDropdown() {
     showGithubDropdown = !showGithubDropdown; // si estaba abierto, lo cierra. Si estaba cerrado, lo abre.
     showFrontendsDropdown = false;            // cierra los otros
     showAPIsDropdown = false;
     showDocumentationDropdown = false;
+    showViewsDropdown=false;
 }
 
 
@@ -19,6 +30,7 @@
     showGithubDropdown = false;
     showAPIsDropdown = false;
     showDocumentationDropdown = false;
+    showViewsDropdown=false;
 }
 
     function toggleDocumentationDropdown() {
@@ -27,6 +39,7 @@
     showFrontendsDropdown = false;
     showGithubDropdown = false;
     showAPIsDropdown = false;
+    showViewsDropdown=false;
     showDocumentationDropdown = !showDocumentationDropdown;
 }
 
@@ -36,6 +49,7 @@
     showGithubDropdown = false;
     showFrontendsDropdown = false;
     showDocumentationDropdown = false;
+    showViewsDropdown=false;
 }
     
 
@@ -44,6 +58,7 @@
         showFrontendsDropdown = false;
         showAPIsDropdown = false;
         showDocumentationDropdown = false;
+        showViewsDropdown=false;
         
     }
 
@@ -180,17 +195,18 @@
         </div>
 
         
-        <!-- Documentaciones dropdown -->
-        <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleDocumentationDropdown}>
-            <i class="fas fa-file-alt"></i>Documentaciones <i class="fas fa-caret-down arrow-down"></i>
-            {#if showDocumentationDropdown}
-                <div class="dropdown">
-                    <a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs">University Demands</a>
-                    <a href="http://sos2425-17.onrender.com/api/v1/students_satisfaction/docs">students_satisfaction</a>
-                    <a href="http://sos2425-17.onrender.com/api/v1/university-academic-performance/docs">university-academic-performance</a>
-                </div>
-            {/if}
+      <!-- Vistas dropdown -->
+<div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleViewsDropdown}>
+    <i class="fas fa-eye"></i> Vistas <i class="fas fa-caret-down arrow-down"></i>
+    {#if showViewsDropdown}
+        <div class="dropdown">
+            <a href="/university-demands/vistas">Vista university-demands</a>
+            <a href="/students_satisfaction/vistas">Vista students-satisfaction</a>
+            <a href="/university-academic-performance/vistas">Vista university-academic-performance</a>
         </div>
+    {/if}
+</div>
+
         
     </div>
 </header>

@@ -15,14 +15,14 @@ let db = new dataStore(); //Esto es para inicializar dataStore que sirve para in
 const university_demands = [ 
     { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5, academicYear: "2016-2017" },
     { location: "Almendralejo", degree: "Educación Primaria", over45: 7, spanishFirst: 5, foreigners: 7, graduated: 5, academicYear: "2016-2017" },
-    { location: "Mérida", degree: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
+    { location: "Merida", degree: "Enfermería", over45: 5, spanishFirst: 57, foreigners: null, graduated: 8, academicYear: "2016-2017" },
     { location: "Badajoz", degree: "Educación Infantil", over45: 13, spanishFirst: 5, foreigners: 13, graduated: 5, academicYear: "2016-2017" },
     { location: "Badajoz", degree: "Educación Primaria", over45: 117, spanishFirst: 5.01, foreigners: 158, graduated: 297, academicYear: "2016-2017" },
     { location: "Badajoz", degree: "Ingeniería Electrónica y Automática", over45: 57, spanishFirst: 5, foreigners: 9, graduated: 65, academicYear: "2016-2017" },
-    { location: "Plasencia", degree: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 7.8, academicYear: "2016-2017" },
+    { location: "Plasencia", degree: "Enfermería", over45: 5.75, spanishFirst: 98, foreigners: null, graduated: 8, academicYear: "2016-2017" },
     { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 67, spanishFirst: 6, foreigners: 78, graduated: 5, academicYear: "2016-2017" },
     { location: "Badajoz", degree: "Medicina", over45: 33, spanishFirst: 8, foreigners: 82, graduated: 113, academicYear: "2016-2017" },  
-    { location: "Cáceres", degree: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 8.98, academicYear: "2016-2017" },
+    { location: "Cáceres", degree: "Grado en Derecho", over45: 6.75, spanishFirst: 105, foreigners: 1, graduated: 9, academicYear: "2016-2017" },
     { location: "Cáceres", degree: "Grado en Educación Social", over45: 12, spanishFirst: null, foreigners: 73, graduated: 87, academicYear: "2016-2017" },
     { location: "Badajoz", degree: "Grado en Economía", over45: 24, spanishFirst: null, foreigners: 16, graduated: 42, academicYear: "2016-2017" },
     { location: "Plasencia", degree: "Grado en Podología", over45: 23, spanishFirst: null, foreigners: 42, graduated: 66, academicYear: "2016-2017" },
@@ -43,46 +43,40 @@ const university_demands = [
     { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 84, spanishFirst: 6, foreigners: 151, graduated: 5, academicYear: "2017-2018" },
     { location: "Badajoz", degree: "Medicina", over45: 39, spanishFirst: 9, foreigners: 88, graduated: 8, academicYear: "2017-2018" },
     { location: "Cáceres", degree: "Derecho", over45: 44, spanishFirst: 7.76, foreigners: 73, graduated: 5, academicYear: "2017-2018" },
-    { location: "Cáceres", degree: "Educación Social", over45: 11, spanishFirst: null, foreigners: 73, graduated: 6.53, academicYear: "2017-2018" },
-    { location: "Badajoz", degree: "Economía", over45: 15, spanishFirst: null, foreigners: 18, graduated: 5.65, academicYear: "2017-2018" },
+    { location: "Cáceres", degree: "Educación Social", over45: 11, spanishFirst: null, foreigners: 73, graduated: 7, academicYear: "2017-2018" },
+    { location: "Badajoz", degree: "Economía", over45: 15, spanishFirst: null, foreigners: 18, graduated: 6, academicYear: "2017-2018" },
     { location: "Plasencia", degree: "Podología", over45: 26, spanishFirst: 7.48, foreigners: 40, graduated: 6, academicYear: "2017-2018" },
     { location: "Cáceres", degree: "Educación Infantil", over45: 13, spanishFirst: 7, foreigners: 120, graduated: 5, academicYear: "2017-2018" },
     { location: "Cáceres", degree: "Educación Primaria", over45: 66, spanishFirst: 8, foreigners: 74, graduated: 5, academicYear: "2017-2018" },
     { location: "Cáceres", degree: "Veterinaria", over45: 37, spanishFirst: null, foreigners: 60, graduated: 10, academicYear: "2017-2018" },
     { location: "Badajoz", degree: "Comunicación Audiovisual", over45: 34, spanishFirst: null, foreigners: 33, graduated: 6, academicYear: "2017-2018" },
-    { location: "Merida", degree: "Ingeniería Informática en Tecnologías de la Información", over45: 25, spanishFirst: null, foreigners: 6, graduated: 5.2, academicYear: "2017-2018" },
+    { location: "Merida", degree: "Ingeniería Informática en Tecnologías de la Información", over45: 25, spanishFirst: null, foreigners: 6, graduated: 5, academicYear: "2017-2018" },
     { location: "Merida", degree: "Ingeniería Informática en Ingeniería de Computadores", over45: 67, spanishFirst: null, foreigners: 7, graduated: 5, academicYear: "2017-2018" },
     { location: "Merida", degree: "Ingeniería Informática en Ingeniería del Software", over45: 80, spanishFirst: null, foreigners: 6, graduated: 7, academicYear: "2017-2018" },
-    { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 5.93, academicYear: "2018-2019" },
+    { location: "Almendralejo", degree: "Educación Infantil", over45: 1, spanishFirst: 5, foreigners: 1, graduated: 6, academicYear: "2018-2019" },
     { location: "Almendralejo", degree: "Educación Primaria", over45: 10, spanishFirst: 5, foreigners: 8, graduated: 5, academicYear: "2018-2019" },
     { location: "Merida", degree: "Enfermería", over45: 13, spanishFirst: 57, foreigners: 13, graduated: 8.62, academicYear: "2018-2019" },
     { location: "Badajoz", degree: "Educación Infantil", over45: 6, spanishFirst: 5, foreigners: 6, graduated: 5, academicYear: "2018-2019" },
-    { location: "Badajoz", degree: "Educación Primaria", over45: 109, spanishFirst: 7, foreigners: 106, graduated: 8.25, academicYear: "2018-2019" },
-    { location: "Badajoz", degree: "Ingeniería Electrónica y Automática (Rama Industrial)", over45: 51, spanishFirst: 6, foreigners: 3, graduated: null, academicYear: "2018-2019" },
+    { location: "Badajoz", degree: "Educación Primaria", over45: 109, spanishFirst: 7, foreigners: 106, graduated: 8, academicYear: "2018-2019" },
+    { location: "Badajoz", degree: "Ingeniería Electrónica y Automática (Rama Industrial)", over45: 51, spanishFirst: 6, foreigners: 3, graduated: 9, academicYear: "2018-2019" },
     { location: "Plasencia", degree: "Enfermería", over45: 27, spanishFirst: 96, foreigners: 3, graduated: 8, academicYear: "2018-2019" },
-    { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 83, spanishFirst: 5, foreigners: 4, graduated: 5.42, academicYear: "2018-2019" },
-    { location: "Badajoz", degree: "Medicina", over45: 45, spanishFirst: 116, foreigners: 11, graduated: 5.95, academicYear: "2018-2019" },
+    { location: "Cáceres", degree: "Administración y Dirección de Empresas", over45: 83, spanishFirst: 5, foreigners: 4, graduated: 5, academicYear: "2018-2019" },
+    { location: "Badajoz", degree: "Medicina", over45: 45, spanishFirst: 116, foreigners: 11, graduated: 6, academicYear: "2018-2019" },
     { location: "Cáceres", degree: "Derecho", over45: 45, spanishFirst: 112, foreigners: 4, graduated: 5, academicYear: "2018-2019" },
-    { location: "Cáceres", degree: "Educación Social", over45: 15, spanishFirst: 84, foreigners: null, graduated: 6.67, academicYear: "2018-2019" },
-    { location: "Badajoz", degree: "Economía", over45: 26, spanishFirst: 38, foreigners: 2, graduated: null, academicYear: "2018-2019" },
-    { location: "Plasencia", degree: "Podología", over45: 12, spanishFirst: 63, foreigners: 1, graduated: 6.24, academicYear: "2018-2019" },
-    { location: "Cáceres", degree: "Educación Infantil", over45: 20, spanishFirst: 130, foreigners: 1, graduated: 5.88, academicYear: "2018-2019" },
-    { location: "Cáceres", degree: "Educación Primaria", over45: 72, spanishFirst: 134, foreigners: 1, graduated: 6.66, academicYear: "2018-2019" },
-    { location: "Cáceres", degree: "Veterinaria", over45: 31, spanishFirst: 101, foreigners: 2, graduated: 8.33, academicYear: "2018-2019" },
-    { location: "Badajoz", degree: "Comunicación Audiovisual", over45: 30, spanishFirst: 62, foreigners: null, graduated: 6.78, academicYear: "2018-2019" },
+    { location: "Cáceres", degree: "Educación Social", over45: 15, spanishFirst: 84, foreigners: null, graduated: 7, academicYear: "2018-2019" },
+    { location: "Badajoz", degree: "Economía", over45: 26, spanishFirst: 38, foreigners: 2, graduated: 10, academicYear: "2018-2019" },
+    { location: "Plasencia", degree: "Podología", over45: 12, spanishFirst: 63, foreigners: 1, graduated: 6, academicYear: "2018-2019" },
+    { location: "Cáceres", degree: "Educación Infantil", over45: 20, spanishFirst: 130, foreigners: 1, graduated: 6, academicYear: "2018-2019" },
+    { location: "Cáceres", degree: "Educación Primaria", over45: 72, spanishFirst: 134, foreigners: 1, graduated: 7, academicYear: "2018-2019" },
+    { location: "Cáceres", degree: "Veterinaria", over45: 31, spanishFirst: 101, foreigners: 2, graduated: 8, academicYear: "2018-2019" },
+    { location: "Badajoz", degree: "Comunicación Audiovisual", over45: 30, spanishFirst: 62, foreigners: null, graduated: 7, academicYear: "2018-2019" },
     { location: "Merida", degree: "Ingeniería Informática en Tecnologías de la Información", over45: 21, spanishFirst: 21, foreigners: null, graduated: 5, academicYear: "2018-2019" },
     { location: "Merida", degree: "Ingeniería Informática en Ingeniería de Computadores", over45: 73, spanishFirst: 78, foreigners: 1, graduated: 5, academicYear: "2018-2019" },
     { location: "Merida", degree: "Ingeniería Informática en Ingeniería del Software", over45: 77, spanishFirst: 81, foreigners: 3, graduated: 9, academicYear: "2018-2019" },        
 ];
 
-//db.find({},(err,demands)=>{ //EL {} es para que te busque todo y el segundo parametro es lo que te va a devolver 
-     //El err esque te devolvera error y el contacts es lo que te va a devolver 
-  //   if (demands.length < 1){ //Si no encuentra nada entonces le inserto el initialContacts para que asi tenga base de datos
-    //     db.insert(university_demands);
-     //}
- //});
 
- //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
+//location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 function loadBackendJavierV2(app){
     app.get(BASE_API + "/university-demands", (req, res) => {
         let {

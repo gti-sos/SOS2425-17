@@ -13,7 +13,7 @@ process.on('warning', (warning) => {
 
 
 
-import express from "express";
+import express from "express"; 
 import cors from "cors";
 const app = express(); //para llamar al framework express
 const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
