@@ -32,24 +32,35 @@ function loadBackendAlejandroV2(app) {
 
     // Obtener datos con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
-        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico, limit, offset } = req.query;
-
+        let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico, from, to, limit, offset } = req.query;
+    
         let query = {};
+    
+        // Filtros básicos
         if (carrera) query.carrera = new RegExp("^" + carrera + "$", "i");
         if (ciudad) query.ciudad = new RegExp("^" + ciudad + "$", "i");
         if (satisfaccion_total) query.satisfaccion_total = Number(satisfaccion_total);
         if (sat_estudiantes) query.sat_estudiantes = Number(sat_estudiantes);
         if (satisfaccion_pdi) query.satisfaccion_pdi = Number(satisfaccion_pdi);
         if (año_academico) query.año_academico = año_academico;
-
-        db.find(query).sort({ año_academico: 1 }).exec((err, results) => {
+    
+        // Filtro por rango de satisfacción total (from y to)
+        if (from || to) {
+            query.satisfaccion_total = {};
+            if (from) query.satisfaccion_total.$gte = Number(from); // Mayor o igual a "from"
+            if (to) query.satisfaccion_total.$lte = Number(to); // Menor o igual a "to"
+        }
+    
+        // Buscar y ordenar por satisfacción total
+        db.find(query).sort({ satisfaccion_total: 1 }).exec((err, results) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (results.length === 0) return res.status(404).json({ error: "Sin resultados." });
-
+    
+            // Paginación
             if (offset) results = results.slice(Number(offset));
             if (limit) results = results.slice(0, Number(limit));
-
-            results.forEach(r => delete r._id);
+    
+            results.forEach(r => delete r._id); // Eliminar el campo _id
             res.json(results);
         });
     });
