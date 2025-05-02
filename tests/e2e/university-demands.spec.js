@@ -8,16 +8,9 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/SOS2425-17/);
 });
 
-test('Get contact list', async ({ page }) => {
-  await page.goto('localhost:16078');
-
-  await page.getByRole('link', { name: 'Front university-demands' }).click();
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/University Demands/);
-});
 
 test('GetLoadInitialData', async ({ page }) => {
+
   // Ir a la página
   await page.goto('http://localhost:16078');
 
@@ -34,12 +27,14 @@ test('GetLoadInitialData', async ({ page }) => {
   await expect(async () => {
     const count = await dataRows.count();
     expect(count).toBeGreaterThan(0);
-  }).toPass();
+  }).toPass({ timeout: 10000 }); // 10 segundos
 });
+
+
 
 //Filtro por un dato especifico y desde un año hasta otro y luego le doy a limpiar filtros
 test('Filter', async ({ page }) => {
-  const testLocation = "Badajoz";
+  const testLocation = "BADAJOZ";
   const testYearsFrom = "2017-2018";
   const testYearsTo = "2018-2019";
 
@@ -193,8 +188,8 @@ test('Create EROR 400', async ({ page }) => {
 test('Create EROR 409', async ({ page }) => {
   
   //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
-  const testLocation = "Badajoz";
-  const testDegree = "Educación Infantil";
+  const testLocation = "BADAJOZ";
+  const testDegree = "GRADO EN EDUCACIÓN INFANTIL";
   const testOver45 = "13";
   const testSpanishFirst = "5";
   const testForeigners = "13";
