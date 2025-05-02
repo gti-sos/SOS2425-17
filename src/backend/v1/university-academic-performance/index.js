@@ -82,11 +82,10 @@ const university_academic_performance = [
         
             // Extraer los parámetros de búsqueda
             let {
-                degree, location, dropoutFirstCourse, efficiencyRate,dropoutSecondCourse, successRate, dropoutThirdCourse, dropoutsThirdCourse, progressNormalized, dropoutsFirstCourse, performanceRate, cohortStudents, dropoutsSecondCourse, dropoutRate, graduationRate, academicYear,
-                year_small,year_big,
-                limit, offset} = request.query;
+                degree, location, dropoutFirstCourse, efficiencyRate,dropoutSecondCourse, successRate, dropoutThirdCourse, dropoutsThirdCourse, progressNormalized, dropoutsFirstCourse, performanceRate, cohortStudents, dropoutsSecondCourse, dropoutRate, graduationRate, academicYear
+             } = request.query;
         
-            // Crear el filtro dinámicamente
+            // Crear el filtro dinámicamente  
             let query = {};
         
             if (degree !== undefined) query.degree = new RegExp("^" + degree + "$", "i");
@@ -105,23 +104,6 @@ const university_academic_performance = [
             if (progressNormalized !== undefined) query.progressNormalized = Number(progressNormalized);
             if (graduationRate !== undefined) query.graduationRate = Number(graduationRate);
             if (cohortStudents !== undefined) query.cohortStudents = Number(cohortStudents);
-
-            if (year_small || year_big) {
-                query.academicYear = {};
-                if (year_small) query.academicYear.$gte = year_small;
-                if (year_big) query.academicYear.$lte = year_big;
-            }
-            
-            let sortOptions = {};
-            let {sortBy,order}=request.query
-                // Si sortBy no está definido, se utiliza academicYear y degree como por defecto
-            if (sortBy && typeof sortBy === "string") {
-                // Si el parámetro sortBy está presente, ordenar por ese campo
-                sortOptions[sortBy] = order === "desc" ? -1 : 1;
-            } else {
-                // Orden por defecto: primero academicYear, luego degree
-                sortOptions = { academicYear: 1, degree: 1 ,location: 1};
-            }
         
             university_academic_performance_db.find(query).sort(sortOptions).exec((err, data) => {
                 if (err) {
@@ -210,6 +192,7 @@ const university_academic_performance = [
                 }
             });
         });
+
         
         
 
