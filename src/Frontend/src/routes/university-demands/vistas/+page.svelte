@@ -94,104 +94,161 @@
 </style>
 
 <script>
+
     import { onMount } from "svelte";
-    import { dev } from "$app/environment";
+    import { dev } from "$app/environment"; 
 
     let DEVEL_HOST = "http://localhost:16078";
-    let API = "/api/v2/students_satisfaction";
 
-    if (dev) {
+    let API = "/api/v2/university-demands";
+
+    if(dev)
         API = DEVEL_HOST + API;
-    }
+
+    /**
+     * @type {never[]}
+     */
+    
+
+    //Funcion para sacar los datos 
 
     let myData = [];
-    let resultadoSatisfaccion = [];
+    let resultadoGraduados = [];
+    let result = "";
+    let resultStatus = "";
 
-    // Función para obtener los datos del backend
-    async function getData() {
+    //Funcion para sacar los datos 
+    async function getData(){
+        resultStatus = result = "";
+
         try {
-            const res = await fetch(API, { method: "GET" });
+
+            //Cargo los datos iniciales
+            await fetch("/api/v2/university-demands/loadInitialData")
+
+            const res = await fetch(API,{method:"GET"});
+
             const data = await res.json();
+            result = JSON.stringify(data,null,2);
+
             myData = data;
-            console.log(`Response received:\n${JSON.stringify(myData, null, 2)}`);
-        } catch (error) {
-            console.log(`ERROR: GET from ${API}: ${error}`);
+            console.log(`Response received:\n${JSON.stringify(myData,null,2)}`);
+
+        } catch (error){
+            console.log(`ERROR:  GET from ${API}: ${error}`);
         }
     }
 
-    // Función para calcular la media de satisfacción por ciudad
-    async function calculateAverageSatisfactionByCity() {
-        await getData(); // Cargar los datos
+
+    async function numGraduateByLocationandYear() {
+        await getData(); // Cargo los datos
 
         const grouped = {};
 
         for (const entry of myData) {
-            const { ciudad, satisfaccion_total } = entry;
+            //Pngo los parametros que quiero agrupar 
+            const { location, academicYear, graduated } = entry;
+            //digo que la clave es la localizacion y el año academico
+            const key = `${location}__${academicYear}`;
 
-            if (!grouped[ciudad]) {
-                grouped[ciudad] = {
-                    ciudad,
-                    totalSatisfaccion: 0,
-                    count: 0
+            //Si no existe la clave , pongo que sea 0 
+            if (!grouped[key]) {
+                grouped[key] = {
+                    location,
+                    academicYear,
+                    totalGraduated: 0
                 };
             }
-
-            grouped[ciudad].totalSatisfaccion += parseFloat(satisfaccion_total) || 0;
-            grouped[ciudad].count += 1;
+            //Si exista la clave entonces le sume los graduados
+            grouped[key].totalGraduated += parseFloat(graduated) || 0;
         }
 
-        // Calcular la media de satisfacción para cada ciudad
-        return Object.values(grouped).map(item => ({
-            ciudad: item.ciudad,
-            averageSatisfaction: item.totalSatisfaccion / item.count
-        }));
+        return Object.values(grouped); // Lista de objetos agrupados
+    } 
+
+    function getGraduadosPorLocalizacion(año, localizaciones, datos) {
+
+        //devuelvo las localizaciones cuyo año sea el que le paso 
+        return localizaciones.map(loc => {
+            const entry = datos.find(item =>
+                item.academicYear === año && item.location === loc
+            );
+            return entry ? entry.totalGraduated : 0;
+        });
     }
-
+        
     onMount(async () => {
-        resultadoSatisfaccion = await calculateAverageSatisfactionByCity();
 
-        // Obtener las ciudades y sus medias
-        const ciudades = resultadoSatisfaccion.map(item => item.ciudad);
-        const medias = resultadoSatisfaccion.map(item => item.averageSatisfaction);
+        resultadoGraduados  = await numGraduateByLocationandYear();
 
-        // Crear la gráfica
+        // Saco las localizaciones de la funcion de sacar los datos
+        const localizacion = [...new Set(resultadoGraduados.map(item => item.location))];
+
+        // Saco el numero de graduados en funcion de la localizacion y el año que le paso
+        const numGraduados2016_2017 = getGraduadosPorLocalizacion("2016-2017", localizacion, resultadoGraduados);
+        const numGraduados2017_18 = getGraduadosPorLocalizacion("2017-2018", localizacion, resultadoGraduados);
+        const numGraduados2018_19 = getGraduadosPorLocalizacion("2018-2019", localizacion, resultadoGraduados);
+
         // @ts-ignore
         Highcharts.chart('container', {
-            chart: {
-                type: 'bar', // Cambiar a gráfico de barras
-                styledMode: true
-            },
+
+        chart: {
+            type: 'column',
+            styledMode: true
+        },
+
+        title: {
+            text: 'Numero de graduados por provincia en cada año'
+        },
+        subtitle: {
+        text: 'Grafico de Highcharts (Styled mode column)'  
+        },
+
+        xAxis: {
+            categories: localizacion
+        },
+
+        yAxis: [{ // Primary axis
+            className: 'highcharts-color-0',
             title: {
-                text: 'Media de satisfacción total por ciudad'
-            },
-            xAxis: {
-                categories: ciudades, // Ciudades en el eje Y
-                title: {
-                    text: 'Ciudades'
-                }
-            },
-            yAxis: {
-                min: 0,
-                max: 10, // Rango de 0 a 10
-                title: {
-                    text: 'Media de satisfacción total'
-                }
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: 5
-                }
-            },
-            series: [{
-                name: 'Media de satisfacción',
-                data: medias, // Medias de satisfacción
-                tooltip: {
-                    valueSuffix: ' puntos'
-                }
-            }]
+                text: 'Numero de graduados'
+            }
+        }, { // Secondary axis
+            className: 'highcharts-color-1',
+            opposite: true,
+            title: {
+                text: 'Años'
+            }
+        }],
+
+        plotOptions: {
+            column: {
+                borderRadius: 5
+            }
+        },
+
+        series: [{
+            name: '2016-2017',
+            data: numGraduados2016_2017,
+            tooltip: {
+                valueSuffix: ' personas'
+            }
+        }, {
+            name: '2017-2018',
+            data: numGraduados2017_18,
+            yAxis: 1
+        }, {
+            name: '2018-2019',
+            data: numGraduados2018_19,
+            yAxis: 1
+        }]
+
         });
+            
     });
+    
 </script>
+
 
 <figure class="highcharts-figure">
     <div id="container"></div>
