@@ -73,19 +73,16 @@ const university_academic_performance = [
     function loadBackendPabloV1(app){
         
     
-
+        //GET TODO
         app.get(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("--------------------------------------------------------------------")
             const url = `/university-academic-performance?${new URLSearchParams(request.query).toString()}`;
             console.log("NEW GET ", url);
             
-        
-            // Extraer los parámetros de búsqueda
             let {
                 degree, location, dropoutFirstCourse, efficiencyRate,dropoutSecondCourse, successRate, dropoutThirdCourse, dropoutsThirdCourse, progressNormalized, dropoutsFirstCourse, performanceRate, cohortStudents, dropoutsSecondCourse, dropoutRate, graduationRate, academicYear
-             } = request.query;
+               } = request.query
         
-            // Crear el filtro dinámicamente  
             let query = {};
         
             if (degree !== undefined) query.degree = new RegExp("^" + degree + "$", "i");
@@ -105,21 +102,10 @@ const university_academic_performance = [
             if (graduationRate !== undefined) query.graduationRate = Number(graduationRate);
             if (cohortStudents !== undefined) query.cohortStudents = Number(cohortStudents);
         
-            university_academic_performance_db.find(query).sort(sortOptions).exec((err, data) => {
+            university_academic_performance_db.find(query).exec((err, data) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
                 }
-        
-                // Aplicar paginación si se requiere
-                if (offset !== undefined) {
-                    data = data.slice(Number(offset));
-                }
-        
-                if (limit !== undefined) {
-                    data = data.slice(0, Number(limit));
-                }
-        
-                // Limpiar los documentos (_id)
                 const cleaned = data.map(({ _id, ...rest }) => rest);
         
                 return response.status(200).json(cleaned);
@@ -162,7 +148,6 @@ const university_academic_performance = [
             console.log("--------------------------------------------------------------------")
             console.log("NEW GET /university-academic-performance/loadInitialData");
         
-            // Verificar si la base de datos ya tiene datos
             university_academic_performance_db.count({}, (err, count) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
@@ -174,8 +159,6 @@ const university_academic_performance = [
                         if (err) {
                             return response.status(500).json({ error: "Database error" });
                         }
-        
-                        // Limpiar el campo _id antes de enviarlo al cliente
                         const cleanDocs = newDocs.map(doc => {
                             const { _id, ...rest } = doc;
                             return rest;
@@ -192,7 +175,6 @@ const university_academic_performance = [
                 }
             });
         });
-
         
         
 
@@ -205,7 +187,6 @@ const university_academic_performance = [
 
             const body = request.body;
             console.log("EL BODY ES ", body.degree )
-            // Verificar si algún campo obligatorio está vacío o no definido
             if ([
                 body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
                 body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
@@ -215,8 +196,7 @@ const university_academic_performance = [
             ].some(value => value === undefined || value === null)) {
                 return response.status(400).json({ error: "All fields needs a value" });
             }
-            
-            // Verificar si el registro ya existe
+
             university_academic_performance_db.findOne({degree: body.degree, academicYear: body.academicYear, location: body.location }, (err, existingRecord) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
@@ -226,7 +206,6 @@ const university_academic_performance = [
                     return response.status(409).json({ error: "Record already exists" });
                 }
         
-                // Insertar el nuevo registro en la base de datos
                 university_academic_performance_db.insert(body, (err, newDoc) => {
                     if (err) {
                         return response.status(500).json({ error: "Database error" });
@@ -281,8 +260,6 @@ const university_academic_performance = [
             {
                 return response.status(400).json({error: "All fields needs a value"});
             }
-        
-            // Buscar y actualizar el registro en la base de datos
             university_academic_performance_db.update({ degree, location, academicYear },  {$set: body},(err, numReplaced) => {
                     if (err) {
                         return response.status(500).json({ error: "Database error" });
@@ -355,6 +332,7 @@ const university_academic_performance = [
     
         });
 
+        //DOCUMENTACION POSTMAN 
 
         app.get(BASE_API+"/university-academic-performance/docs",(request,response)=>{
             console.log("--------------------------------------------------------------------")
