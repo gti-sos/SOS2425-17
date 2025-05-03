@@ -132,7 +132,6 @@
             result = JSON.stringify(data,null,2);
 
             myData = data;
-            console.log(`Response received:\n${JSON.stringify(myData,null,2)}`);
 
         } catch (error){
             console.log(`ERROR:  GET from ${API}: ${error}`);

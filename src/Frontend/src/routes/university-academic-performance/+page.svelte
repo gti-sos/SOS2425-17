@@ -79,7 +79,6 @@
             lastSearch=ruta_api
             successMessage = "Datos cargados con éxito.";
             newTimeOut= newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
-            console.log("response received:\n" + output);
         } catch (error) {
             errorMessage = "No se han podido cargar correctamente los datos.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
@@ -125,8 +124,6 @@ async function getOne(params = {}) {
     await stopTimer();
 
     if (params.degree != null && params.location != null && params.academicYear != null){
-        console.log("la ruta es ",ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear)
-
         try {
             const url=ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear
             const res = await fetch(url, { method: "GET" });
@@ -141,7 +138,6 @@ async function getOne(params = {}) {
             lastSearch=url;
             successMessage = "El registro fue filtrado con éxito.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-            console.log("Response received:\n",output);
         }
         catch (error) {
              errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
@@ -153,8 +149,6 @@ async function getOne(params = {}) {
         try {
             const filteredParams = Object.fromEntries(
             Object.entries(params).filter(([_, value]) => value !== undefined && value !==null));
-
-            console.log("PARAMETROS FILRADOS",filteredParams)
             const queryString = new URLSearchParams(filteredParams).toString();
             const url = ruta_api + "?" + queryString;
             const res = await fetch(url, { method: "GET" });
@@ -171,7 +165,6 @@ async function getOne(params = {}) {
                     lastSearch=url;
                     successMessage = "Los datos fueron filtrados con éxito.";
                     newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
-                    console.log("Response received:\n",output);
                 }
             
         } catch (error) {
@@ -216,8 +209,7 @@ async function createUniversityAcademicPerformance() {
             successMessage = "Nuevo registro creado con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
             output=JSON.stringify(newRecord)
-            console.log("Response recived:\n",output)
-            await checkSearch();
+            checkSearch();
 
         } else if (res.status === 409) {
              errorMessage = "Ya existe un registro con el mismo Grado, Ciudad y Año académico." ;
@@ -273,8 +265,7 @@ async function updateUniversityAcademicPerformance() {
         });
 
         if (res.status === 200) {
-            console.log("Response recived: \n",JSON.stringify(updatedRecord))
-            await checkSearch();
+            checkSearch();
             successMessage = "Registro actualizado con éxito."; 
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
 
@@ -308,11 +299,8 @@ async function deleteAll() {
     try {
         const res = await fetch(ruta_api, { method: "DELETE" });
 
-        console.log("Status Code:", res.status);
-
         if (res.status === 200) {
             const responseBody = await res.json(); 
-            console.log("Response recived\n",responseBody);
             await(getUniversityAcademicPerformance());  
             successMessage = "Se han Borrado los registros con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
@@ -340,7 +328,6 @@ async function deleteOne(degree, location, academicYear){
         await stopTimer();
         
         try {
-            console.log("NEW DELETE /", ruta_api + "/" + degree + "/" + location + "/" + academicYear);
             const res = await fetch(`${ruta_api}/${encodeURIComponent(degree)}/${encodeURIComponent(location)}/${encodeURIComponent(academicYear)}`, {method: "DELETE"});
             status = res.status;
 
