@@ -50,10 +50,8 @@
             result = JSON.stringify(data,null,2);
 
             myData = data;
-<<<<<<< HEAD
+
             //console.log(`Response received:\n${JSON.stringify(myData,null,2)}`);
-=======
->>>>>>> e37ae83029b4f0ff75188dc49f8fd87cbbb65fdc
 
         } catch (error){
             console.log(`ERROR:  GET from ${API}: ${error}`);
