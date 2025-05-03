@@ -203,6 +203,8 @@
             <a href="/university-demands/vistas">Vista university-demands</a>
             <a href="/students_satisfaction/vistas">Vista students-satisfaction</a>
             <a href="/university-academic-performance/vistas">Vista university-academic-performance</a>
+            <a href="/analytics">Grafica común</a>
+
         </div>
     {/if}
 </div>

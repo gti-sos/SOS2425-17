@@ -294,6 +294,7 @@ async function updateUniversityAcademicPerformance() {
          errorMessage = "Ha ocurrido un error desconocido." ;
         newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
     }
+    
 }
 
 

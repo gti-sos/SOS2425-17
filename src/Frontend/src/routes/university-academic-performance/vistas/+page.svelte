@@ -161,8 +161,8 @@
   text: "Gráfico de Highcharts (3D Donut Chart)",
   style: {
     fontFamily: 'Georgia',
-    fontSize: '11px',        // Asegúrate de incluir las unidades
-    fontWeight: '200'        // 'normal' o valores numéricos como '200'
+    fontSize: '11px',  
+    fontWeight: '200'
   }
 },
         plotOptions: {

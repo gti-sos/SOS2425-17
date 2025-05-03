@@ -141,14 +141,17 @@
 
 
     async function numGraduateByLocationandYear() {
-        await getData(); // Asegura que myData esté poblado
+        await getData(); // Cargo los datos
 
         const grouped = {};
 
         for (const entry of myData) {
+            //Pngo los parametros que quiero agrupar 
             const { location, academicYear, graduated } = entry;
+            //digo que la clave es la localizacion y el año academico
             const key = `${location}__${academicYear}`;
 
+            //Si no existe la clave , pongo que sea 0 
             if (!grouped[key]) {
                 grouped[key] = {
                     location,
@@ -156,17 +159,19 @@
                     totalGraduated: 0
                 };
             }
-
+            //Si exista la clave entonces le sume los graduados
             grouped[key].totalGraduated += parseFloat(graduated) || 0;
         }
 
         return Object.values(grouped); // Lista de objetos agrupados
     } 
 
-    function getGraduadosPorLocalizacion(anio, localizaciones, datos) {
+    function getGraduadosPorLocalizacion(año, localizaciones, datos) {
+
+        //devuelvo las localizaciones cuyo año sea el que le paso 
         return localizaciones.map(loc => {
             const entry = datos.find(item =>
-                item.academicYear === anio && item.location === loc
+                item.academicYear === año && item.location === loc
             );
             return entry ? entry.totalGraduated : 0;
         });
@@ -176,11 +181,10 @@
 
         resultadoGraduados  = await numGraduateByLocationandYear();
 
-        // Extraer todas las provincias únicas
+        // Saco las localizaciones de la funcion de sacar los datos
         const localizacion = [...new Set(resultadoGraduados.map(item => item.location))];
-        console.log(localizacion)
 
-        // Obtener datos por año para cada provincia en el mismo orden
+        // Saco el numero de graduados en funcion de la localizacion y el año que le paso
         const numGraduados2016_2017 = getGraduadosPorLocalizacion("2016-2017", localizacion, resultadoGraduados);
         const numGraduados2017_18 = getGraduadosPorLocalizacion("2017-2018", localizacion, resultadoGraduados);
         const numGraduados2018_19 = getGraduadosPorLocalizacion("2018-2019", localizacion, resultadoGraduados);
@@ -195,6 +199,9 @@
 
         title: {
             text: 'Numero de graduados por provincia en cada año'
+        },
+        subtitle: {
+        text: 'Grafico de Highcharts (Styled mode column)'  
         },
 
         xAxis: {
