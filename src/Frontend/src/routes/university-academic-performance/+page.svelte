@@ -79,7 +79,6 @@
             lastSearch=ruta_api
             successMessage = "Datos cargados con éxito.";
             newTimeOut= newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
-            console.log("response received:\n" + output);
         } catch (error) {
             errorMessage = "No se han podido cargar correctamente los datos.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
@@ -125,8 +124,6 @@ async function getOne(params = {}) {
     await stopTimer();
 
     if (params.degree != null && params.location != null && params.academicYear != null){
-        console.log("la ruta es ",ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear)
-
         try {
             const url=ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear
             const res = await fetch(url, { method: "GET" });
@@ -141,7 +138,6 @@ async function getOne(params = {}) {
             lastSearch=url;
             successMessage = "El registro fue filtrado con éxito.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-            console.log("Response received:\n",output);
         }
         catch (error) {
              errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
@@ -153,8 +149,6 @@ async function getOne(params = {}) {
         try {
             const filteredParams = Object.fromEntries(
             Object.entries(params).filter(([_, value]) => value !== undefined && value !==null));
-
-            console.log("PARAMETROS FILRADOS",filteredParams)
             const queryString = new URLSearchParams(filteredParams).toString();
             const url = ruta_api + "?" + queryString;
             const res = await fetch(url, { method: "GET" });
@@ -171,7 +165,6 @@ async function getOne(params = {}) {
                     lastSearch=url;
                     successMessage = "Los datos fueron filtrados con éxito.";
                     newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
-                    console.log("Response received:\n",output);
                 }
             
         } catch (error) {
@@ -216,8 +209,7 @@ async function createUniversityAcademicPerformance() {
             successMessage = "Nuevo registro creado con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
             output=JSON.stringify(newRecord)
-            console.log("Response recived:\n",output)
-            await checkSearch();
+            checkSearch();
 
         } else if (res.status === 409) {
              errorMessage = "Ya existe un registro con el mismo Grado, Ciudad y Año académico." ;
@@ -273,8 +265,7 @@ async function updateUniversityAcademicPerformance() {
         });
 
         if (res.status === 200) {
-            console.log("Response recived: \n",JSON.stringify(updatedRecord))
-            await checkSearch();
+            checkSearch();
             successMessage = "Registro actualizado con éxito."; 
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
 
@@ -300,7 +291,6 @@ async function updateUniversityAcademicPerformance() {
 
 
 //Borro Todo
-// Función para borrar todos los registros
 async function deleteAll() {
     successMessage = "";
     errorMessage = "";
@@ -309,11 +299,8 @@ async function deleteAll() {
     try {
         const res = await fetch(ruta_api, { method: "DELETE" });
 
-        console.log("Status Code:", res.status);
-
         if (res.status === 200) {
             const responseBody = await res.json(); 
-            console.log("Response recived\n",responseBody);
             await(getUniversityAcademicPerformance());  
             successMessage = "Se han Borrado los registros con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
@@ -341,7 +328,6 @@ async function deleteOne(degree, location, academicYear){
         await stopTimer();
         
         try {
-            console.log("NEW DELETE /", ruta_api + "/" + degree + "/" + location + "/" + academicYear);
             const res = await fetch(`${ruta_api}/${encodeURIComponent(degree)}/${encodeURIComponent(location)}/${encodeURIComponent(academicYear)}`, {method: "DELETE"});
             status = res.status;
 
@@ -368,6 +354,8 @@ async function deleteOne(degree, location, academicYear){
         }
     }
 
+    //CREA PARAMS
+
     function handleActualizar() {
     const params = {
       degree: UniversityAcademicPerformanceDegree,
@@ -393,12 +381,14 @@ async function deleteOne(degree, location, academicYear){
     lastParams=params;
   }
 
+//CAMBIA COLOR TABLA
+
   function getcolorClass(index) {
     return index % 2 === 0 ? "color-green" : "color-ligthgreen";
   }
 
 
-
+//ORDENA ARRIBA/ABAJO
 
   function handleClick(column) {
     if (sortColumn === column) {
@@ -412,7 +402,7 @@ async function deleteOne(degree, location, academicYear){
 
 
 
-
+//ÚLTIMA BÚSQUEDA
   
     function checkSearch(){
         console.log("La última busqueda fue a  ",lastSearch)
@@ -436,7 +426,7 @@ async function deleteOne(degree, location, academicYear){
 
 </script>
 
-
+<!--MUESTRA LOS MENSAJES -->
 
 {#if successMessage}
 <div class="sucess-message">{successMessage}</div>
@@ -445,18 +435,21 @@ async function deleteOne(degree, location, academicYear){
 <div class="error-message">{errorMessage}</div>
 {/if}
 
+<!--BOTON LOAD INITIAL DATA -->
 
-<div class="container">
+<div class="container-btns">
     <button class="btn-purple" on:click={getLoadInitialData}>
         Cargar datos iniciales
     </button>
 
+<!--BOTON GET TODO -->
 
     <button class="btn-green" on:click={getUniversityAcademicPerformance}>
         Mira datos
     </button>
 
-<!-- Botón que muestra/oculta el formulario -->
+<!--BOTON FILTRADO -->
+
 <button class="btn-green" on:click={() => {UniversityAcademicPerformanceDropoutThirdCourse=null;UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;toYear=null,fromYear=null;
  showfilterForm = !showfilterForm
 }}>
@@ -465,7 +458,6 @@ async function deleteOne(degree, location, academicYear){
   
   {#if showfilterForm}
     <div class="formulario">
-      <!-- Tus inputs bind:value aquí... -->
       <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
       <input placeholder="Localización" bind:value={UniversityAcademicPerformanceLocation} />
       <input placeholder="Año académico" bind:value={UniversityAcademicPerformanceAcademicYear} />
@@ -486,20 +478,18 @@ async function deleteOne(degree, location, academicYear){
         <input class=inputs-years placeholder="Desde el año" bind:value={fromYear} />
         <input class=inputs-years placeholder="Hasta el año" bind:value={toYear} />
     </div>
-      <!-- 4) Botón que llama a handleActualizar -->
       <button class="btn-green" on:click={() =>{showfilterForm=false;handleActualizar()}}>
         Filtrar
       </button>
     </div>
   {/if}
 
-    <!-- Botón para mostrar el formulario -->
+   <!-- BOTON POST-->
     <button class="btn-yellow" on:click={() => {UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
     showCreateForm = !showCreateForm}}>
         {showCreateForm ? "Cancelar" : "Crear nuevo registro"}
     </button>
-    
-    <!-- Formulario -->
+
     {#if showCreateForm}
         <div class="formulario">
             <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
@@ -526,13 +516,13 @@ async function deleteOne(degree, location, academicYear){
         </div>
     {/if}
 
-<!-- Botón para mostrar/ocultar el formulario de edición -->
+<!-- BOTON UPDATE -->
 <button class="btn-blue" on:click={() =>{UniversityAcademicPerformanceDropoutsFirstCourse=null;UniversityAcademicPerformanceDegree=null;UniversityAcademicPerformanceLocation=null;UniversityAcademicPerformanceDropoutSecondCourse=null;UniversityAcademicPerformanceEfficiencyRate=null;UniversityAcademicPerformanceSuccessRate=null;UniversityAcademicPerformanceDropoutFirstCourse=null;UniversityAcademicPerformanceDropoutsThirdCourse=null; UniversityAcademicPerformanceProgressNormalized=null;UniversityAcademicPerformancePerformanceRate=null;UniversityAcademicPerformanceCohortStudents=null;UniversityAcademicPerformanceDropoutsSecondCourse=null;UniversityAcademicPerformanceDropoutRate=null;UniversityAcademicPerformanceGraduationRate=null;UniversityAcademicPerformanceAcademicYear=null;
      showEditForm = !showEditForm}}>
     {showEditForm ? "Cancelar" : "Editar registro"}
 </button>
 
-<!-- Formulario de edición -->
+
 {#if showEditForm}
     <div class="formulario">
         <input placeholder="Grado" bind:value={UniversityAcademicPerformanceDegree} />
@@ -558,23 +548,18 @@ async function deleteOne(degree, location, academicYear){
     </div>
 {/if}
 
-
-
-
-
-
+<!--BOTON BORRA TODO -->
 
     <button class="btn-red" on:click={deleteAll}>
         Borra todo
     </button>
 
-<!-- Botón para mostrar/ocultar el formulario de borrado -->
+<!-- BOTON BORRA UNO-->
 <button class="btn-red" on:click={() => {deleteDegree="";deleteLocation="";deleteAcademiYear="";
     showDeleteForm = !showDeleteForm}}>
     {showDeleteForm ? "Cancelar" : "Borrar registro"}
 </button>
 
-<!-- Formulario para borrar demanda específica -->
 {#if showDeleteForm}
     <div class="formulario">
         <input placeholder="Grado" bind:value={deleteDegree} />
@@ -591,6 +576,7 @@ async function deleteOne(degree, location, academicYear){
 
 </div>
 
+<!--TABLA  -->
 
 <Table class="table">
     <tbody>
@@ -613,7 +599,6 @@ async function deleteOne(degree, location, academicYear){
             <th class="title" on:click={() => handleClick('graduationRate')}>Tasa de graduacion</th>
         </tr>
         
-        <!-- Esto ejecuta tantos tr como contacts haya -->
         {#each UniversityAcademicPerformance as universityD,index}
             <tr class={getcolorClass(index)}>
                 <td class="transparent">
@@ -684,6 +669,8 @@ async function deleteOne(degree, location, academicYear){
   border: 2px solid black;
 }
 
+/*  CSS MENSAJE DE ERROR*/ 
+
 .error-message{
   background-color: #ffe5e5;
   color: #d8000c;
@@ -695,6 +682,8 @@ async function deleteOne(degree, location, academicYear){
   margin: 12px 0;
   box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
 }
+
+/*  CSS MENSAJE DE ÉXITO*/ 
 
 .sucess-message{
   background-color: #ffe5e5;
@@ -708,39 +697,50 @@ async function deleteOne(degree, location, academicYear){
   box-shadow: 0 2px 4px rgba(216, 0, 12, 0.1);
 }
 
+/*  CSS INPUTS FILTRO DIFERENTE */ 
+
 .inputs-years{
-  width: 100px;           /* Ancho reducido */
-  padding: 4px 8px;       /* Relleno ajustado */
-  font-size: 12px;        /* Tamaño de fuente pequeño */
-  line-height: 1.2;        /* Altura de línea compacta */
-  border: 1px solid #ccc; /* Borde ligero */
-  border-radius: 4px;     /* Esquinas redondeadas */
-  box-sizing: border-box; /* Incluye padding en el ancho total */
+  width: 100px;           
+  padding: 4px 8px;       
+  font-size: 12px;        
+  line-height: 1.2;        
+  border: 1px solid #ccc; 
+  border-radius: 4px;     
+  box-sizing: border-box; 
 }
 
-.container{
-    margin-bottom: 5px; /* Espacio entre los botones y la tabla */
+/*  CSS CONTENEDOR DE LOS BOTONES */ 
+
+.container-btns{
+    margin-bottom: 5px; 
     padding: 10px;
     display: flex;
-    justify-content: center;  /* Centra horizontalmente */
-    align-items: center;      /* Centra verticalmente si hace falta */
-    flex-wrap: wrap;          /* Por si hay muchos botones */
-    gap: 19px;                /* Espacio entre botones */
+    justify-content: center;  
+    align-items: center;      
+    flex-wrap: wrap;         
+    gap: 19px;                
 }
 
+/*  CSS TABLA*/ 
+
 .table{
-    border: 2px solid black;   /* Opcional: borde superior para la celda de los botones */
+    border: 2px solid black;   
     width: 100%;
 }
 
+/*  CSS CONTENEDOR DE LOS BOTONES EN LA TABLA*/ 
+
 .btns-table{
   display: flex;
-  flex-direction: column; /* Coloca los botones en columna */
-  gap: 8px;                /* Espacio entre los botones */
-  align-items: center;     /* Centra horizontalmente */
+  flex-direction: column; 
+  gap: 8px;                
+  align-items: center; 
   margin-top: 8px;
   font-family: "Merriweather", serif;
 }
+
+/*  CSS CONTENEDOR DE LOS TITULOS DE LA GRAFICA */ 
+
 .title{
     background-color: orange;
     border: 2px solid black;
@@ -753,7 +753,7 @@ async function deleteOne(degree, location, academicYear){
     background-color: #ddd;
 }
 
-
+/*  CSS DATOS TABLA */ 
 
 .transparent{
     background-color: transparent;
@@ -762,49 +762,63 @@ async function deleteOne(degree, location, academicYear){
     font-family: "Playfair Display", serif;
 }
 
+/*  CSS COLOR variable 1 */ 
+
 .color-green {
-    background-color: #57fda2; /* gris clarito */
+    background-color: #57fda2; 
     
 }
 
+/*  CSS COLOR variable 2 */ 
+
 .color-ligthgreen {
-    background-color: #bde844; /* blanco */
+    background-color: #bde844;
 }
+
+/*  CSS BOTONES MIRAR Y FILTRAR */ 
 
 .btn-green {
-    background-color: #4CAF50; /* verde */
+    background-color: #4CAF50; 
     color: white;
     cursor: pointer;
     text-align: center;
     font-family: "Merriweather", serif;
 }
+
+/*  CSS BOTONES BORRAR */ 
 
 .btn-red {
-    background-color: #f44336; /* rojo */
+    background-color: #f44336; 
     color: white;
     cursor: pointer;
     text-align: center;
     font-family: "Merriweather", serif;
 }
+
+/*  CSS BOTON POST */ 
 
 .btn-yellow {
-    background-color: 	#ebca60; /* amarillo */
+    background-color: 	#ebca60;
     color: white;
     cursor: pointer;
     text-align: center;
     font-family: "Merriweather", serif;
 }
+
+/*  CSS BOTON UPDATE*/ 
 
 .btn-blue {
-    background-color: #2196F3; /* azul */
+    background-color: #2196F3; 
     color: white;
     cursor: pointer;
     text-align: center;
     font-family: "Merriweather", serif;
 }
 
+/*  CSS BOTON LOADINITIAL DATA*/
+
 .btn-purple {
-    background-color: #950d7e; /* azul */
+    background-color: #950d7e; 
     color: white;
     cursor: pointer;
     text-align: center;

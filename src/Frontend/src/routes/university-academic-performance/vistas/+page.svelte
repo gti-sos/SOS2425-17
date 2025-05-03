@@ -10,8 +10,6 @@
     let canvasEl;
     let data = [];
     let dropoutByLocation = [];
-  
-    // Etiquetas que usaremos para los promedios
     const labels = [
      "efficiencyRate", "successRate", "performanceRate", "cohortStudents", "dropoutRate", "graduationRate"
     ];
@@ -19,52 +17,71 @@
     const translate_labels = ["Tasa de eficiencia","Tasa de exito","Tasa de rendimiento","Estudiantes Cohorte (N)","Tasa de abandono","Tasa de graduacion"
     ];
   
-    // Procesa los datos por tipo de grado y devuelve promedios
-    function procesarDatosPorTipo(data) {
-      const resultado = {
-        ingenierias: [],
-        otros: []
-      };
-  
-      for (const item of data) {
-        if (item.degree.toUpperCase().includes("INGENIERÍA")) {
-          resultado.ingenierias.push(item);
-        } else {
-          resultado.otros.push(item);
-        }
-      }
-  
-      function calcularPromedio(lista) {
-  if (lista.length === 0) return [];
+    //GET DATA
 
+async function getUniversityAcademicPerformance() {
+
+  try{
+      await fetch("/api/v2/university-academic-performance/loadInitialData");
+      const response = await fetch("/api/v2/university-academic-performance");
+      const json = await response.json();
+      return json  
+  }catch (error){
+      console.log("ERROR");
+  }
+}
+
+  //CALCULAR PROMEDIOS PARA INGENIERIAS
+
+function averageByIngeniery(lista, labels) {
   const suma = {};
-  const keysNumericas = labels;
 
   for (const item of lista) {
-    for (const key of keysNumericas) {
+    for (const key of labels) {
       suma[key] = (suma[key] || 0) + (item[key] || 0);
     }
   }
 
-  const resultado = keysNumericas.map(key => [
+  const resultado = labels.map(key => [
     key,
     +(suma[key] / lista.length).toFixed(2)
   ]);
-  console.log(resultado)
+
   return resultado;
 }
-  
-      let promedioIngenierias = calcularPromedio(resultado.ingenierias);
-      let promedioOtros = calcularPromedio(resultado.otros);
-      console.log("INGENIERIAS", promedioIngenierias);
-      console.log("OTROS", promedioOtros);
-      return {
-  promedioIngenierias,
-  promedioOtros
-};
+    //PROCESAR DATOS PARA INGENIERIAS
+
+
+function dataByIngeniery(data, labels) {
+
+  const resultado = {
+    ingenierias: [],
+    otros: []
+  };
+
+  for (const item of data) {
+    if (item.degree.toUpperCase().includes("INGENIERÍA")) {
+      resultado.ingenierias.push(item);
+    } else {
+      resultado.otros.push(item);
+    }
+  }
+
+  const promedioIngenierias = averageByIngeniery(resultado.ingenierias, labels);
+  const promedioOtros = averageByIngeniery(resultado.otros, labels);
+
+  return {
+    promedioIngenierias,
+    promedioOtros
+  };
 }
+ 
+  //CALCULA ABANDONO POR CIUDAD (DONUT)
+
+
     function calculateDropoutRateByLocation(allData) {
       const grouped = {};
+
   
       for (const entry of allData) {
         const { location, dropoutRate } = entry;
@@ -81,19 +98,13 @@
       ]);
     }
   
-    async function getUniversityAcademicPerformance() {
-      console.log("Cargado de datos...");
-      await fetch("/api/v2/university-academic-performance/loadInitialData");
-      const response = await fetch("/api/v2/university-academic-performance");
-      const json = await response.json();
-      data = json;
-      return json;
-    }
-  
     onMount(async () => {
-      const loadedData = await getUniversityAcademicPerformance();
-      dropoutByLocation = calculateDropoutRateByLocation(loadedData);
-      const { promedioIngenierias, promedioOtros } = procesarDatosPorTipo(loadedData);
+      data=await getUniversityAcademicPerformance();
+      dropoutByLocation = calculateDropoutRateByLocation(data);
+      const { promedioIngenierias, promedioOtros } = dataByIngeniery(data,labels);
+
+
+      //CHAR LOL
   
       const chartConfig = {
         type: 'radar',
@@ -121,28 +132,29 @@
       display: true,
       text: 'Comparación de Indicadores Académicos',
       font: {
-        size: 25,       // Tamaño de letra más grande
-        weight: 'bold'  // Negrita
+        size: 25,       
+        weight: 'bold'  
       },
-      color: '#000'      // (opcional) Color del texto
+      color: '#000'      
           },
           subtitle: {
           display: true,
           text: "Gráfico de Angular_Chart (Radar-Chart)",
           font: {
         family: 'Georgia',
-        size: 11,           // Tamaño de letra más pequeño
-        weight: '200'    // Opcional: normal, si no quieres que sea negrita
+        size: 11,           
+        weight: '200'    
       },
       padding: {
-        bottom: 15          // Espacio debajo del subtítulo
+        bottom: 15          
       }
-          
-
         }
         }
       }
     };
+
+
+    //CHAR DONUT
   
       new Chart(canvasEl.getContext('2d'), chartConfig);
   
@@ -198,7 +210,7 @@
   .chart-container {
     width: 400px;
     height: 400px;
-    margin: 2rem auto 0 auto; /* solo centrado horizontal */
+    margin: 2rem auto 0 auto;
     position: relative;
   }
   

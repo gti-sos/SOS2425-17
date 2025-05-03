@@ -304,6 +304,7 @@ function openEditForm(sat) {
         newSatisfaccion_total = sat.satisfaccion_total;
         newSat_estudiantes = sat.sat_estudiantes;
         newSatisfaccion_pdi = sat.satisfaccion_pdi;
+        newAñoAcademico = sat.año_academico; 
     showUpdateForm = true;
 }
 

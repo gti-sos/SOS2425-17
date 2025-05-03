@@ -141,7 +141,6 @@
             result = JSON.stringify(data,null,2);
 
             dataAle = data;
-            //console.log(`Response received:\n${JSON.stringify(dataAle,null,2)}`);
 
         } catch (error){
             console.log(`ERROR:  GET from ${API+"/students_satisfaction"}: ${error}`);
@@ -158,7 +157,6 @@
         degree: item.degree,
         graduated: item.graduated
         }));
-        //console.log(dataJav);
         });   
     }
 
@@ -175,7 +173,6 @@
         degree: item.degree,
         dropoutRate: item.dropoutRate
         }));
-        //console.log(dataPab);
         });   
     }
 
@@ -224,17 +221,24 @@
             mapa.get(item.degree).graduated = item.graduated;
         });
         data = Array.from(mapa.entries())
+        console.log("1")
         console.log(Array.from(mapa.values()));
+        console.log("2")
             
         });
     }
 
-    console.log(combinarDatos());
-
     onMount(async () => {
         
         await combinarDatos();
+<<<<<<< HEAD
         // @ts-ignore
+=======
+        console.log("esto es data",data)
+        console.log(data.map(item => item[1].satisfaccion_total))
+        console.log("1")
+        console.log("1")
+>>>>>>> e37ae83029b4f0ff75188dc49f8fd87cbbb65fdc
         Highcharts.chart('container', {
         chart: {
             type: 'column',
