@@ -150,14 +150,14 @@
     //Javier
 
     async function GraduatedByDegree(anio = "2016-2017",ciudad = "MÉRIDA") {
-        await getDataJavier().then(() => {
+        getDataJavier().then(() => {
         dataJav = dataJav
         .filter(item => item.academicYear === anio && item.location === ciudad)
         .map(item => ({
         degree: item.degree,
-        graduated: item.graduated
+        graduated: (item.graduated / ((item.over45 ?? 0) +(item.spanishFirst ?? 0) +(item.foreigners ?? 0)))*100
         }));
-        });   
+        });
     }
 
     //console.log(GraduatedByDegree());
@@ -184,7 +184,7 @@
         .filter(item => item.año_academico === anio && item.ciudad === ciudad)
         .map(item => ({
         carrera: item.carrera,
-        satisfaccion_total: item.satisfaccion_total
+        satisfaccion_total: item.satisfaccion_total *10
         }));
         //console.log(dataAle);
         });   
