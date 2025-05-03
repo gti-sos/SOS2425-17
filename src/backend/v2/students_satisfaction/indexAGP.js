@@ -6,6 +6,7 @@ let db = new dataStore();
 
 const students_satisfaction_data = [
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
+    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.59, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, año_academico: "2016-2017" },
     { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, año_academico: "2018-2019" },
@@ -65,10 +66,6 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
-
 ];
 
 function loadBackendAlejandroV2(app) {
