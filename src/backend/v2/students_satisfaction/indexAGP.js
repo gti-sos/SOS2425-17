@@ -5,16 +5,6 @@ const BASE_API = "/api/v2";
 let db = new dataStore();
 
 const students_satisfaction_data = [
-    { carrera: "GRADO EN MEDICINA", ciudad: "BADAJOZ", satisfaccion_total: 4.57, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58, año_academico: "2018-2019" },
-    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.61, sat_estudiantes: 7.46, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
-    { carrera: "GRADO EN DERECHO", ciudad: "CÁCERES", satisfaccion_total: 8.27, sat_estudiantes: 7.41, satisfaccion_pdi: 3.89, año_academico: "2018-2019" },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 4.57, sat_estudiantes: 5.6, satisfaccion_pdi: 4.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "BADAJOZ", satisfaccion_total: 7.75, sat_estudiantes: 6, satisfaccion_pdi: 3.77, año_academico: "2018-2019" },
-    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.55, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, año_academico: "2017-2018" },
-    { carrera: "GRADO EN INGENIERÍA ELECTRÓNICA Y AUTOMÁTICA", ciudad: "BADAJOZ", satisfaccion_total: 9, sat_estudiantes: 4.56, satisfaccion_pdi: 4.59, año_academico: "2016-2017" },
-    { carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.28, sat_estudiantes: 5.42, satisfaccion_pdi: 4.58, año_academico: "2018-2019" },
-    { carrera: "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS", ciudad: "CÁCERES", satisfaccion_total: 8.81, sat_estudiantes: 4.54, satisfaccion_pdi: 4.33, año_academico: "2016-2017" },
-    { carrera: "GRADO EN ENFERMERÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.58, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, año_academico: "2016-2017" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.59, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, año_academico: "2016-2017" },
@@ -72,9 +62,9 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 4.0, satisfaccion_pdi: 3.71, año_academico: "2018-2019" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 7.35, sat_estudiantes: 3.0, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 7.42, sat_estudiantes: 4.33, satisfaccion_pdi: 3.69, año_academico: "2016-2017" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DE LA INFORMACIÓN", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DE LA INFORMACIÓN", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DE LA INFORMACIÓN", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
 ];
 
 function loadBackendAlejandroV2(app) {
