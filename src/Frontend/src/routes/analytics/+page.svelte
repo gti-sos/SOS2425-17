@@ -231,14 +231,13 @@
     onMount(async () => {
         
         await combinarDatos();
-<<<<<<< HEAD
+
         // @ts-ignore
-=======
         console.log("esto es data",data)
         console.log(data.map(item => item[1].satisfaccion_total))
         console.log("1")
         console.log("1")
->>>>>>> e37ae83029b4f0ff75188dc49f8fd87cbbb65fdc
+
         Highcharts.chart('container', {
         chart: {
             type: 'column',
