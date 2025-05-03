@@ -45,8 +45,8 @@ test('Filter', async ({ page }) => {
 
   // Rellenar el filtro con la ciudad "BADAJOZ"
   await page.getByRole('textbox').nth(1).fill(testLocation);
-  await page.getByRole('textbox').nth(5).fill(testfrom);
-  await page.getByRole('textbox').nth(6).fill(testto);
+  await page.getByRole('textbox').nth(6).fill(testfrom);
+  await page.getByRole('textbox').nth(7).fill(testto);
 
 
   // Aplicar el filtro
@@ -128,6 +128,7 @@ test('Filter 404', async ({ page }) => {
       const tests1 = "1";
       const tests2 = "2";
       const tests3 = "3";
+      const testaño="2016-2017"
    
       await page.goto('http://localhost:16078/students_satisfaction');
    
@@ -141,6 +142,7 @@ test('Filter 404', async ({ page }) => {
       await page.getByRole('textbox').nth(2).fill(tests1);
       await page.getByRole('textbox').nth(3).fill(tests2);
       await page.getByRole('textbox').nth(4).fill(tests3);
+      await page.getByRole('textbox').nth(5).fill(testaño);
    
       // Crear entrada
       await page.getByRole('button', { name: 'Crear' }).click();
@@ -152,7 +154,8 @@ test('Filter 404', async ({ page }) => {
       await expect(demandRow).toContainText(testciudad);
       await expect(demandRow).toContainText(tests1);
       await expect(demandRow).toContainText(tests2);
-      await expect(demandRow).toContainText(tests3); // FIX: Este valor se mostraba en una celda diferente
+      await expect(demandRow).toContainText(tests3); 
+      await expect(demandRow).toContainText(testaño);// FIX: Este valor se mostraba en una celda diferente
    
       // Borrar la fila
       const deleteButton = demandRow.getByRole('button', { name: 'Borrar' });
@@ -210,6 +213,7 @@ test('Create ERROR 400', async ({ page }) => {
     const tests1 = "1";
     const tests2 = "2";
     const tests3 = "3";
+    const testaño = "2016-2017";
     const expectedMessage = "¡Esta demanda ya existe!";
  
     // Ir a la página principal
@@ -228,6 +232,7 @@ test('Create ERROR 400', async ({ page }) => {
     await page.getByRole('textbox').nth(2).fill(tests1);
     await page.getByRole('textbox').nth(3).fill(tests2);
     await page.getByRole('textbox').nth(4).fill(tests3);
+    await page.getByRole('textbox').nth(5).fill(testaño);
    
     // Pulsar el botón "Crear" para crear el primer recurso
     await page.getByRole('button', { name: 'Crear' }).click();
@@ -242,36 +247,39 @@ test('Create ERROR 400', async ({ page }) => {
 
 
 
-test('PUT ', async ({ page }) => {
-  // Datos que NO existen en la base de datos
-  const testciudad = "8fdfdf0";
-  const successMessage = page.getByText('¡Demanda actualizada con éxito!');
- 
- 
-  // Ir a la app
+test('PUT', async ({ page }) => {
+  // Datos de prueba
+  const testcarrera = "Ingeniería de Software";
+  const testciudad = "Sevilla";
+  const tests1 = "4";
+  const tests2 = "3.5";
+  const tests3 = "4.2";
+  const testaño = "2023-2024";
+  const successMessage = "¡Demanda actualizada con éxito!";
+
+  // Ir a la página principal
   await page.goto('http://localhost:16078/students_satisfaction');
- 
+
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
 
-
   // Ir al formulario de edición
-  //El first click es para que una vez dentro de la pagina pulse sobre el primer boton editar que encuentre
   await page.getByRole('button', { name: 'Editar' }).first().click();
 
-
-  // Rellenar el formulario con academicYear vacio para que me de error 400 de que falta rellenar un campo
-  await page.getByRole('textbox').nth(2).fill(testciudad);
-
+  // Rellenar el formulario
+  await page.getByPlaceholder('Ej: Medicina').fill(testcarrera);
+  await page.getByPlaceholder('Ej: Madrid').fill(testciudad);
+  await page.getByPlaceholder('Ej: 4').fill(tests1);
+  await page.getByPlaceholder('Ej: 5').fill(tests2);
+  await page.getByPlaceholder('Ej: 3').fill(tests3);
+  await page.getByPlaceholder('Ej: 2023').fill(testaño);
 
   // Pulsar el botón "Actualizar"
   await page.getByRole('button', { name: 'Actualizar' }).click();
 
-
-  // Esperar a que aparezca el mensaje de éxito (si lo tienes)
-  await expect(successMessage).toBeVisible({ timeout: 10000 });
-
-
+  // Verificar que aparece el mensaje de éxito
+  const successMessageLocator = page.locator(`text=${successMessage}`);
+  await expect(successMessageLocator).toBeVisible({ timeout: 10000 });
 });
 
 
@@ -282,6 +290,7 @@ test('PUT ERROR 404 ', async ({ page }) => {
   const tests1 = "";
   const tests2 = "";
   const tests3 = "";
+  const testaño = "";
  
 
 
@@ -307,6 +316,7 @@ test('PUT ERROR 404 ', async ({ page }) => {
   await page.getByRole('textbox').nth(2).fill(tests1);
   await page.getByRole('textbox').nth(3).fill(tests2);
   await page.getByRole('textbox').nth(4).fill(tests3);
+  await page.getByRole('textbox').nth(4).fill(testaño);
 
 
   // Pulsar el botón "Actualizar"
