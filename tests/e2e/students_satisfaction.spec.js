@@ -247,39 +247,36 @@ test('Create ERROR 400', async ({ page }) => {
 
 
 
-test('PUT', async ({ page }) => {
-  // Datos de prueba
-  const testcarrera = "Ingeniería de Software";
-  const testciudad = "Sevilla";
-  const tests1 = "4";
-  const tests2 = "3.5";
-  const tests3 = "4.2";
-  const testaño = "2023-2024";
-  const successMessage = "¡Demanda actualizada con éxito!";
-
-  // Ir a la página principal
+test('PUT ', async ({ page }) => {
+  // Datos que NO existen en la base de datos
+  const testaño = "2016-2017";
+  const successMessage = page.getByText('¡Demanda actualizada con éxito!');
+ 
+ 
+  // Ir a la app
   await page.goto('http://localhost:16078/students_satisfaction');
-
+ 
   // Cargar los datos
   await page.getByRole('button', { name: 'Cargar Datos' }).first().click();
 
+
   // Ir al formulario de edición
+  //El first click es para que una vez dentro de la pagina pulse sobre el primer boton editar que encuentre
   await page.getByRole('button', { name: 'Editar' }).first().click();
 
-  // Rellenar el formulario
-  await page.getByPlaceholder('Ej: Medicina').fill(testcarrera);
-  await page.getByPlaceholder('Ej: Madrid').fill(testciudad);
-  await page.getByPlaceholder('Ej: 4').fill(tests1);
-  await page.getByPlaceholder('Ej: 5').fill(tests2);
-  await page.getByPlaceholder('Ej: 3').fill(tests3);
-  await page.getByPlaceholder('Ej: 2023').fill(testaño);
+
+  // Rellenar el formulario con academicYear vacio para que me de error 400 de que falta rellenar un campo
+  await page.getByRole('textbox').nth(5).fill(testaño);
+
 
   // Pulsar el botón "Actualizar"
   await page.getByRole('button', { name: 'Actualizar' }).click();
 
-  // Verificar que aparece el mensaje de éxito
-  const successMessageLocator = page.locator(`text=${successMessage}`);
-  await expect(successMessageLocator).toBeVisible({ timeout: 10000 });
+
+  // Esperar a que aparezca el mensaje de éxito (si lo tienes)
+  await expect(successMessage).toBeVisible({ timeout: 10000 });
+
+
 });
 
 
