@@ -50,10 +50,45 @@ loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
+app.get('/tiktok-data', async (req, res) => {
+  const response = await fetch('https://tiktok-api23.p.rapidapi.com/api/user/followers?secUid=MS4wLjABAAAAqB08cUbXaDWqbD6MCga2RbGTuhfO2EsHayBYx08NDrN7IE3jQuRDNNN6YwyfH6_6&count=30&min', {
+    headers: {
+      'x-rapidapi-host': 'tiktok-api23.p.rapidapi.com',
+      'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
+    }
+  });
 
+  const data = await response.json();
+  res.json(data);
+});
+
+app.get('/onepiece-data', async (req, res) => {
+  const response = await fetch('https://one-piece2.p.rapidapi.com/api/get-character-list ', {
+    headers: {
+      'x-rapidapi-host': 'one-piece2.p.rapidapi.com',
+      'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
+    }
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
+
+app.get('/lol-data', async (req, res) => {
+  const response = await fetch('https://league-of-legends-esports1.p.rapidapi.com/team-statistics?tournamentId=1177 ', {
+    headers: {
+      'x-rapidapi-host': 'league-of-legends-esports1.p.rapidapi.com',
+      'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
+    }
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
 
 app.use(handler);
 
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
 }); //Esto es para usar el framework en ese puerto (poner un puerto alto)
+

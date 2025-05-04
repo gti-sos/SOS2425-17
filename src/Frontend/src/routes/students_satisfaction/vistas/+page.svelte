@@ -222,15 +222,19 @@
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </svelte:head>
 
+<!-- Gráfica 1: Highcharts -->
 <figure class="highcharts-figure">
     <div id="container"></div>
     <p class="highcharts-description">
-        Este gráfico muestra la media de satisfacción total, de estudiantes y de PDI por ciudad. El eje Y contiene las ciudades, y el eje X muestra las medias en un rango de 0 a 10.
+        **Gráfica de barras (Highcharts):** Esta gráfica muestra la media de satisfacción total, de estudiantes y de PDI por ciudad. El eje Y contiene las ciudades, y el eje X muestra las medias en un rango de 0 a 10.
     </p>
 </figure>
 
-<!-- Contenedor para la gráfica de amCharts -->
+<!-- Gráfica 2: amCharts -->
 <div id="chartdiv"></div>
+<p class="amcharts-description">
+    **Gráfica de dona (amCharts):** Esta gráfica muestra el porcentaje de satisfacción media por año académico, calculado en relación con el total de satisfacción media de todos los años.
+</p>
 
 <style>
     .highcharts-figure,
@@ -251,5 +255,10 @@
     #chartdiv {
         width: 100%;
         height: 500px;
+    }
+
+    .amcharts-description {
+        margin: 0.3rem 10px;
+        text-align: center;
     }
 </style>
