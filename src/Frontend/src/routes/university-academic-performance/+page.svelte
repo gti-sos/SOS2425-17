@@ -12,7 +12,7 @@
     let ruta_api = "/api/v2/university-academic-performance";
 
     let UniversityAcademicPerformance = [];
-    let UniversityAcademicPerformanceDegree;
+    let UniversityAcademicPerformanceDegree;console.log("15")
     let UniversityAcademicPerformanceLocation;
     let UniversityAcademicPerformanceDropoutSecondCourse;
     let UniversityAcademicPerformanceEfficiencyRate;
@@ -29,7 +29,7 @@
     let UniversityAcademicPerformanceGraduationRate;
     let UniversityAcademicPerformanceAcademicYear;
     let output = "";
-    let status = "";
+    let status = "";console.log("32")
     let sortDirection;
     let sortColumn;
     let lastSearch;
@@ -47,7 +47,7 @@
     let successMessage = "";
     let errorMessage = "";
     let deleteDegree="";
-    let deleteLocation="";
+    let deleteLocation="";console.log(50)
     let deleteAcademiYear="";
     let fromYear;
     let toYear;
@@ -58,14 +58,14 @@
 
     //CARGAR DATOS AL INICIAR LA PÁGINA
 
-    onMount(async () => {
+    onMount(async () => {console.log("61")
         await deleteAll();
         await getLoadInitialData();
     });
 
     //  MIRAR TODOS LOS DATOS
 
-    async function getUniversityAcademicPerformance() {
+    async function getUniversityAcademicPerformance() {console.log("68")
         output = "";
         status = "";
         errorMessage= "";
@@ -77,28 +77,28 @@
             UniversityAcademicPerformance = data;
             output = JSON.stringify(data, null, 2);
             lastSearch=ruta_api
-            successMessage = "Datos cargados con éxito.";
+            successMessage = "Datos cargados con éxito.";console.log("80")
             newTimeOut= newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
         } catch (error) {
             errorMessage = "No se han podido cargar correctamente los datos.";
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-        }
+        console.log("85")}
     }
 
     // LOAD INITIAL DATA
 
     async function getLoadInitialData() {
         errorMessage= "";
-        successMessage= "";
-        await stopTimer();
+        successMessage= "";console.log("92")
+        stopTimer();
 
-    await fetch("/api/v2/university-academic-performance/loadInitialData")
+        fetch("/api/v2/university-academic-performance/loadInitialData")
         .then(response => {
             if (response.status === 201) {
                 successMessage = "Datos cargados con éxito.";
-                newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
+                newTimeOut= setTimeout(() => { successMessage= "" }, 6000);console.log("99")
                 lastSearch="/api/v2/university-academic-performance/loadInitialData";
-                getUniversityAcademicPerformance();
+                getUniversityAcademicPerformance();console.log("101")
             } else if (response.status === 409) {
                 errorMessage = "La página ya contiene datos; para insertar datos nuevos, borre los actuales.";
                 newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
@@ -160,7 +160,7 @@ async function getOne(params = {}) {
                 } 
                 else if (status === 200){
                     const data = await res.json();
-                    UniversityAcademicPerformance=data;
+                    UniversityAcademicPerformance=data;console.log("163")
                     output = JSON.stringify(data, null, 2);
                     lastSearch=url;
                     successMessage = "Los datos fueron filtrados con éxito.";
@@ -178,7 +178,7 @@ async function getOne(params = {}) {
 async function createUniversityAcademicPerformance() {
     errorMessage = "";
     successMessage = "";
-    await stopTimer();
+    stopTimer();console.log("181")
 
     const newRecord = {
         degree: UniversityAcademicPerformanceDegree,
@@ -199,7 +199,7 @@ async function createUniversityAcademicPerformance() {
         graduationRate: parseFloat(UniversityAcademicPerformanceGraduationRate)
     };
 
-    try {
+    try {console.log("202")
         const res = await fetch("/api/v2/university-academic-performance", {method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newRecord)
@@ -294,7 +294,7 @@ async function updateUniversityAcademicPerformance() {
 async function deleteAll() {
     successMessage = "";
     errorMessage = "";
-    await stopTimer();
+    stopTimer();
 
     try {
         const res = await fetch(ruta_api, { method: "DELETE" });
@@ -325,14 +325,14 @@ async function deleteOne(degree, location, academicYear){
         status = "";
         errorMessage= "";
         successMessage= "";
-        await stopTimer();
+        stopTimer();
         
         try {
             const res = await fetch(`${ruta_api}/${encodeURIComponent(degree)}/${encodeURIComponent(location)}/${encodeURIComponent(academicYear)}`, {method: "DELETE"});
             status = res.status;
 
             if (status === 200) {
-                await checkSearch()
+                checkSearch()
                 successMessage = "Registo borrado con éxito." ;
                 newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
             }

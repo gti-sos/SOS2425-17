@@ -275,36 +275,23 @@ const university_academic_performance = [
 
         // Elimina todo
 
-        app.delete(BASE_API + "/university-academic-performance", (request,response) => {
-            console.log("--------------------------------------------------------------------")
-            console.log("NEW DELETE /university-academic-performance")
-            university_academic_performance_db.find({}, (err, docs) => {
+        app.delete(BASE_API + "/university-academic-performance", (request, response) => {
+            console.log("--------------------------------------------------------------------");
+            console.log("NEW DELETE /university-academic-performance");
+        
+            university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
                 if (err) {
                     return response.status(500).json({ error: "Database error" });
                 }
-            
-                if (docs.length === 0) {
+        
+                if (numRemoved === 0) {
                     return response.status(409).json({ error: "Database is empty, nothing to delete" });
                 }
-            else{
-                university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
-                    if (err) {
-                        return response.status(500).json({ error: "Database error" });
-                    }
-                    
-                    else {
-    
-    
-                        
-                        return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
-                    }
-                    
-                });
-            }})
-
         
-            
+                return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
+            });
         });
+        
         
 
         // Eliminar un registro existente
