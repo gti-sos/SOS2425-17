@@ -1,9 +1,4 @@
 <script>
-    let showSubmenu = {
-        'university-demands': false,
-        'students_satisfaction': false,
-        'university-academic-performance': false,
-    };
     
     let showGithubDropdown = false;
     let showFrontendsDropdown = false;
@@ -41,16 +36,6 @@
     showViewsDropdown=false;
 }
 
-    function toggleDocumentationDropdown() {
-    //Eso lo haces para que solo un dropdown este activo , dices que los otros sean false y que el dropdown de frontend
-    //sea el contrario es decir true , ya por defecto es false 
-    showFrontendsDropdown = false;
-    showGithubDropdown = false;
-    showAPIsDropdown = false;
-    showViewsDropdown=false;
-    showDocumentationDropdown = !showDocumentationDropdown;
-}
-
 
     function toggleAPIsDropdown() {
         console.log("antes",showAPIsDropdown)
@@ -61,16 +46,7 @@
     showDocumentationDropdown = false;
     showViewsDropdown=false;
 }
-        function toggleSubmenu(api) {
-        // Toggle the selected submenu and close others
-        for (const key in showSubmenu) { 
-            if (key === api) {
-                showSubmenu[key] = !showSubmenu[key];
-            } else {
-                showSubmenu[key] = false;
-            }
-        }
-    }
+
 
     function closeDropdowns() {
         showGithubDropdown = false;
@@ -170,43 +146,6 @@
         color: white;
     }
 
-    .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    text-align: center;
-  }
-
-  .dropdown-item {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .submenu {
-    position: relative;
-    margin-top: 0.25rem;
-    margin-left: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  .submenu a {
-    padding: 0.25rem 0;
-    text-decoration: none;
-    font-weight: normal;
-    color: black;
-  }
-  .submenu a:hover {
-    text-decoration: underline;
-  }
-
     .arrow-down {
         margin-left: 0.3rem;
     }
@@ -219,45 +158,13 @@
             <i class="fas fa-home"></i> Inicio
         </a>
 
-        <!-- APIs Dropdown -->
         <div use:clickOutside on:outclick={closeDropdowns} class="nav-link" on:click|stopPropagation={toggleAPIsDropdown}>
-            <i class="fas fa-microchip"></i> APIs <i class="fas fa-caret-down arrow-down"></i>
+            <i class="fas fa-microchip"></i>APIs <i class="fas fa-caret-down arrow-down"></i>
             {#if showAPIsDropdown}
-                <div class="dropdown-menu">
-
-                    <!-- university-demands -->
-                    <div class="dropdown-item" on:click={() => toggleSubmenu('university-demands')}>
-                        <a href="#" on:click|preventDefault>university-demands</a>                    
-                        {#if showSubmenu['university-demands']}
-                            <div class="submenu">
-                                <a href="/api/v1/university-demands">/V1</a>
-                                <a href="/api/v2/university-demands">/V2</a>
-                            </div>
-                        {/if}
-                    </div>
-
-                    <!-- students_satisfaction -->
-                    <div class="dropdown-item" on:click={() => toggleSubmenu('students_satisfaction')}>
-                        <a href="#">students_satisfaction</a>
-                        {#if showSubmenu['students_satisfaction']}
-                            <div class="submenu">
-                                <a href="/api/v1/students_satisfaction">/V1</a>
-                                <a href="/api/v2/students_satisfaction">/V2</a>
-                            </div>
-                        {/if}
-                    </div>
-
-                    <!-- university-academic-performance -->
-                    <div class="dropdown-item" on:click={() => toggleSubmenu('university-academic-performance')}>
-                        <a href="#">university-academic-performance</a>
-                        {#if showSubmenu['university-academic-performance']}
-                            <div class="submenu">
-                                <a href="/api/v1/university-academic-performance">/V1</a>
-                                <a href="/api/v2/university-academic-performance">/V2</a>
-                            </div>
-                        {/if}
-                    </div>
-
+                <div class="dropdown">
+                    <a href="/api/v2/university-demands">university-demands</a>
+                    <a href="/api/v2/students_satisfaction">students_satisfaction</a>
+                    <a href="/api/v2/university-academic-performance">university-academic-performance</a>
                 </div>
             {/if}
         </div>

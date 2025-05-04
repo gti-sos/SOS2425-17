@@ -10,6 +10,7 @@
     
     let myData = [];
     let resultadoSatisfaccion = [];
+    let resultadoSatisfaccionPorAño = [];
     let result = "";
     let resultStatus = "";
 
@@ -59,6 +60,40 @@
             averageTotal: (item.totalSatisfaccion / item.count).toFixed(2),
             averageEstudiantes: (item.estudiantesSatisfaccion / item.count).toFixed(2),
             averagePDI: (item.pdiSatisfaccion / item.count).toFixed(2)
+        }));
+    }
+
+    // Función para calcular el porcentaje de satisfacción media por año
+    async function calculateSatisfactionPercentageByYear() {
+        const grouped = {};
+
+        for (const entry of myData) {
+            const { año_academico, satisfaccion_total } = entry;
+
+            if (!grouped[año_academico]) {
+                grouped[año_academico] = {
+                    año_academico,
+                    totalSatisfaccion: 0,
+                    count: 0
+                };
+            }
+
+            grouped[año_academico].totalSatisfaccion += parseFloat(satisfaccion_total) || 0;
+            grouped[año_academico].count += 1;
+        }
+
+        // Calcular la media de satisfacción para cada año
+        const data = Object.values(grouped).map(item => ({
+            año_academico: item.año_academico,
+            averageSatisfaction: item.totalSatisfaccion / item.count
+        }));
+
+        // Calcular el porcentaje de cada año respecto al total
+        const totalSatisfaction = data.reduce((sum, item) => sum + item.averageSatisfaction, 0);
+
+        return data.map(item => ({
+            category: item.año_academico,
+            value: ((item.averageSatisfaction / totalSatisfaction) * 100).toFixed(2) // Porcentaje
         }));
     }
 
@@ -128,13 +163,63 @@
                 }
             }]
         });
+
+        // Gráfica de amCharts
+        const satisfactionData = await calculateSatisfactionPercentageByYear();
+        console.log("Satisfaction Data:", satisfactionData);
+
+        am5.ready(function () {
+            var root = am5.Root.new("chartdiv");
+
+            root.setThemes([am5themes_Animated.new(root)]);
+
+            var chart = root.container.children.push(
+                am5percent.PieChart.new(root, {
+                    layout: root.verticalLayout,
+                    innerRadius: am5.percent(50)
+                })
+            );
+
+            var series = chart.series.push(
+                am5percent.PieSeries.new(root, {
+                    valueField: "value",
+                    categoryField: "category",
+                    alignLabels: false
+                })
+            );
+
+            series.labels.template.setAll({
+                textType: "circular",
+                centerX: 0,
+                centerY: 0
+            });
+
+            series.data.setAll(satisfactionData);
+
+            var legend = chart.children.push(
+                am5.Legend.new(root, {
+                    centerX: am5.percent(50),
+                    x: am5.percent(50),
+                    marginTop: 15,
+                    marginBottom: 15
+                })
+            );
+
+            legend.data.setAll(series.dataItems);
+
+            series.appear(1000, 100);
+        });
     });
 </script>
+
 <svelte:head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </svelte:head>
 
 <figure class="highcharts-figure">
@@ -143,6 +228,9 @@
         Este gráfico muestra la media de satisfacción total, de estudiantes y de PDI por ciudad. El eje Y contiene las ciudades, y el eje X muestra las medias en un rango de 0 a 10.
     </p>
 </figure>
+
+<!-- Contenedor para la gráfica de amCharts -->
+<div id="chartdiv"></div>
 
 <style>
     .highcharts-figure,
@@ -158,5 +246,10 @@
 
     .highcharts-description {
         margin: 0.3rem 10px;
+    }
+
+    #chartdiv {
+        width: 100%;
+        height: 500px;
     }
 </style>
