@@ -86,6 +86,43 @@ app.get('/lol-data', async (req, res) => {
   res.json(data);
 });
 
+
+app.get('/apiInternet/teams', async (req, res) => {
+  const response = await fetch('https://api.collegefootballdata.com/teams/fbs', {
+    headers: {
+      'Authorization': 'Bearer wEIn+bJGA/HdnBCgas3uv/rK/wcS6cz20on+cvGsw/5uFtT5eIFRSjOQ0zfi0RFk'
+    }
+  });
+  const data = await response.json();
+  res.json(data);
+});
+
+app.get('/boxing-data', async (req, res) => {
+  const response = await fetch('https://boxing-data-api.p.rapidapi.com/v1/events/schedule?days=30&past_hours=12&date_sort=ASC&page_num=1&page_size=25', {
+    headers: {
+      'x-rapidapi-host': 'boxing-data-api.p.rapidapi.com',
+      'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
+    }
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
+
+app.get('/api-movies', async (req, res) => {
+  const response = await fetch('https://movie-data-api.p.rapidapi.com/movie_suggestions?movie_id=66622', {
+    headers: {
+      'x-rapidapi-host': 'movie-data-api.p.rapidapi.com',
+      'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
+    }
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
+
+
+
 app.use(handler);
 
 app.listen(Port,()=>{
