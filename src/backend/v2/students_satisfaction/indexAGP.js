@@ -65,7 +65,7 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 7.42, sat_estudiantes: 4.33, satisfaccion_pdi: 3.69, año_academico: "2016-2017" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" }
 ];
 
 function loadBackendAlejandroV2(app) {
