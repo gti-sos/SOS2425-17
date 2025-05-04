@@ -6,11 +6,11 @@ let db = new dataStore();
 
 const students_satisfaction_data = [
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
-    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.59, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
+    { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 7.46, sat_estudiantes: 4.59, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.53, satisfaccion_pdi: 4.45, año_academico: "2016-2017" },
-    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, año_academico: "2018-2019" },
-    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.54, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 6.56, sat_estudiantes: 4.88, satisfaccion_pdi: 4.46, año_academico: "2018-2019" },
+    { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 7.2, sat_estudiantes: 4.54, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN EDUCACIÓN PRIMARIA", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.56, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
     { carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 4.58, satisfaccion_pdi: 3.0, año_academico: "2018-2019" },
     { carrera: "GRADO EN ENFERMERÍA", ciudad: "MÉRIDA", satisfaccion_total: 7.41, sat_estudiantes: 3.89, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
@@ -38,7 +38,7 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN DERECHO", ciudad: "CÁCERES", satisfaccion_total: 6.94, sat_estudiantes: 3.71, satisfaccion_pdi: 3.43, año_academico: "2016-2017" },
     { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 8.31, sat_estudiantes: 3.76, satisfaccion_pdi: 4.0, año_academico: "2018-2019" },
     { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 7.36, sat_estudiantes: 4.58, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 46.0, sat_estudiantes: 4.58, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
+    { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 6, sat_estudiantes: 4.58, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
     { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 8.31, sat_estudiantes: 4.58, satisfaccion_pdi: 4.59, año_academico: "2018-2019" },
     { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 7.23, sat_estudiantes: 3.92, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 7.44, sat_estudiantes: 3.87, satisfaccion_pdi: 3.65, año_academico: "2016-2017" },
@@ -107,7 +107,7 @@ function loadBackendAlejandroV2(app) {
     
         // Buscar y ordenar por satisfacción total
         db.find(query).sort({ satisfaccion_total: 1 }).exec((err, results) => {
-            if (err) return res.status(500).send("Error en la base de datos.");
+            
             if (results.length === 0) return res.status(404).json({ error: "Sin resultados." });
     
             // Paginación
@@ -128,7 +128,6 @@ function loadBackendAlejandroV2(app) {
         }
 
         db.findOne({ carrera: body.carrera, ciudad: body.ciudad }, (err, existing) => {
-            if (err) return res.status(500).send("Error en la base de datos.");
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
 
             db.insert(body, (err, newDoc) => {
@@ -139,6 +138,11 @@ function loadBackendAlejandroV2(app) {
         });
     });
 
+     //Post ERROR 405
+    
+     app.post(BASE_API + "/students_satisfaction/:carrera/:ciudad",(req,res)=>{    
+        res.sendStatus(405);
+    });
     // Actualizar un registro existente
     app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
         const { carrera, ciudad } = req.params;
@@ -149,10 +153,15 @@ function loadBackendAlejandroV2(app) {
         }
 
         db.update({ carrera, ciudad }, { $set: body }, {}, (err, numUpdated) => {
-            if (err) return res.status(500).send("Error en la base de datos.");
             if (numUpdated === 0) return res.status(404).json({ error: "Registro no encontrado." });
             res.sendStatus(200);
         });
+    });
+
+    //FALLO DE PUT a todos los datos
+    app.put(BASE_API + "/students_satisfaction",(req,res)=>{    
+        
+        res.sendStatus(405);
     });
 
     // Eliminar todos los registros

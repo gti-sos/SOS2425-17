@@ -31,8 +31,8 @@
         {
             nombre: 'Alejandro Gaona Penco',
             frontend: '/students_satisfaction',
-            api: 'https://sos2425-17.onrender.com/api/v1/students-satisfaction/docs',
-            postman: 'https://documenter.getpostman.com/view/42373237/2sB2cUBicY',
+            api: '/api/v2/students_satisfaction',
+            postman: '/api/v2/students_satisfaction/docs',
             recurso: 'students-satisfaction',
             github: 'https://github.com/alegp2003',
             vistas:'/students_satisfaction/vistas'
