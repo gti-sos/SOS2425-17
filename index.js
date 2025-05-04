@@ -86,7 +86,7 @@ app.get('/lol-data', async (req, res) => {
   res.json(data);
 });
 
-
+/*
 app.get('/api-f1', async (req, res) => {
   const response = await fetch('https://f1-live-motorsport-data.p.rapidapi.com/drivers/standings/2020', {
     headers: {
@@ -122,6 +122,7 @@ app.get('/api-fifa', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
+*/
 
 
 
