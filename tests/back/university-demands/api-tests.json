@@ -3,9 +3,9 @@
 		"_postman_id": "632ee2ee-6046-4673-ab69-e79b75668cda",
 		"name": "API Javier",
 		"description": "This is the api of university-demands",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "42357894",
-		"_collection_link": "https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/42357894-632ee2ee-6046-4673-ab69-e79b75668cda?action=share&source=collection_link&creator=42357894"
+		"_collection_link": "https://hola11-0443.postman.co/workspace/98f36551-bff9-46fa-bbc4-f34779133190/collection/42357894-632ee2ee-6046-4673-ab69-e79b75668cda?action=share&source=collection_link&creator=42357894"
 	},
 	"item": [
 		{
@@ -45,18 +45,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/loadInitialData",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"loadInitialData"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/loadInitialData"
 			},
 			"response": []
 		},
@@ -94,17 +83,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		},
@@ -145,20 +124,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Infantil",
-						"Almendralejo",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
 			},
 			"response": []
 		},
@@ -256,20 +222,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Enfermería/Huelva/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Enfermería",
-						"Huelva",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Enfermería/Huelva/2016-2017"
 			},
 			"response": []
 		},
@@ -306,17 +259,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		},
@@ -354,17 +297,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		},
@@ -402,17 +335,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		},
@@ -450,20 +373,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Ingeniería Electrónica y Automática/Badajoz/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Ingeniería Electrónica y Automática",
-						"Badajoz",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Ingeniería Electrónica y Automática/Badajoz/2016-2017"
 			},
 			"response": []
 		},
@@ -501,20 +411,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Almendralejo/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Pera",
-						"Almendralejo",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Almendralejo/2016-2017"
 			},
 			"response": []
 		},
@@ -552,20 +449,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Huelva/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Pera",
-						"Huelva",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Huelva/2016-2017"
 			},
 			"response": []
 		},
@@ -603,20 +487,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Infantil",
-						"Almendralejo",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
 			},
 			"response": []
 		},
@@ -654,20 +525,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Infantil",
-						"Almendralejo",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
 			},
 			"response": []
 		},
@@ -705,17 +563,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		},
@@ -753,20 +601,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Huelva/2016-2017",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands",
-						"Educación Infantil",
-						"Huelva",
-						"2016-2017"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Huelva/2016-2017"
 			},
 			"response": []
 		},
@@ -804,17 +639,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-demands",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-demands"
-					]
-				}
+				"url": "{{BASE_URL}}/api/v1/university-demands"
 			},
 			"response": []
 		}
