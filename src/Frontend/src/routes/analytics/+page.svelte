@@ -155,7 +155,7 @@
         .filter(item => item.academicYear === anio && item.location === ciudad)
         .map(item => ({
         degree: item.degree,
-        graduated: (item.graduated / ((item.over45 ?? 0) +(item.spanishFirst ?? 0) +(item.foreigners ?? 0)))*100
+        graduated: ((item.graduated / ((item.over45 ?? 0) +(item.spanishFirst ?? 0) +(item.foreigners ?? 0)))*100)
         }));
         });
     }
@@ -259,7 +259,7 @@
         yAxis: {
             min: 0,
             title: {
-                text: 'Personas / Tasa'
+                text: 'Tasa en %'
             }
         },
         plotOptions: {

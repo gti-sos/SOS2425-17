@@ -39,9 +39,9 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 8.31, sat_estudiantes: 3.76, satisfaccion_pdi: 4.0, año_academico: "2018-2019" },
     { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 7.36, sat_estudiantes: 4.58, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN EDUCACIÓN SOCIAL", ciudad: "CÁCERES", satisfaccion_total: 46.0, sat_estudiantes: 4.58, satisfaccion_pdi: 4.58, año_academico: "2016-2017" },
-    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 4.58, satisfaccion_pdi: 4.59, año_academico: "2018-2019" },
-    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.92, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN ECONOMÍA", ciudad: "MÉRIDA", satisfaccion_total: 7.44, sat_estudiantes: 3.87, satisfaccion_pdi: 3.65, año_academico: "2016-2017" },
+    { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 8.31, sat_estudiantes: 4.58, satisfaccion_pdi: 4.59, año_academico: "2018-2019" },
+    { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 7.23, sat_estudiantes: 3.92, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN ECONOMÍA", ciudad: "BADAJOZ", satisfaccion_total: 7.44, sat_estudiantes: 3.87, satisfaccion_pdi: 3.65, año_academico: "2016-2017" },
     { carrera: "GRADO EN PODOLOGÍA", ciudad: "PLASENCIA", satisfaccion_total: 8.31, sat_estudiantes: 4.42, satisfaccion_pdi: 4.0, año_academico: "2018-2019" },
     { carrera: "GRADO EN PODOLOGÍA", ciudad: "PLASENCIA", satisfaccion_total: 8.26, sat_estudiantes: 4.27, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN PODOLOGÍA", ciudad: "PLASENCIA", satisfaccion_total: 4.59, sat_estudiantes: 3.79, satisfaccion_pdi: 4.0, año_academico: "2016-2017" },
@@ -63,9 +63,9 @@ const students_satisfaction_data = [
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 4.0, satisfaccion_pdi: 3.71, año_academico: "2018-2019" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 7.35, sat_estudiantes: 3.0, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
     { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DE COMPUTADORES", ciudad: "MÉRIDA", satisfaccion_total: 7.42, sat_estudiantes: 4.33, satisfaccion_pdi: 3.69, año_academico: "2016-2017" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
-    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN TECNOLOGÍAS DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" }
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 8.31, sat_estudiantes: 3.79, satisfaccion_pdi: 3.67, año_academico: "2018-2019" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.23, sat_estudiantes: 3.83, satisfaccion_pdi: 3.89, año_academico: "2017-2018" },
+    { carrera: "GRADO EN INGENIERÍA INFORMÁTICA EN INGENIERÍA DEL SOFTWARE", ciudad: "MÉRIDA", satisfaccion_total: 7.93, sat_estudiantes: 4.71, satisfaccion_pdi: 4.58, año_academico: "2016-2017" }
 ];
 
 function loadBackendAlejandroV2(app) {
