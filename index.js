@@ -87,12 +87,14 @@ app.get('/lol-data', async (req, res) => {
 });
 
 
-app.get('/apiInternet/teams', async (req, res) => {
-  const response = await fetch('https://api.collegefootballdata.com/teams/fbs', {
+app.get('/api-f1', async (req, res) => {
+  const response = await fetch('https://f1-live-motorsport-data.p.rapidapi.com/drivers/standings/2020', {
     headers: {
-      'Authorization': 'Bearer wEIn+bJGA/HdnBCgas3uv/rK/wcS6cz20on+cvGsw/5uFtT5eIFRSjOQ0zfi0RFk'
+      'x-rapidapi-host': 'f1-live-motorsport-data.p.rapidapi.com',
+      'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
     }
   });
+
   const data = await response.json();
   res.json(data);
 });
@@ -109,10 +111,10 @@ app.get('/boxing-data', async (req, res) => {
   res.json(data);
 });
 
-app.get('/api-movies', async (req, res) => {
-  const response = await fetch('https://movie-data-api.p.rapidapi.com/movie_suggestions?movie_id=66622', {
+app.get('/api-fifa', async (req, res) => {
+  const response = await fetch('https://fifa23-players-data.p.rapidapi.com/list/2', {
     headers: {
-      'x-rapidapi-host': 'movie-data-api.p.rapidapi.com',
+      'x-rapidapi-host': 'fifa23-players-data.p.rapidapi.com',
       'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
     }
   });
