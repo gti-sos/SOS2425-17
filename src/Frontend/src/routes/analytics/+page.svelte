@@ -275,7 +275,7 @@
             },
             {
                 name: 'Graduados',
-                data: data.map(item => Number(item[1].graduated.toFixed(2)))
+                data: data.map(item => item[1].graduated)
 
             },
             {
