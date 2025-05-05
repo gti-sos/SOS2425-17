@@ -420,17 +420,12 @@ onMount(async () => {
     console.log("FOR SCATTER MAP",data_scatter)
     data_RadarsStats=await getRadarsStats();
     console.log("RADARS STATS G10 ",data_RadarsStats)
-
-
-
-
-    /*
-
     data_PrecipitacionStats=await getPrecipitationStats();
     console.log("PRECIPITACIONSTATS G15 ",data_PrecipitacionStats)
     data_EmploymentData=await getEmploymentData();
     console.log("EMPLOYMENT DATA G14 ",data_EmploymentData);
-    */
+
+
     /*
     data_Sofascore=await getSofascore();
     console.log("INTERNET SOFASCORE ",data_Sofascore)
