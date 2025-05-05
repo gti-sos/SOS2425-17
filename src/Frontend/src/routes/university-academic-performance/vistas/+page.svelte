@@ -1,3 +1,12 @@
+<svelte:head>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</svelte:head>
+
+
 <div class="chart-container">
     <canvas bind:this={canvasEl} class="chart"></canvas>
   </div>
@@ -193,14 +202,6 @@ function dataByIngeniery(data, labels) {
     });
   
   </script>
-  
-  <svelte:head>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-  </svelte:head>
   
   <figure class="highcharts-figure">
     <div id="container"></div>
