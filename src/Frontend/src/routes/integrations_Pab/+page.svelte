@@ -18,9 +18,18 @@
 <figure class="highcharts-figure">
     <div id="container2"></div>
   </figure>
+  <h3 style="margin-bottom: 0; text-align: center;">Cantidad de Pokémon por tipo de daño (Físico / Especial)</h3>
+  <p style="margin-top: 0; color: gray; text-align: center;">MORRIS.JS: diagrama de barras</p>
+<div id="chartId" style="height: 250px;"></div>
+  <div class="chart-container">
+    <div id="{chartId}" style="height: 100%;"></div>
+  </div>
+  
 
 
 <script>
+
+let chartId = 'bar-chart-fixed';
 
 import { onMount } from "svelte";
 let data_pab=[]
@@ -31,9 +40,10 @@ let data_EmploymentData=[]
 let data_RadarsStats=[]
 let data_Astronomy=[]
 let data_Anime=[]
-let data_PokemonUnite=[]
+let data_PokemonUnite;
 let average_Fines;
 let data_scatter;
+let data_DamageTypeChart;
 
 
 
@@ -149,6 +159,9 @@ try{
 }catch (error){
     console.log("ERROR");
 }
+
+
+
 }
 
 
@@ -198,7 +211,30 @@ async function forScatterMap() {
   }));
 }
 
+async function damageTypeChartData() {
+    const counts = { Physical: 0, Special: 0 };
+    const { items } = await getPokemon(); 
 
+    items.forEach(p => {
+        if (p.damageType === 'Physical') counts.Physical++;
+        else if (p.damageType === 'Special') counts.Special++;
+    });
+
+    return [
+        { y: 'Físico', count: counts.Physical },
+        { y: 'Especial', count: counts.Special }
+    ];
+}
+
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
 
 
 
@@ -213,6 +249,9 @@ async function forScatterMap() {
 
 
 onMount(async () => {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js');
+    await loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js');
     data_pab=await getUniversityAcademicPerformance();
     console.log("MIS DATOS ",data_pab)
     data_Fines=await getFines();
@@ -223,6 +262,8 @@ onMount(async () => {
     console.log("SANCTIONS AND POINTS G19 ",data_sanctionsAndPoints)
     data_scatter=await forScatterMap();
     console.log("FOR SCATTER MAP",data_scatter)
+
+
     /*
 
     data_PrecipitacionStats=await getPrecipitationStats();
@@ -237,6 +278,8 @@ onMount(async () => {
     console.log("INTERNET ASTRONOMY  ",data_Astronomy)
     data_PokemonUnite=await getPokemon();
     console.log("INTERNET POKEMON UNITE  ",data_PokemonUnite)
+    data_DamageTypeChart=await damageTypeChartData()
+    console.log("DATA DAMAGE TYPE CHART",data_DamageTypeChart)
     data_Anime=await getAnime();
     console.log("INTERNET ANIME  ",data_Anime)
     */
@@ -421,12 +464,19 @@ Highcharts.chart('container2', {
 });
 
 
-
-
+/*
+new window.Morris.Bar({
+  element: chartId,
+  data: data_DamageTypeChart, 
+  xkey: 'y',
+  ykeys: ['count'],
+  labels: ['Cantidad de Pokémons'],
+  barColors: ['#0b62a4'],
+  hideHover: 'auto',
+  resize: true
 });
-
-
-
+*/
+  });
 
 
 </script>
@@ -458,6 +508,12 @@ Highcharts.chart('container2', {
     text-align: center;
     width: 100%;
     max-width: 500px;
+}
+@import url('https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css');
+
+.chart-container {
+  height: 300px;
+  margin: 20px 0;
 }
 
 .highcharts-data-table caption {
