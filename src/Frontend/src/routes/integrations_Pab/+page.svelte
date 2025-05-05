@@ -4,11 +4,19 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.trendline.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.pointLabels.min.js"></script>
 
 
   </svelte:head>
-
-
 
 
 <figure class="highcharts-figure">
@@ -18,18 +26,29 @@
 <figure class="highcharts-figure">
     <div id="container2"></div>
   </figure>
-  <h3 style="margin-bottom: 0; text-align: center;">Cantidad de Pokémon por tipo de daño (Físico / Especial)</h3>
-  <p style="margin-top: 0; color: gray; text-align: center;">MORRIS.JS: diagrama de barras</p>
-<div id="chartId" style="height: 250px;"></div>
-  <div class="chart-container">
-    <div id="{chartId}" style="height: 100%;"></div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Cantidad de Pokémon por tipo de daño (Físico / Especial)</h3>
+    <p style="margin: 5px 0 10px; color: gray;">MORRIS.JS: diagrama de barras</p>
+    <div id="donut-chart" style="height: 250px; display: inline-block;"></div>
   </div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Letra inicial más común para los personajes de anime</h3>
+    <p style="margin: 5px 0 10px; color: gray;">MORRIS.JS: Donut flavours</p>
+    <div id="donut-chart" style="height: 250px; display: inline-block;"></div>
+</div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+  <h3 style="margin: 0;">Evolución de media de pases por temporada</h3>
+  <p style="margin: 5px 0 10px; color: gray;">JQPLOT.js: Trend lines computed automatically!</p>
+  <div id="chart-container" style="width: 600px; height: 450px;display: inline-block;"></div> 
+</div>
+
   
 
 
 <script>
-
-let chartId = 'bar-chart-fixed';
 
 import { onMount } from "svelte";
 let data_pab=[]
@@ -38,12 +57,16 @@ let data_sanctionsAndPoints=[]
 let data_PrecipitacionStats=[]
 let data_EmploymentData=[]
 let data_RadarsStats=[]
-let data_Astronomy=[]
+let data_Sofascore=[]
 let data_Anime=[]
 let data_PokemonUnite;
 let average_Fines;
 let data_scatter;
 let data_DamageTypeChart;
+let data_DonutAnime;
+let data_DrawSofascore;
+
+let chartId = 'chart2';
 
 
 
@@ -122,10 +145,10 @@ try{
 }
 }
 
-async function getAstronomy() {
+async function getSofascore() {
 
 try{
-    const response = await fetch("/api-astronomy");
+    const response = await fetch("/api-sofascore");
     
     
     return await response.json(); 
@@ -237,9 +260,142 @@ function loadScript(src) {
   }
 
 
+  function countInitialAnime(dataAnime) {
+  const conteo = {};
+
+  // Recorremos cada personaje
+  dataAnime.data.forEach(personaje => {
+    const inicial = personaje.name.charAt(0).toUpperCase();
+    conteo[inicial] = (conteo[inicial] || 0) + 1;
+  });
+
+  // Transformamos en el formato para Morris Donut
+  const resultado = Object.keys(conteo).map(letra => ({
+    label: letra,
+    value: conteo[letra]
+  }));
+
+  return resultado;
+}
+
+function generateColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    // Genera colores pastel aleatorios
+    const hue = Math.floor(Math.random() * 360);
+    colors.push(`hsl(${hue}, 70%, 70%)`);
+  }
+  return colors;
+}   
 
 
 
+function loadScripts() {
+  console.log("entro");
+
+  return new Promise((resolve, reject) => {
+    const load = (src) =>
+      new Promise((res, rej) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = res;
+        script.onerror = () => {
+          console.error(`❌ Error al cargar el script: ${src}`);
+          rej(new Error(`Error al cargar el script: ${src}`));
+        };
+        document.head.appendChild(script);
+      });
+
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = 'https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.css';
+    document.head.appendChild(style);
+
+    console.log("salgo");
+
+    Promise.all([
+      load('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.trendline.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.pointLabels.min.js')
+    ])
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+
+function buildChartData(data_Sofascore, statField = 'accuratePasses') {
+  const groupedStats = {};
+
+  for (const seasonEntry of data_Sofascore.seasons) {
+    const stats = seasonEntry.statistics;
+    const year = seasonEntry.year;
+
+    if (!stats || !(statField in stats)) continue;
+
+    if (!groupedStats[year]) {
+      groupedStats[year] = {
+        total: 0,
+        count: 0
+      };
+    }
+
+    groupedStats[year].total += stats[statField];
+    groupedStats[year].count += 1;
+  }
+
+  const chartData = Object.entries(groupedStats).map(([year, { total, count }]) => {
+    const average = Math.round(total / count); // redondear si quieres
+    return [year, average];
+  });
+
+  // Ordenar por año, opcional
+  chartData.sort((a, b) => a[0].localeCompare(b[0]));
+
+  return chartData;
+}
+
+
+
+
+
+function drawChart() {
+  console.log("entro");
+
+  const jQueryInstance = window.jQuery;
+  
+  // Asegúrate de que el contenedor tenga un id correcto y esté en el DOM
+  const chartId = 'chart-container'; // Debe ser el ID del contenedor en tu HTML
+  
+  // Verifica que el contenedor realmente existe
+  if (document.getElementById(chartId)) {
+    jQueryInstance.jqplot(chartId, [data_DrawSofascore], {
+      seriesDefaults: {
+        showMarker: true,
+        pointLabels: { show: true },
+        trendline: { show: true }
+      },
+      axes: {
+        xaxis: {
+          renderer: jQueryInstance.jqplot.CategoryAxisRenderer,
+          label: 'Temporada'
+        },
+        yaxis: {
+          label: 'Pases precisos'
+        }
+      },
+      highlighter: {
+        show: true,
+        sizeAdjust: 7.5
+      }
+    });
+  } else {
+    console.error(`El contenedor con ID "${chartId}" no se encontró.`);
+  }
+}
 
 
 
@@ -262,6 +418,10 @@ onMount(async () => {
     console.log("SANCTIONS AND POINTS G19 ",data_sanctionsAndPoints)
     data_scatter=await forScatterMap();
     console.log("FOR SCATTER MAP",data_scatter)
+    data_RadarsStats=await getRadarsStats();
+    console.log("RADARS STATS G10 ",data_RadarsStats)
+
+
 
 
     /*
@@ -270,18 +430,23 @@ onMount(async () => {
     console.log("PRECIPITACIONSTATS G15 ",data_PrecipitacionStats)
     data_EmploymentData=await getEmploymentData();
     console.log("EMPLOYMENT DATA G14 ",data_EmploymentData);
-    data_RadarsStats=await getRadarsStats();
-    console.log("RADARS STATS G10 ",data_RadarsStats)
     */
     /*
-    data_Astronomy=await getAstronomy();
-    console.log("INTERNET ASTRONOMY  ",data_Astronomy)
+    data_Sofascore=await getSofascore();
+    console.log("INTERNET SOFASCORE ",data_Sofascore)
+    data_DrawSofascore=buildChartData(data_Sofascore)
+    console.log("INTERNET DRAW SOFASCORE ",data_DrawSofascore)
+    await loadScripts();
+    drawChart();
     data_PokemonUnite=await getPokemon();
     console.log("INTERNET POKEMON UNITE  ",data_PokemonUnite)
     data_DamageTypeChart=await damageTypeChartData()
     console.log("DATA DAMAGE TYPE CHART",data_DamageTypeChart)
     data_Anime=await getAnime();
     console.log("INTERNET ANIME  ",data_Anime)
+    data_DonutAnime=countInitialAnime(data_Anime)
+    console.log("DATA DONUT ANIME",data_DonutAnime)
+    const colorsForDonut = generateColors(data_DonutAnime.length);
     */
 
 
@@ -475,7 +640,46 @@ new window.Morris.Bar({
   hideHover: 'auto',
   resize: true
 });
+
+
+
+
+new Morris.Donut({
+  element: 'donut-chart',
+  data: data_DonutAnime,
+  colors: colorsForDonut,
+  resize: true
+});
+
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   });
 
 
