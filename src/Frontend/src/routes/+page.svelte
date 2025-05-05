@@ -113,7 +113,9 @@
         <ul>
             {#each miembros as miembro}
                 <li><strong>{miembro.nombre} API:</strong>
-                    {#if miembro.postman_v1 && miembro.postman_v2}
+                    {#if miembro.nombre === 'Alejandro Gaona Penco'}
+                        <a href="/api/v2/students_satisfaction/docs" target="_blank">Documentación Postman</a>
+                    {:else if miembro.postman_v1 && miembro.postman_v2}
                         <a href={miembro.postman_v1} target="_blank">API v1</a> | 
                         <a href={miembro.postman_v2} target="_blank">API v2</a>
                     {:else if miembro.api}
