@@ -122,7 +122,7 @@ app.get('/api-fifa', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-/*
+
 app.get('/api-sofascore', async (req, res) => {
   const response = await fetch('https://sofascore.p.rapidapi.com/players/get-all-statistics?playerId=155997', {
     headers: {
@@ -159,7 +159,6 @@ app.get('/api-pokemon-unite', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-*/
 
 
 app.use(handler);
