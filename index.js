@@ -122,26 +122,11 @@ app.get('/api-fifa', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-
-
-
 /*
-app.get('/api-astronomy', async (req, res) => {
-  const response = await fetch('https://astronomy.p.rapidapi.com/api/v2/bodies/positions?latitude=33.775867&longitude=-84.39733&elevation=166&from_date=2017-12-20&to_date=2017-12-21&time=12%3A00%3A00', {
+app.get('/api-sofascore', async (req, res) => {
+  const response = await fetch('https://sofascore.p.rapidapi.com/players/get-all-statistics?playerId=155997', {
     headers: {
-      'x-rapidapi-host': 'astronomy.p.rapidapi.com',
-      'x-rapidapi-key': '14ab9a12c4mshc408dc06a83c6f1p18c6d0jsn714586264596'
-    }
-  });
-
-  const data = await response.json();
-  res.json(data);
-});
-
-app.get('/api-pokemon-unite', async (req, res) => {
-  const response = await fetch('https://pokemon-unite-pokemons.p.rapidapi.com/pokemon?page=1&pageSize=10', {
-    headers: {
-      'x-rapidapi-host': 'pokemon-unite-pokemons.p.rapidapi.com',
+      'x-rapidapi-host': 'sofascore.p.rapidapi.com',
       'x-rapidapi-key': '14ab9a12c4mshc408dc06a83c6f1p18c6d0jsn714586264596'
     }
   });
@@ -162,7 +147,20 @@ app.get('/api-anime', async (req, res) => {
   res.json(data);
 });
 
+
+app.get('/api-pokemon-unite', async (req, res) => {
+  const response = await fetch('https://pokemon-unite-pokemons.p.rapidapi.com/pokemon?page=1&pageSize=10', {
+    headers: {
+      'x-rapidapi-host': 'pokemon-unite-pokemons.p.rapidapi.com',
+      'x-rapidapi-key': '14ab9a12c4mshc408dc06a83c6f1p18c6d0jsn714586264596'
+    }
+  });
+
+  const data = await response.json();
+  res.json(data);
+});
 */
+
 
 app.use(handler);
 

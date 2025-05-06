@@ -4,11 +4,19 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.trendline.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.pointLabels.min.js"></script>
 
 
   </svelte:head>
-
-
 
 
 <figure class="highcharts-figure">
@@ -19,21 +27,66 @@
     <div id="container2"></div>
   </figure>
 
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Cantidad de Pokémon por tipo de daño (Físico / Especial)</h3>
+    <p style="margin: 5px 0 10px; color: gray;">MORRIS.JS: diagrama de barras</p>
+    <div id="donut-chart" style="height: 250px; display: inline-block;"></div>
+  </div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Letra inicial más común para los personajes de anime</h3>
+    <p style="margin: 5px 0 10px; color: gray;">MORRIS.JS: Donut flavours</p>
+    <div id="donut-chart" style="height: 250px; display: inline-block;"></div>
+</div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+  <h3 style="margin: 0;">Evolución de media de pases por temporada</h3>
+  <p style="margin: 5px 0 10px; color: gray;">JQPLOT.js: Trend lines computed automatically!</p>
+  <div id="chart-container" style="width: 600px; height: 450px;display: inline-block;"></div> 
+</div>
+
+  <div class="chart-wrapper" style="text-align: center;">
+  <h3 style="margin: 0;">Tasa de graduación y desempleo por año en extremadura</h3>
+  <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bar Chart  -- (INTEGRADA)</p>
+<canvas id="barChart"></canvas>
+  </div>
+
+
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Top 5 carreteras más multadas</h3>
+    <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Polar Chart</p>
+    <canvas id="polarChart"></canvas>
+
+    </div>  
+
+  
+
 
 <script>
 
 import { onMount } from "svelte";
+import Chart from 'chart.js/auto';
+
+let canvas;
 let data_pab=[]
 let data_Fines=[]
 let data_sanctionsAndPoints=[]
 let data_PrecipitacionStats=[]
 let data_EmploymentData=[]
 let data_RadarsStats=[]
-let data_Astronomy=[]
+let data_Sofascore=[]
 let data_Anime=[]
-let data_PokemonUnite=[]
+let data_PokemonUnite;
 let average_Fines;
 let data_scatter;
+let data_DamageTypeChart;
+let data_DonutAnime;
+let data_DrawSofascore;
+let data_FunctionIntegrated1;
+let charts_Bar;
+let data_PolarRadarsStars;
+let chartId = 'chart2';
+
 
 
 
@@ -112,10 +165,10 @@ try{
 }
 }
 
-async function getAstronomy() {
+async function getSofascore() {
 
 try{
-    const response = await fetch("/api-astronomy");
+    const response = await fetch("/api-sofascore");
     
     
     return await response.json(); 
@@ -149,6 +202,9 @@ try{
 }catch (error){
     console.log("ERROR");
 }
+
+
+
 }
 
 
@@ -198,10 +254,282 @@ async function forScatterMap() {
   }));
 }
 
+async function damageTypeChartData() {
+    const counts = { Physical: 0, Special: 0 };
+    const { items } = await getPokemon(); 
+
+    items.forEach(p => {
+        if (p.damageType === 'Physical') counts.Physical++;
+        else if (p.damageType === 'Special') counts.Special++;
+    });
+
+    return [
+        { y: 'Físico', count: counts.Physical },
+        { y: 'Especial', count: counts.Special }
+    ];
+}
+
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+
+  function countInitialAnime(dataAnime) {
+  const conteo = {};
+
+  // Recorremos cada personaje
+  dataAnime.data.forEach(personaje => {
+    const inicial = personaje.name.charAt(0).toUpperCase();
+    conteo[inicial] = (conteo[inicial] || 0) + 1;
+  });
+
+  // Transformamos en el formato para Morris Donut
+  const resultado = Object.keys(conteo).map(letra => ({
+    label: letra,
+    value: conteo[letra]
+  }));
+
+  return resultado;
+}
+
+function generateColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    // Genera colores pastel aleatorios
+    const hue = Math.floor(Math.random() * 360);
+    colors.push(`hsl(${hue}, 70%, 70%)`);
+  }
+  return colors;
+}   
+
+
+
+function loadScripts() {
+  console.log("entro");
+
+  return new Promise((resolve, reject) => {
+    const load = (src) =>
+      new Promise((res, rej) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = res;
+        script.onerror = () => {
+          console.error(`❌ Error al cargar el script: ${src}`);
+          rej(new Error(`Error al cargar el script: ${src}`));
+        };
+        document.head.appendChild(script);
+      });
+
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = 'https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.css';
+    document.head.appendChild(style);
+
+    console.log("salgo");
+
+    Promise.all([
+      load('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.trendline.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js'),
+      load('https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.pointLabels.min.js')
+    ])
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
+
+function buildChartData(data_Sofascore, statField = 'accuratePasses') {
+  const groupedStats = {};
+
+  for (const seasonEntry of data_Sofascore.seasons) {
+    const stats = seasonEntry.statistics;
+    const year = seasonEntry.year;
+
+    if (!stats || !(statField in stats)) continue;
+
+    if (!groupedStats[year]) {
+      groupedStats[year] = {
+        total: 0,
+        count: 0
+      };
+    }
+
+    groupedStats[year].total += stats[statField];
+    groupedStats[year].count += 1;
+  }
+
+  const chartData = Object.entries(groupedStats).map(([year, { total, count }]) => {
+    const average = Math.round(total / count); // redondear si quieres
+    return [year, average];
+  });
+
+  // Ordenar por año, opcional
+  chartData.sort((a, b) => a[0].localeCompare(b[0]));
+
+  return chartData;
+}
 
 
 
 
+
+function drawChart() {
+  console.log("entro");
+
+  const jQueryInstance = window.jQuery;
+  
+  // Asegúrate de que el contenedor tenga un id correcto y esté en el DOM
+  const chartId = 'chart-container'; // Debe ser el ID del contenedor en tu HTML
+  
+  // Verifica que el contenedor realmente existe
+  if (document.getElementById(chartId)) {
+    jQueryInstance.jqplot(chartId, [data_DrawSofascore], {
+      seriesDefaults: {
+        showMarker: true,
+        pointLabels: { show: true },
+        trendline: { show: true }
+      },
+      axes: {
+        xaxis: {
+          renderer: jQueryInstance.jqplot.CategoryAxisRenderer,
+          label: 'Temporada'
+        },
+        yaxis: {
+          label: 'Pases precisos'
+        }
+      },
+      highlighter: {
+        show: true,
+        sizeAdjust: 7.5
+      }
+    });
+  } else {
+    console.error(`El contenedor con ID "${chartId}" no se encontró.`);
+  }
+}
+
+function getAverageGraduationRatesByYear(data) {
+  const grouped = {};
+
+  data.forEach(item => {
+    const year = item.academicYear;
+    const rate = item.graduationRate;
+
+    if (!grouped[year]) {
+      grouped[year] = [];
+    }
+    grouped[year].push(rate);
+  });
+
+  const years = Object.keys(grouped).sort();
+
+  const averages = years.map(year => {
+    const rates = grouped[year];
+    const avg = rates.reduce((sum, val) => sum + val, 0) / rates.length;
+    return {
+      year,
+      average: parseFloat(avg.toFixed(2))
+    };
+  });
+
+  return averages;
+}
+
+
+
+function getAverageUnemploymentByYearForExtremadura(data) {
+  const years = [...new Set(data.map(item => item.year))].sort();
+
+  return years.map(year => {
+    const filtered = data.filter(item => 
+      item.year === year && item.autonomous_community === "Extremadura"
+    );
+
+    const average = filtered.reduce((sum, item) => sum + item.unemployment_rate, 0) / filtered.length;
+
+    return {
+      year,
+      averageUnemployment: parseFloat(average.toFixed(2))
+    };
+  });
+}
+
+
+
+function combineRatesByYear(graduationRates, unemploymentRates) {
+  // Normalizamos el formato del año
+  const normalizedGraduationRates = graduationRates.map(d => ({
+    ...d,
+    year: parseInt(d.year.split('-')[0]) // De "2021-2022" toma 2021 como número
+  }));
+
+  const normalizedUnemploymentRates = unemploymentRates.map(d => ({
+    ...d,
+    year: parseInt(d.year) // Asegura que también es número
+  }));
+
+  const gradYears = normalizedGraduationRates.map(d => d.year);
+  const unempYears = normalizedUnemploymentRates.map(d => d.year);
+
+  const commonYears = gradYears.filter(year => unempYears.includes(year)).sort();
+
+  return commonYears.map(year => {
+    const graduation = normalizedGraduationRates.find(d => d.year === year);
+    const unemployment = normalizedUnemploymentRates.find(d => d.year === year);
+
+    return {
+      year,
+      averageGraduationRate: graduation.averageGraduationRate || graduation.average,
+      averageUnemployment: unemployment.averageUnemployment || unemployment.average
+    };
+  });
+}
+
+
+function getTopFiveCriticalKilometerPoints(data) {
+  const groupedData = {};
+
+  data.forEach(item => {
+    const way = item.way;
+    const complaints = item.complaint;
+
+    if (groupedData[way]) {
+      groupedData[way].totalComplaints += complaints;
+      groupedData[way].count += 1;
+    } else {
+      groupedData[way] = {
+        totalComplaints: complaints,
+        count: 1
+      };
+    }
+  });
+
+  // Obtener el promedio de multas por tramo
+  let criticalPoints = Object.keys(groupedData).map(way => {
+    const avgComplaints = groupedData[way].totalComplaints / groupedData[way].count;
+    return { way, avgComplaints };
+  });
+
+  // Ordenar y limitar a los 5 más altos
+  criticalPoints = criticalPoints
+    .sort((a, b) => b.avgComplaints - a.avgComplaints)
+    .slice(0, 5); // Limitar a los 5 más altos
+
+  // Formato para el gráfico
+  return {
+    labels: criticalPoints.map(point => point.way),
+    data: criticalPoints.map(point => point.avgComplaints)
+  };
+}
 
 
 
@@ -213,6 +541,9 @@ async function forScatterMap() {
 
 
 onMount(async () => {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js');
+    await loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js');
     data_pab=await getUniversityAcademicPerformance();
     console.log("MIS DATOS ",data_pab)
     data_Fines=await getFines();
@@ -223,22 +554,37 @@ onMount(async () => {
     console.log("SANCTIONS AND POINTS G19 ",data_sanctionsAndPoints)
     data_scatter=await forScatterMap();
     console.log("FOR SCATTER MAP",data_scatter)
-    /*
-
+    data_RadarsStats=await getRadarsStats();
+    console.log("RADARS STATS G10 ",data_RadarsStats)
     data_PrecipitacionStats=await getPrecipitationStats();
     console.log("PRECIPITACIONSTATS G15 ",data_PrecipitacionStats)
     data_EmploymentData=await getEmploymentData();
     console.log("EMPLOYMENT DATA G14 ",data_EmploymentData);
-    data_RadarsStats=await getRadarsStats();
-    console.log("RADARS STATS G10 ",data_RadarsStats)
-    */
+    console.log("G14",getAverageUnemploymentByYearForExtremadura(data_EmploymentData))
+    console.log("PABLO",getAverageGraduationRatesByYear(data_pab))
+    data_FunctionIntegrated1=combineRatesByYear(getAverageGraduationRatesByYear(data_pab),getAverageUnemploymentByYearForExtremadura(data_EmploymentData))
+    console.log("hola hola hola",combineRatesByYear(getAverageGraduationRatesByYear(data_pab),getAverageUnemploymentByYearForExtremadura(data_EmploymentData)))
+    data_PolarRadarsStars=getTopFiveCriticalKilometerPoints(data_RadarsStats)
+    console.log("Este",getTopFiveCriticalKilometerPoints(data_RadarsStats))
+
+
+
     /*
-    data_Astronomy=await getAstronomy();
-    console.log("INTERNET ASTRONOMY  ",data_Astronomy)
+    data_Sofascore=await getSofascore();
+    console.log("INTERNET SOFASCORE ",data_Sofascore)
+    data_DrawSofascore=buildChartData(data_Sofascore)
+    console.log("INTERNET DRAW SOFASCORE ",data_DrawSofascore)
+    await loadScripts();
+    drawChart();
     data_PokemonUnite=await getPokemon();
     console.log("INTERNET POKEMON UNITE  ",data_PokemonUnite)
+    data_DamageTypeChart=await damageTypeChartData()
+    console.log("DATA DAMAGE TYPE CHART",data_DamageTypeChart)
     data_Anime=await getAnime();
     console.log("INTERNET ANIME  ",data_Anime)
+    data_DonutAnime=countInitialAnime(data_Anime)
+    console.log("DATA DONUT ANIME",data_DonutAnime)
+    const colorsForDonut = generateColors(data_DonutAnime.length);
     */
 
 
@@ -421,12 +767,112 @@ Highcharts.chart('container2', {
 });
 
 
-
-
+/*
+new window.Morris.Bar({
+  element: chartId,
+  data: data_DamageTypeChart, 
+  xkey: 'y',
+  ykeys: ['count'],
+  labels: ['Cantidad de Pokémons'],
+  barColors: ['#0b62a4'],
+  hideHover: 'auto',
+  resize: true
 });
 
 
 
+
+new Morris.Donut({
+  element: 'donut-chart',
+  data: data_DonutAnime,
+  colors: colorsForDonut,
+  resize: true
+});
+
+*/
+
+
+const ctx = document.getElementById('barChart').getContext('2d');
+charts_Bar = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: data_FunctionIntegrated1.map(d => d.year),
+    datasets: [
+      {
+        label: 'Tasa de Graduación',
+        data: data_FunctionIntegrated1.map(d => d.averageGraduationRate),
+        backgroundColor: '#60a5fa',
+        borderRadius: 5,
+      },
+      {
+        label: 'Tasa de Desempleo',
+        data: data_FunctionIntegrated1.map(d => d.averageUnemployment),
+        backgroundColor: '#f87171',
+        borderRadius: 5,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y', // esto hace la barra horizontal
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  },
+});
+
+
+
+const ctxPolar = document.getElementById('polarChart').getContext('2d');
+
+const charts_Polar = new Chart(ctxPolar, {
+  type: 'polarArea',
+  data: {
+    labels: data_PolarRadarsStars.labels, // Aquí pasas las etiquetas de las carreteras
+    datasets: [{
+      label: 'Multas por Tramo',
+      data: data_PolarRadarsStars.data,  // Aquí pasas los datos de multas promedio
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E7E9ED', '#4BC0C0'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    }
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  });
 
 
 </script>
@@ -458,6 +904,12 @@ Highcharts.chart('container2', {
     text-align: center;
     width: 100%;
     max-width: 500px;
+}
+@import url('https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css');
+
+.chart-container {
+  height: 300px;
+  margin: 20px 0;
 }
 
 .highcharts-data-table caption {
