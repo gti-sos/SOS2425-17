@@ -45,12 +45,29 @@
   <div id="chart-container" style="width: 600px; height: 450px;display: inline-block;"></div> 
 </div>
 
+  <div class="chart-wrapper" style="text-align: center;">
+  <h3 style="margin: 0;">Tasa de graduación y desempleo por año en extremadura</h3>
+  <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bar Chart  -- (INTEGRADA)</p>
+<canvas id="barChart"></canvas>
+  </div>
+
+
+  <div class="chart-wrapper" style="text-align: center;">
+    <h3 style="margin: 0;">Top 5 carreteras más multadas</h3>
+    <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Polar Chart</p>
+    <canvas id="polarChart"></canvas>
+
+    </div>  
+
   
 
 
 <script>
 
 import { onMount } from "svelte";
+import Chart from 'chart.js/auto';
+
+let canvas;
 let data_pab=[]
 let data_Fines=[]
 let data_sanctionsAndPoints=[]
@@ -65,8 +82,11 @@ let data_scatter;
 let data_DamageTypeChart;
 let data_DonutAnime;
 let data_DrawSofascore;
-
+let data_FunctionIntegrated1;
+let charts_Bar;
+let data_PolarRadarsStars;
 let chartId = 'chart2';
+
 
 
 
@@ -397,6 +417,122 @@ function drawChart() {
   }
 }
 
+function getAverageGraduationRatesByYear(data) {
+  const grouped = {};
+
+  data.forEach(item => {
+    const year = item.academicYear;
+    const rate = item.graduationRate;
+
+    if (!grouped[year]) {
+      grouped[year] = [];
+    }
+    grouped[year].push(rate);
+  });
+
+  const years = Object.keys(grouped).sort();
+
+  const averages = years.map(year => {
+    const rates = grouped[year];
+    const avg = rates.reduce((sum, val) => sum + val, 0) / rates.length;
+    return {
+      year,
+      average: parseFloat(avg.toFixed(2))
+    };
+  });
+
+  return averages;
+}
+
+
+
+function getAverageUnemploymentByYearForExtremadura(data) {
+  const years = [...new Set(data.map(item => item.year))].sort();
+
+  return years.map(year => {
+    const filtered = data.filter(item => 
+      item.year === year && item.autonomous_community === "Extremadura"
+    );
+
+    const average = filtered.reduce((sum, item) => sum + item.unemployment_rate, 0) / filtered.length;
+
+    return {
+      year,
+      averageUnemployment: parseFloat(average.toFixed(2))
+    };
+  });
+}
+
+
+
+function combineRatesByYear(graduationRates, unemploymentRates) {
+  // Normalizamos el formato del año
+  const normalizedGraduationRates = graduationRates.map(d => ({
+    ...d,
+    year: parseInt(d.year.split('-')[0]) // De "2021-2022" toma 2021 como número
+  }));
+
+  const normalizedUnemploymentRates = unemploymentRates.map(d => ({
+    ...d,
+    year: parseInt(d.year) // Asegura que también es número
+  }));
+
+  const gradYears = normalizedGraduationRates.map(d => d.year);
+  const unempYears = normalizedUnemploymentRates.map(d => d.year);
+
+  const commonYears = gradYears.filter(year => unempYears.includes(year)).sort();
+
+  return commonYears.map(year => {
+    const graduation = normalizedGraduationRates.find(d => d.year === year);
+    const unemployment = normalizedUnemploymentRates.find(d => d.year === year);
+
+    return {
+      year,
+      averageGraduationRate: graduation.averageGraduationRate || graduation.average,
+      averageUnemployment: unemployment.averageUnemployment || unemployment.average
+    };
+  });
+}
+
+
+function getTopFiveCriticalKilometerPoints(data) {
+  const groupedData = {};
+
+  data.forEach(item => {
+    const way = item.way;
+    const complaints = item.complaint;
+
+    if (groupedData[way]) {
+      groupedData[way].totalComplaints += complaints;
+      groupedData[way].count += 1;
+    } else {
+      groupedData[way] = {
+        totalComplaints: complaints,
+        count: 1
+      };
+    }
+  });
+
+  // Obtener el promedio de multas por tramo
+  let criticalPoints = Object.keys(groupedData).map(way => {
+    const avgComplaints = groupedData[way].totalComplaints / groupedData[way].count;
+    return { way, avgComplaints };
+  });
+
+  // Ordenar y limitar a los 5 más altos
+  criticalPoints = criticalPoints
+    .sort((a, b) => b.avgComplaints - a.avgComplaints)
+    .slice(0, 5); // Limitar a los 5 más altos
+
+  // Formato para el gráfico
+  return {
+    labels: criticalPoints.map(point => point.way),
+    data: criticalPoints.map(point => point.avgComplaints)
+  };
+}
+
+
+
 
 
 
@@ -424,6 +560,13 @@ onMount(async () => {
     console.log("PRECIPITACIONSTATS G15 ",data_PrecipitacionStats)
     data_EmploymentData=await getEmploymentData();
     console.log("EMPLOYMENT DATA G14 ",data_EmploymentData);
+    console.log("G14",getAverageUnemploymentByYearForExtremadura(data_EmploymentData))
+    console.log("PABLO",getAverageGraduationRatesByYear(data_pab))
+    data_FunctionIntegrated1=combineRatesByYear(getAverageGraduationRatesByYear(data_pab),getAverageUnemploymentByYearForExtremadura(data_EmploymentData))
+    console.log("hola hola hola",combineRatesByYear(getAverageGraduationRatesByYear(data_pab),getAverageUnemploymentByYearForExtremadura(data_EmploymentData)))
+    data_PolarRadarsStars=getTopFiveCriticalKilometerPoints(data_RadarsStats)
+    console.log("Este",getTopFiveCriticalKilometerPoints(data_RadarsStats))
+
 
 
     /*
@@ -649,7 +792,61 @@ new Morris.Donut({
 */
 
 
+const ctx = document.getElementById('barChart').getContext('2d');
+charts_Bar = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: data_FunctionIntegrated1.map(d => d.year),
+    datasets: [
+      {
+        label: 'Tasa de Graduación',
+        data: data_FunctionIntegrated1.map(d => d.averageGraduationRate),
+        backgroundColor: '#60a5fa',
+        borderRadius: 5,
+      },
+      {
+        label: 'Tasa de Desempleo',
+        data: data_FunctionIntegrated1.map(d => d.averageUnemployment),
+        backgroundColor: '#f87171',
+        borderRadius: 5,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y', // esto hace la barra horizontal
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  },
+});
 
+
+
+const ctxPolar = document.getElementById('polarChart').getContext('2d');
+
+const charts_Polar = new Chart(ctxPolar, {
+  type: 'polarArea',
+  data: {
+    labels: data_PolarRadarsStars.labels, // Aquí pasas las etiquetas de las carreteras
+    datasets: [{
+      label: 'Multas por Tramo',
+      data: data_PolarRadarsStars.data,  // Aquí pasas los datos de multas promedio
+      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E7E9ED', '#4BC0C0'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    }
+  }
+});
 
 
 
