@@ -5,6 +5,8 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 </svelte:head>
 
 <figure class="highcharts-figure">
@@ -19,6 +21,12 @@
         **Gráfica de Indicadores Clave (KPI):** Esta gráfica muestra la satisfacción total media y el número de autobuses en la provincia de Badajoz integrando los datos del G19 con los del G17.
     </p>
 </figure>
+<figure class="canvasjs-figure">
+    <div id="container-canvasjs" style="height: 400px; width: 100%;"></div>
+    <p class="canvasjs-description">
+        **Gráfica de Columnas (CanvasJS):** Esta gráfica muestra la satisfacción media de los estudiantes y el porcentaje de consumo de electricidad en Extremadura durante el año 2018 integrando los datos del G12 con los del G17.
+    </p>
+</figure>
 
 <script>
 import { onMount } from "svelte";
@@ -30,7 +38,7 @@ let apionepiece = "/onepiece-data";
 let apiG15="https://sos2425-15.onrender.com/ocupied-grand-stats";
 let apiG10="https://sos2425-10.onrender.com/api/v1/registrations-stats";
 let apiG19="https://sos2425-19.onrender.com/api/v2/ownerships-changes-stats/";
-let apiG12="https://sos2425-12.onrender.com/annual-consumptions";
+let apiG12="https://sos2425-12.onrender.com/api/v1/annual-consumptions";
 let mydatag17=[];
 let mydatatiktok = [];
 let mydatalol = [];
@@ -130,27 +138,27 @@ async function mountG10Chart() {
 
 // Función para obtener y procesar los datos de la API G17
 async function getG17DataForBadajoz() {
-        try {
-            const response = await fetch(apiG17, { method: "GET" });
-            if (!response.ok) {
-                throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
-            }
-            const data = await response.json();
-            mydatag17 = data;
-
-            // Filtrar los datos para la provincia "Badajoz"
-            const badajozData = data.filter(item => item.ciudad === "BADAJOZ");
-
-            // Calcular la satisfacción total media
-            const totalSatisfaccion = badajozData.reduce((sum, item) => sum + item.satisfaccion_total, 0);
-            const mediaSatisfaccion = badajozData.length > 0 ? totalSatisfaccion / badajozData.length : 0;
-
-            return mediaSatisfaccion.toFixed(2); // Devolver la media con 2 decimales
-        } catch (error) {
-            console.error(`ERROR al obtener datos de la API G17: ${error}`);
-            return 0; // Devolver 0 si hay un error
+    try {
+        const response = await fetch(apiG17, { method: "GET" });
+        if (!response.ok) {
+            throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
         }
+        const data = await response.json();
+        mydatag17 = data;
+
+        // Filtrar los datos para la provincia "Badajoz" (normalizando el texto)
+        const badajozData = data.filter(item => item.ciudad?.toUpperCase() === "BADAJOZ");
+
+        // Calcular la satisfacción total media
+        const totalSatisfaccion = badajozData.reduce((sum, item) => sum + (item.satisfaccion_total || 0), 0);
+        const mediaSatisfaccion = badajozData.length > 0 ? totalSatisfaccion / badajozData.length : 0;
+
+        return mediaSatisfaccion.toFixed(2); // Devolver la media con 2 decimales
+    } catch (error) {
+        console.error(`ERROR al obtener datos de la API G17: ${error}`);
+        return 0; // Devolver 0 si hay un error
     }
+}
 
     // Función para obtener y procesar los datos de la API G19
     async function getG19DataForBadajoz() {
@@ -268,37 +276,105 @@ async function getG17DataForBadajoz() {
         await mountKPIChart();
     });
         
-    // Función para obtener datos de apiG19
-    async function getDataG19() {
-        resultStatus = result = "";
+    // Función para obtener y procesar los datos de la API G17
+    async function getG17DataForExtremadura() {
         try {
-            const res = await fetch(apiG19, { method: "GET" });
-            const data = await res.json();
-            result = JSON.stringify(data, null, 2);
-            mydatag19 = data;
-            console.log(`Response received from G19 API:\n${JSON.stringify(mydatag19, null, 2)}`);
-        } catch (error) {
-            console.log(`ERROR: GET from ${apiG19}: ${error}`);
-        }
-    }
+            const response = await fetch(apiG17, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            mydatag17 = data;
 
-    // Función para obtener datos de apiG12
-    async function getDataG12() {
-        resultStatus = result = "";
+            // Filtrar los datos para el año académico 2017-2018
+            const data2017_2018 = data.filter(item => item.año_academico === "2017-2018");
+
+             // Calcular la satisfacción media de los estudiantes
+        const totalSatisfaccion = data2017_2018.reduce((sum, item) => sum + item.sat_estudiantes, 0);
+        const mediaSatisfaccion = data2017_2018.length > 0 ? totalSatisfaccion / data2017_2018.length : 0;
+
+        // Convertir la satisfacción media en porcentaje (escala de 0 a 100)
+        const mediaSatisfaccionPorcentaje = (mediaSatisfaccion / 10) * 100;
+
+        return mediaSatisfaccionPorcentaje.toFixed(2); // Devolver el porcentaje con 2 decimales
+    } catch (error) {
+        console.error(`ERROR al obtener datos de la API G17: ${error}`);
+        return 0; // Devolver 0 si hay un error
+    }
+}
+// Función para obtener y procesar los datos de la API G12
+async function getG12DataForExtremadura() {
         try {
-            const res = await fetch(apiG12, { method: "GET" });
-            const data = await res.json();
-            result = JSON.stringify(data, null, 2);
+            const response = await fetch(apiG12, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error en la API G12: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
             mydatag12 = data;
-            console.log(`Response received from G12 API:\n${JSON.stringify(mydatag12, null, 2)}`);
+
+            // Filtrar los datos para Extremadura y el año 2018
+            const extremaduraData = data.find(item => item.aacc === "Extremadura" && item.year === 2018);
+
+            // Calcular el porcentaje de consumo de electricidad
+            if (extremaduraData) {
+                const totalConsumption = extremaduraData.total_consumption;
+                const electricityPercentage = (extremaduraData.electricity / totalConsumption) * 100;
+                return electricityPercentage.toFixed(2); // Devolver el porcentaje con 2 decimales
+            }
+
+            return 0; // Devolver 0 si no hay datos
         } catch (error) {
-            console.log(`ERROR: GET from ${apiG12}: ${error}`);
+            console.error(`ERROR al obtener datos de la API G12: ${error}`);
+            return 0; // Devolver 0 si hay un error
         }
     }
+        // Función para montar la gráfica de CanvasJS
+    async function mountCanvasJSChart() {
+        const mediaSatisfaccion = await getG17DataForExtremadura();
+        const electricityPercentage = await getG12DataForExtremadura();
 
+        // Crear la gráfica de CanvasJS
+        const chart = new CanvasJS.Chart("container-canvasjs", {
+            animationEnabled: true,
+            title: {
+                text: "Indicadores Clave de Extremadura (2018)"
+            },
+            axisY: {
+                title: "Porcentaje (%)",
+                suffix: "%",
+                lineColor: "#4F81BC",
+                tickColor: "#4F81BC",
+                labelFontColor: "#4F81BC",
+                titleFontColor: "#4F81BC"
+            },
+            data: [{
+                type: "column",
+                name: "Satisfacción Media",
+                showInLegend: true,
+                yValueFormatString: "#,##0.##'%'",
+                dataPoints: [
+                    { label: "Satisfacción Media", y: parseFloat(mediaSatisfaccion) }
+                ]
+            },
+            {
+                type: "column",
+                name: "Consumo de Electricidad",
+                showInLegend: true,
+                yValueFormatString: "#,##0.##'%'",
+                dataPoints: [
+                    { label: "Consumo de Electricidad", y: parseFloat(electricityPercentage) }
+                ]
+            }]
+        });
 
+        chart.render();
+    }
 
-
+    // Llamar a la función para montar la gráfica al cargar la página
+    onMount(async () => {
+        await mountCanvasJSChart();
+    });
+    
 
 
 
@@ -371,6 +447,18 @@ async function getG17DataForBadajoz() {
     }
 
     .highcharts-description {
+        margin: 0.3rem 10px;
+        text-align: center;
+        font-size: 1rem;
+        color: #555;
+    }
+    .canvasjs-figure {
+        min-width: 320px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .canvasjs-description {
         margin: 0.3rem 10px;
         text-align: center;
         font-size: 1rem;
