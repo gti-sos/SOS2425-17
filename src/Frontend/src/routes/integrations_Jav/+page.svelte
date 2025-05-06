@@ -340,6 +340,7 @@
             points: Number(item.points)
         }))
         .sort((a, b) => b.points - a.points)
+        .slice(0,10);
 
     return datosFiltrados;
     
@@ -438,7 +439,7 @@ async function trackByStreamCount() {
         const values = data.map(item => item.value);
 
         
-
+        
         const resultado2 = await playersByOverall(); 
 
         const data2 = resultado2.map(item => ({
@@ -449,8 +450,9 @@ async function trackByStreamCount() {
 
         const names2 = data2.map(item => item.name);
         const values2 = data2.map(item => item.value);
+        
     
-        const resultado3 = await trackByStreamCount(); // ya viene ordenado
+        const resultado3 = await trackByStreamCount(); 
 
         const data3 = resultado3.map(item => ({
             name: item.name,
@@ -789,6 +791,8 @@ async function trackByStreamCount() {
         item: {
           fontFamily: 'Roboto',
           fontSize: '12px',
+          maxItems: 100,       
+          autoFit: true 
         },
         label: {
           text: 'IPoints',
@@ -841,6 +845,7 @@ async function trackByStreamCount() {
       ],
     };
 
+    
     // RENDER CHARTS
     // -----------------------------
     zingchart.render({
@@ -999,10 +1004,6 @@ async function trackByStreamCount() {
         }]
 
     });
-    
-    
-
-    
     
     });
   
