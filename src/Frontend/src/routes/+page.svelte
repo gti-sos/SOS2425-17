@@ -156,3 +156,9 @@
     </div>
 
 </main>
+
+<div class="section">
+    <h2>ℹ️ Enlace a about</h2>
+    <strong>About : </strong>
+    <a href="/about" class="boton">About</a>
+</div>
