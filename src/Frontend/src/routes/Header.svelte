@@ -207,7 +207,7 @@
             </a>
 
         <!-- Inicio -->
-        <a href="/effort" class="nav-link">
+        <a href="/efforts" class="nav-link">
             <i class="fas fa-running"></i> Esfuerzos
         </a>
         
