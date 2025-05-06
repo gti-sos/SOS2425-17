@@ -2,47 +2,6 @@
 	<title>SOS2425-17</title>
 </svelte:head>
 
-<script>
-    // Datos de los miembros
-    const miembros = [
-        {
-            nombre: 'Pablo Aguza Barragán',
-            frontend: '/university-academic-performance',
-            api_v1: "/api/v1/university-academic-performance",
-            api_v2: "/api/v2/university-academic-performance",
-            postman_v1: '/api/v1/university-academic-performance/docs',
-            postman_v2: '/api/v2/university-academic-performance/docs',
-            recurso: 'university-academic-performance',
-            github: 'https://github.com/Aguzajr',
-            vistas:"/university-academic-performance/vistas"
-        },
-        {
-            nombre: 'Javier Guerrero Pérez',
-            //API Javier Guerrero Pérez
-            frontend: '/university-demands',
-            api_v1: '/api/v1/university-demands',
-            api_v2: '/api/v2/university-demands',
-            postman_v1: '/api/v1/university-demands/docs',
-            postman_v2: '/api/v2/university-demands/docs',
-            recurso: 'university-demands',
-            github: 'https://github.com/Javiigp',
-            vistas: '/university-demands/vistas'
-        },
-        {
-            nombre: 'Alejandro Gaona Penco',
-            frontend: '/students_satisfaction',
-            api: '/api/v2/students_satisfaction',
-            postman: '/api/v2/students_satisfaction/docs',
-            recurso: 'students-satisfaction',
-            github: 'https://github.com/alegp2003',
-            vistas:'/students_satisfaction/vistas'
-        }
-    ];
-
-    const githubComun = 'https://github.com/gti-sos/sos2425-17';
-</script>
-
-
 <style>
     h1 {
         text-align: center;
@@ -73,92 +32,48 @@
     <div class="section">
         <h2>📱 Enlaces a los Front-End desarrollados por cada miembro del grupo</h2>
         <ul>
-            {#each miembros as miembro}
-                <li><strong>{miembro.nombre}:</strong>
-                    {#if miembro.nombre === 'Javier Guerrero Pérez'}
-                        <a href="/university-demands">Front university-demands</a>
-                    {:else if miembro.nombre === 'Pablo Aguza Barragán'}
-                        <a href="/university-academic-performance">Front-end university-academic-performance</a>                    
-                    {:else if miembro.frontend}
-                        <a href={miembro.frontend} target="_blank">{miembro.frontend}</a>
-                    {:else}
-                        <em>No disponible</em>
-                    {/if}
-                </li>
-            {/each}
+            <li><strong>Pablo Aguza Barragán:</strong> <a href="/university-academic-performance">Front-end university-academic-performance</a></li>
+            <li><strong>Javier Guerrero Pérez:</strong> <a href="/university-demands">Front university-demands</a></li>
+            <li><strong>Alejandro Gaona Penco:</strong> <a href="/students_satisfaction">Front students_satisfaction</a></li>
         </ul>
     </div>
 
     <div class="section">
         <h2>🌐 Enlaces a las URL base de las APIs desarrolladas</h2>
         <ul>
-            {#each miembros as miembro}
-                <li><strong>{miembro.nombre} API:</strong>
-                    {#if miembro.api_v1 && miembro.api_v2}
-                        <a href={miembro.api_v1} target="_blank">API v1</a> | 
-                        <a href={miembro.api_v2} target="_blank">API v2</a>
-                    {:else if miembro.api}
-                        <a href={miembro.api} target="_blank">{miembro.api}</a>
-                    {:else}
-                        <em>No disponible</em>
-                    {/if}
-                </li>
-            {/each}
+            <li><strong>Pablo Aguza Barragán API:</strong> <a href="/api/v1/university-academic-performance" target="_blank">API v1</a> | <a href="/api/v2/university-academic-performance" target="_blank">API v2</a></li>
+            <li><strong>Javier Guerrero Pérez API:</strong> <a href="/api/v1/university-demands" target="_blank">API v1</a> | <a href="/api/v2/university-demands" target="_blank">API v2</a></li>
+            <li><strong>Alejandro Gaona Penco API:</strong> <a href="/api/v2/students_satisfaction" target="_blank">API v2</a></li>
         </ul>
     </div>
-    
 
     <div class="section">
         <h2>📄 Enlaces a la documentación de Postman de las APIs</h2>
         <ul>
-            {#each miembros as miembro}
-                <li><strong>{miembro.nombre} API:</strong>
-                    {#if miembro.nombre === 'Alejandro Gaona Penco'}
-                        <a href="/api/v2/students_satisfaction/docs" target="_blank">Documentación Postman</a>
-                    {:else if miembro.postman_v1 && miembro.postman_v2}
-                        <a href={miembro.postman_v1} target="_blank">API v1</a> | 
-                        <a href={miembro.postman_v2} target="_blank">API v2</a>
-                    {:else if miembro.api}
-                        <a href={miembro.api} target="_blank">{miembro.api}</a>
-                    {:else}
-                        <em>No disponible</em>
-                    {/if}
-                </li>
-            {/each}
+            <li><strong>Pablo Aguza Barragán API:</strong> <a href="/api/v1/university-academic-performance/docs" target="_blank">API v1</a> | <a href="/api/v2/university-academic-performance/docs" target="_blank">API v2</a></li>
+            <li><strong>Javier Guerrero Pérez API:</strong> <a href="/api/v1/university-demands/docs" target="_blank">API v1</a> | <a href="/api/v2/university-demands/docs" target="_blank">API v2</a></li>
+            <li><strong>Alejandro Gaona Penco API:</strong> <a href="/api/v2/students_satisfaction/docs" target="_blank">Documentación Postman</a></li>
         </ul>
     </div>
 
     <div class="section">
         <h2>🗃️ Repositorio del equipo en GitHub</h2>
         <ul>
-            <li><a href={githubComun} target="_blank">{githubComun}</a></li>
+            <li><a href="https://github.com/gti-sos/sos2425-17" target="_blank">https://github.com/gti-sos/sos2425-17</a></li>
         </ul>
     </div>
-
 
     <div class="section">
         <h2>📊 Enlaces a las vistas desarrolladas por cada miembro</h2>
         <ul>
-            {#each miembros as miembro}
-                <li><strong>{miembro.nombre}:</strong>
-                    {#if miembro.nombre === 'Javier Guerrero Pérez'}
-                        <a href="/university-demands/vistas">Vistas university-demands</a>
-                    {:else if miembro.nombre === 'Pablo Aguza Barragán'}
-                        <a href="/university-academic-performance/vistas">Vistas university-academic-performance</a> 
-                    {:else if miembro.vistas}
-                        <a href={miembro.vistas} target="_blank">{miembro.vistas}</a>
-                    {:else}
-                        <em>No disponible</em>
-                    {/if}
-                </li>
-            {/each}
+            <li><strong>Pablo Aguza Barragán:</strong> <a href="/university-academic-performance/vistas">Vistas university-academic-performance</a></li>
+            <li><strong>Javier Guerrero Pérez:</strong> <a href="/university-demands/vistas">Vistas university-demands</a></li>
+            <li><strong>Alejandro Gaona Penco:</strong> <a href="/students_satisfaction/vistas">Vistas students_satisfaction</a></li>
         </ul>
     </div>
 
+    <div class="section">
+        <h2>ℹ️ Enlace a About</h2>
+        <strong>About:</strong> <a href="/about" class="boton">About</a>
+    </div>
 </main>
-
-<div class="section">
-    <h2>ℹ️ Enlace a about</h2>
-    <strong>About : </strong>
-    <a href="/about" class="boton">About</a>
-</div>
