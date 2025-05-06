@@ -19,7 +19,11 @@
         </ul>
         
         <h2>Project Description</h2>
-        <p>Our sources of information are aimed at analyzing the relationship that exists between university demands, student satisfaction, and academic performance in different universities of Extremadura.</p>
+        <ul>
+            <li>
+                <p>Our sources of information are aimed at analyzing the relationship that exists between university demands, student satisfaction, and academic performance in different universities of Extremadura.</p>
+            </li>
+        </ul>
         
         <h2>Repository</h2>
         <ul>
