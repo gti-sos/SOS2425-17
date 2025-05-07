@@ -35,12 +35,29 @@
     </p>
 </figure>
 
+<figure class="canvasjs-figure">
+    <div id="chartContainer" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de línea mostrando cuántas películas se estrenaron cada año, según los datos obtenidos de la API.
+    </p>
+  </figure>
+
+  <figure class="canvasjs-figure">
+    <div id="chartContainerBebidas" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de barras apiladas horizontales que muestra la frecuencia de cada valor en subcategorías 1, 2 y 3 de bebidas.
+    </p>
+  </figure>
+  
+  
+
 <script>
 import { onMount } from "svelte";
 
 let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction";
-let apitiktok = "/tiktok-data";
 let apionepiece = "/onepiece-data";
+let apicerveza = "/cerveza-data";
+let apipelis = "/pelis-data";
 let apiG15="https://sos2425-15.onrender.com/ocupied-grand-stats";
 let apiG10="https://sos2425-10.onrender.com/api/v1/registrations-stats";
 let apiG19="https://sos2425-19.onrender.com/api/v2/ownerships-changes-stats/";
@@ -48,7 +65,7 @@ let apiG12="https://sos2425-12.onrender.com/api/v1/annual-consumptions";
 let mydatag17=[];
 let mydatatiktok = [];
 let mydatalol = [];
-let mydataonepiece = [];
+let mydatapelis = [];
 let mydatag15 = [];
 let mydatag10 = [];
 let mydatag19 = [];
@@ -506,6 +523,163 @@ async function getG12DataForExtremadura() {
         await mountOnePieceChart();
     });
 
+
+    // Función para obtener los datos de la API Películas
+    async function getPelisData() {
+        try {
+            const response = await fetch(apipelis, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error al obtener datos de Películas: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("ERROR al obtener datos de Películas:", error);
+            return [];
+        }
+    }
+    function processPelisData(data) {
+  const yearCounts = {};
+
+  data.forEach(peli => {
+    const year = peli.startYear;
+    if (year && !isNaN(year)) {
+      yearCounts[year] = (yearCounts[year] || 0) + 1;
+    }
+  });
+
+  // Convertimos a array de objetos { x: año, y: cantidad }
+  const dataPoints = Object.entries(yearCounts)
+    .map(([year, count]) => ({ x: parseInt(year), y: count }))
+    .sort((a, b) => a.x - b.x); // ordenado por año
+
+  return dataPoints;
+}
+
+async function mountPelisChart() {
+  const data = await getPelisData();
+  const processed = processPelisData(data);
+
+  const chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: "Películas estrenadas por año",
+      fontSize: 24,
+    },
+    axisX: {
+      title: "Año de estreno",
+      labelFontSize: 14,
+    },
+    axisY: {
+      title: "Número de películas",
+      includeZero: true,
+      labelFontSize: 14,
+    },
+    data: [{
+      type: "spline", // Línea suave
+      markerSize: 5,
+      toolTipContent: "Año: {x}<br/>Películas: {y}",
+      dataPoints: processed
+    }]
+  });
+
+  chart.render();
+}
+onMount(async () => {
+  await mountPelisChart();
+});
+
+async function getBebidasData() {
+  try {
+    const response = await fetch(apicerveza);
+    if (!response.ok) {
+      throw new Error(`Error al obtener datos de bebidas: ${response.status}`);
+    }
+    const json = await response.json();
+    return json.data;
+  } catch (error) {
+    console.error("ERROR al obtener datos de bebidas:", error);
+    return [];
+  }
+}
+
+function procesarDatosBebidas(data) {
+  const subcats = ["sub_category_1", "sub_category_2", "sub_category_3"];
+  const subcatLabels = ["Subcategoría 1", "Subcategoría 2", "Subcategoría 3"];
+
+  const conteos = {
+    "Subcategoría 1": {},
+    "Subcategoría 2": {},
+    "Subcategoría 3": {}
+  };
+
+  data.forEach(item => {
+    subcats.forEach((key, index) => {
+      const valor = item[key]?.trim(); // Evita "undefined" y espacios
+      const etiqueta = subcatLabels[index];
+      if (valor) {
+        conteos[etiqueta][valor] = (conteos[etiqueta][valor] || 0) + 1;
+      }
+    });
+  });
+
+  const categoriasUnicas = new Set();
+  Object.values(conteos).forEach(cat => {
+    Object.keys(cat).forEach(nombre => categoriasUnicas.add(nombre));
+  });
+
+  const dataSeries = [];
+
+  categoriasUnicas.forEach(nombreCategoria => {
+    const puntos = subcatLabels.map(etiqueta => ({
+      y: conteos[etiqueta][nombreCategoria] || 0,
+      label: etiqueta
+    }));
+
+    dataSeries.push({
+      type: "stackedBar",
+      name: nombreCategoria,
+      showInLegend: true,
+      dataPoints: puntos
+    });
+  });
+
+  return dataSeries;
+}
+
+async function montarGraficoBebidas() {
+  const data = await getBebidasData();
+  const series = procesarDatosBebidas(data);
+
+  const chart = new CanvasJS.Chart("chartContainerBebidas", {
+  animationEnabled: true,
+  title: {
+    text: "Distribución de Valores por Subcategoría"
+  },
+  axisY: {
+    title: "Subcategorías" // No ponemos reversed aquí
+  },
+  axisX: {
+    title: "Cantidad",
+    includeZero: true
+  },
+  toolTip: {
+    shared: true
+  },
+  legend: {
+    verticalAlign: "top"
+  },
+  data: series
+});
+
+
+  chart.render();
+}
+
+onMount(() => {
+  montarGraficoBebidas();
+});
     
    
 </script>
