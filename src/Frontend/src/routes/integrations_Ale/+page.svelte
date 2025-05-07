@@ -28,12 +28,18 @@
     </p>
 </figure>
 
+<figure class="canvasjs-figure">
+    <div id="container-onepiece" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de barras horizontales agrupando personajes de One Piece por género y tramos de ID (200 en 200).
+    </p>
+</figure>
+
 <script>
 import { onMount } from "svelte";
 
-let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction"
+let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction";
 let apitiktok = "/tiktok-data";
-let apilol = "/lol-data";
 let apionepiece = "/onepiece-data";
 let apiG15="https://sos2425-15.onrender.com/ocupied-grand-stats";
 let apiG10="https://sos2425-10.onrender.com/api/v1/registrations-stats";
@@ -139,6 +145,7 @@ async function mountG10Chart() {
 // Función para obtener y procesar los datos de la API G17
 async function getG17DataForBadajoz() {
     try {
+        await loadInitialDataForG17();
         const response = await fetch(apiG17, { method: "GET" });
         if (!response.ok) {
             throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
@@ -276,9 +283,28 @@ async function getG17DataForBadajoz() {
         await mountKPIChart();
     });
         
+
+    // Función para cargar los datos iniciales de G17
+async function loadInitialDataForG17() {
+    try {
+        
+        const response = await fetch("https://sos2425-17.onrender.com/api/v2/students_satisfaction/loadInitialData", { method: "GET" });
+        if (!response.ok) {
+            throw new Error(`Error al cargar datos iniciales de G17: ${response.status} ${response.statusText}`);
+        }
+        console.log("Datos iniciales de G17 cargados correctamente.");
+    } catch (error) {
+        console.error("ERROR al cargar datos iniciales de G17:", error);
+    }
+}
+
+
     // Función para obtener y procesar los datos de la API G17
     async function getG17DataForExtremadura() {
         try {
+            // Asegurarse de que los datos iniciales estén cargados
+        await loadInitialDataForG17();
+
             const response = await fetch(apiG17, { method: "GET" });
             if (!response.ok) {
                 throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
@@ -376,9 +402,111 @@ async function getG12DataForExtremadura() {
     });
     
 
+    // Función para obtener los datos de la API One Piece
+    async function getOnePieceData() {
+        try {
+            const response = await fetch(apionepiece, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error al obtener datos de One Piece: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("ERROR al obtener datos de One Piece:", error);
+            return [];
+        }
+    }
+    function processOnePieceData(data) {
+    const step = 200;
+    const minId = 100;
+    const maxId = 1499;
+    const ranges = [];
+
+    for (let start = minId; start <= maxId; start += step) {
+      ranges.push({
+        min: start,
+        max: start + step,
+        label: `${start}-${start + step - 1}`,
+        male: 0,
+        female: 0
+      });
+    }
+
+    data.forEach(character => {
+      const range = ranges.find(r => character.id >= r.min && character.id < r.max);
+      if (range) {
+        if (character.gender === "male") {
+          range.male++;
+        } else if (character.gender === "female") {
+          range.female++;
+        }
+      }
+    });
+
+    return ranges;
+  }
+
+  async function mountOnePieceChart() {
+    const data = await getOnePieceData();
+    const processed = processOnePieceData(data);
+
+    const chart = new CanvasJS.Chart("container-onepiece", {
+  animationEnabled: true,
+  theme: "light2",
+  title: {
+    text: "Distribución de personajes de One Piece por tramo de ID",
+    fontSize: 24,
+  },
+  axisX: {
+    title: "Tramos de ID",
+    labelFontSize: 14,
+    interval: 1,
+  },
+  axisY: {
+    title: "Cantidad de personajes",
+    includeZero: true,
+    labelFontSize: 14,
+  },
+  toolTip: {
+    shared: true
+  },
+  legend: {
+    fontSize: 16,
+    verticalAlign: "bottom"
+  },
+  data: [
+    {
+      type: "stackedArea",
+      name: "Masculino",
+      showInLegend: true,
+      color: "#3A80BA",
+      dataPoints: processed.map(range => ({
+        label: range.label,
+        y: range.male
+      }))
+    },
+    {
+      type: "stackedArea",
+      name: "Femenino",
+      showInLegend: true,
+      color: "#C94C4C",
+      dataPoints: processed.map(range => ({
+        label: range.label,
+        y: range.female
+      }))
+    }
+  ]
+});
 
 
+    chart.render();
+  }
 
+  onMount(async () => {
+        await mountOnePieceChart();
+    });
+
+    
    
 </script>
 
@@ -464,4 +592,15 @@ async function getG12DataForExtremadura() {
         font-size: 1rem;
         color: #555;
     }
+
+    .canvasjs-figure {
+    max-width: 900px;
+    margin: 2em auto;
+  }
+
+  .canvasjs-description {
+    text-align: center;
+    color: #555;
+  }
+  
 </style>

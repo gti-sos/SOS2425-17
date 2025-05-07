@@ -51,7 +51,7 @@ loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
 app.get('/tiktok-data', async (req, res) => {
-  const response = await fetch('https://tiktok-api23.p.rapidapi.com/api/user/followers?secUid=MS4wLjABAAAAqB08cUbXaDWqbD6MCga2RbGTuhfO2EsHayBYx08NDrN7IE3jQuRDNNN6YwyfH6_6&count=30&min', {
+  const response = await fetch('https://tiktok-api23.p.rapidapi.com/api/user/followers?secUid=MS4wLjABAAAAqB08cUbXaDWqbD6MCga2RbGTuhfO2EsHayBYx08NDrN7IE3jQuRDNNN6YwyfH6_6&count=30&minCursor=0', {
     headers: {
       'x-rapidapi-host': 'tiktok-api23.p.rapidapi.com',
       'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
@@ -75,9 +75,9 @@ app.get('/onepiece-data', async (req, res) => {
 });
 
 app.get('/lol-data', async (req, res) => {
-  const response = await fetch('https://league-of-legends-esports1.p.rapidapi.com/team-statistics?tournamentId=1177 ', {
+  const response = await fetch('https://lol_stats.p.rapidapi.com/euw1/SuperTony', {
     headers: {
-      'x-rapidapi-host': 'league-of-legends-esports1.p.rapidapi.com',
+      'x-rapidapi-host': 'lol_stats.p.rapidapi.com',
       'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
     }
   });
