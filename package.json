@@ -2,12 +2,14 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "angular-chart.js": "^1.1.1",
+    "apexcharts": "^4.7.0",
     "chart.js": "^4.4.9",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "nedb": "^1.8.0",
     "normalize-text": "^2.6.0",
-    "plotly.js": "^3.0.1"
+    "plotly.js": "^3.0.1",
+    "svelte-apexcharts": "^1.0.2"
   },
   "name": "sos2425-17",
   "version": "1.0.0",

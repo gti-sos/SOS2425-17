@@ -28,9 +28,9 @@
   </figure>
 
   <div class="chart-wrapper" style="text-align: center;">
-    <h3 style="margin: 0;">Cantidad de Pokémon por tipo de daño (Físico / Especial)</h3>
+    <h3 style="margin: 0;">Número de pokemons por tipo de ataque(Fisico/Especial)</h3>
     <p style="margin: 5px 0 10px; color: gray;">MORRIS.JS: diagrama de barras</p>
-    <div id="donut-chart" style="height: 250px; display: inline-block;"></div>
+    <div id="chart2" style="height: 250px; display: inline-block;"></div>
   </div>
 
   <div class="chart-wrapper" style="text-align: center;">
@@ -48,16 +48,23 @@
   <div class="chart-wrapper" style="text-align: center;">
   <h3 style="margin: 0;">Tasa de graduación y desempleo por año en extremadura</h3>
   <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bar Chart  -- (INTEGRADA)</p>
-<canvas id="barChart"></canvas>
+<canvas id="barChart" style="width: 300px; height: 300px;display: inline-block;"></canvas>
   </div>
 
 
   <div class="chart-wrapper" style="text-align: center;">
     <h3 style="margin: 0;">Top 5 carreteras más multadas</h3>
     <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Polar Chart</p>
-    <canvas id="polarChart"></canvas>
+    <canvas id="polarChart" style="width: 300px; height: 300px;display: inline-block;" ></canvas>
 
     </div>  
+
+    <div class="chart-wrapper" style="text-align: center;">
+      <h3 style="margin: 0;">Lo que sea</h3>
+      <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bubble</p>
+      <canvas id="bubbleChart" style="width: 300px; height: 300px;display: inline-block;"></canvas>
+  
+      </div>  
 
   
 
@@ -67,7 +74,6 @@
 import { onMount } from "svelte";
 import Chart from 'chart.js/auto';
 
-let canvas;
 let data_pab=[]
 let data_Fines=[]
 let data_sanctionsAndPoints=[]
@@ -539,7 +545,7 @@ function getTopFiveCriticalKilometerPoints(data) {
 
 
 
-
+/*
 onMount(async () => {
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js');
     await loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js');
@@ -569,7 +575,7 @@ onMount(async () => {
 
 
 
-    /*
+    
     data_Sofascore=await getSofascore();
     console.log("INTERNET SOFASCORE ",data_Sofascore)
     data_DrawSofascore=buildChartData(data_Sofascore)
@@ -585,7 +591,7 @@ onMount(async () => {
     data_DonutAnime=countInitialAnime(data_Anime)
     console.log("DATA DONUT ANIME",data_DonutAnime)
     const colorsForDonut = generateColors(data_DonutAnime.length);
-    */
+    
 
 
 
@@ -767,9 +773,9 @@ Highcharts.chart('container2', {
 });
 
 
-/*
+
 new window.Morris.Bar({
-  element: chartId,
+  element: "chart2",
   data: data_DamageTypeChart, 
   xkey: 'y',
   ykeys: ['count'],
@@ -789,7 +795,6 @@ new Morris.Donut({
   resize: true
 });
 
-*/
 
 
 const ctx = document.getElementById('barChart').getContext('2d');
@@ -850,29 +855,46 @@ const charts_Polar = new Chart(ctxPolar, {
 
 
 
+const ctxbubble = document.getElementById('bubbleChart').getContext('2d');
+const chart = new Chart(ctxbubble, {
+  type: 'bubble',
+  data: {
+    datasets: [{
+      label: 'Productos',
+      data: [
+        { x: 10, y: 20, r: 10 },
+        { x: 15, y: 10, r: 15 },
+        { x: 25, y: 30, r: 8 },
+        { x: 30, y: 15, r: 12 }
+      ],
+      backgroundColor: 'rgba(75, 192, 192, 0.6)'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Precio'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Demanda'
+        }
+      }
+    }
+  }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  });
+  });*/
 
 
 </script>

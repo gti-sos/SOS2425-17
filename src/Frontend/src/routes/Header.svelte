@@ -115,11 +115,6 @@
         position: relative;
     }
 
-    .nav-link:hover {
-        color: white;
-        background-color: #007bff;
-    }
-
     .dropdown {
         position: absolute;
         top: 100%;
@@ -205,6 +200,17 @@
                 </div>
             {/if}
         </div>
+
+            <!-- Inicio -->
+            <a href="/integrations" class="nav-link">
+                <i class="fas fa-plug"></i> Integraciones
+            </a>
+
+            <!-- Inicio -->
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i> Conocenos
+            </a>
+        
     </div>
 </header>
 

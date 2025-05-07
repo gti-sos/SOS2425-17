@@ -99,10 +99,10 @@ app.get('/api-f1', async (req, res) => {
   res.json(data);
 });
 
-app.get('/boxing-data', async (req, res) => {
-  const response = await fetch('https://boxing-data-api.p.rapidapi.com/v1/events/schedule?days=30&past_hours=12&date_sort=ASC&page_num=1&page_size=25', {
+app.get('/api-spotify', async (req, res) => {
+  const response = await fetch('https://spotify-statistics-and-stream-count.p.rapidapi.com/artist/7Ln80lUS6He07XvHI8qqHH', {
     headers: {
-      'x-rapidapi-host': 'boxing-data-api.p.rapidapi.com',
+      'x-rapidapi-host': 'spotify-statistics-and-stream-count.p.rapidapi.com',
       'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
     }
   });
@@ -122,7 +122,7 @@ app.get('/api-fifa', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-/*
+
 app.get('/api-sofascore', async (req, res) => {
   const response = await fetch('https://sofascore.p.rapidapi.com/players/get-all-statistics?playerId=155997', {
     headers: {
@@ -159,7 +159,6 @@ app.get('/api-pokemon-unite', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-*/
 
 
 app.use(handler);
