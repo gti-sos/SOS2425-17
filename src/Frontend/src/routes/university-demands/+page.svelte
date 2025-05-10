@@ -7,7 +7,7 @@
 
     import {dev} from '$app/environment';
     let Devel_HOST = "http://localhost:16078";
-
+    console.log("26JAV");
 
     let Api = "/api/v2/university-demands";
 
@@ -59,7 +59,7 @@
         
         try{
 
-            const res  = await fetch(Api,{method: "GET"});
+            const res  = await fetch(Api,{method: "GET"});console.log("27JAV");
             //Para manda el resultado res en json y lo mete en data
             const data = await res.json();
             result = JSON.stringify(data,null,2);
@@ -98,7 +98,7 @@
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
-                
+                console.log("28JAV");
             } 
             
             else {
@@ -129,7 +129,7 @@ async function getUniversityEspecifico(params = {}) {
         //Lo que hago es que llamo a la direccion /university-demands?campo = valor 
         const url = `${Api}?${queryString}`;
         const res = await fetch(url, { method: "GET" });
-
+        console.log("29JAV");
         const status = res.status;
         resultStatus = status;
 
@@ -143,7 +143,7 @@ async function getUniversityEspecifico(params = {}) {
             } 
 
         const data = await res.json();
-
+        console.log("30JAV");
         result = JSON.stringify(data, null, 2);
         universityData = data;
         console.log(`Response received:\n${result}`);
@@ -213,7 +213,7 @@ function resetFilters() {
     async function createUniversityDemands(){
         resultStatus = result = "";
         try {
-            
+            console.log("31JAV");
             const res = await fetch(Api,{
                 method:"POST",
                 headers:{
@@ -229,7 +229,7 @@ function resetFilters() {
                     academicYear: newUniversityAcademicYear         })
             });
   
-            const status = await res.status;
+            const status = await res.status;console.log("32JAV");
             resultStatus = status;
             if(status == 201){
                 console.log(`Demand created`);
@@ -277,7 +277,7 @@ function resetFilters() {
             console.log(`ERROR:  GET from ${Api}: ${error}`);
         }
 
-
+        console.log("33JAV");
     }
 
     //Put en el front
@@ -333,7 +333,7 @@ function resetFilters() {
         errorMessage = "Error de red al actualizar.";
     }
 }
-
+console.log("34JAV");
 function openEditForm(universityD) {
     newUniversityLocation = universityD.location;
     newUniversityDegree = universityD.degree;
