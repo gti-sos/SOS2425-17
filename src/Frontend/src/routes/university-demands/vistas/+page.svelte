@@ -40,7 +40,7 @@
         try {
 
             await fetch("/api/v2/university-demands/loadInitialData")
-
+            console.log("35JAV");
             const res = await fetch(API,{method:"GET"});
 
             const data = await res.json();
@@ -58,7 +58,7 @@
 
     async function foreignersByLocation() {
     await getData(); 
-
+    console.log("36JAV");
     const resultado = myData.reduce((acc, { location, foreigners }) => {
         acc[location] = (acc[location] || 0) + foreigners;
         return acc;
@@ -254,7 +254,7 @@ async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
     });
 
     });
-
+    console.log("37JAV");
 </script>
 
 <style>

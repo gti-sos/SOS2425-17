@@ -16,7 +16,8 @@
 
     // Función para obtener los datos del backend
     async function getData() {
-        resultStatus = result = "";
+        resultStatus = result = "";console.log("b");
+
         try {
             await fetch("/api/v2/students_satisfaction/loadInitialData")
             const res = await fetch(API, { method: "GET" });

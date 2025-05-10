@@ -25,7 +25,7 @@
     if(dev)
         API = DEVEL_HOST + API;
 
-    
+        console.log("16JAV");
     
 
   let APIG21 = "https://sos2425-21.onrender.com/api/v1/public-transit-stats/";
@@ -54,7 +54,7 @@
         try {
 
             const res = await fetch(APIG21,{method:"GET"});
-
+            console.log("17JAV");
             const data = await res.json();
             result = JSON.stringify(data,null,2);
 
@@ -68,7 +68,7 @@
     }
     
     console.log(getDataG21());
-    
+    console.log("18JAV");
     async function getDataG18(){
         resultStatus = result = "";
 
@@ -151,7 +151,7 @@
 
     async function getDataG20(){
         resultStatus = result = "";
-
+        console.log("19JAV");
         try {
             await fetch("https://sos2425-20.onrender.com/api/v1/accidents-with-animals/loadInitialData")
             const res = await fetch(APIG20,{method:"GET"});
@@ -175,7 +175,7 @@
 
     async function KmByProvince() {
     await getDataG20(); 
-
+    console.log("20JAV");
     const datosFiltrados = myDatag20
         .map(item => ({
             province: item.province,
@@ -262,7 +262,7 @@
 //getCombinedData().then(console.log);
 
    
-    
+console.log("21JAV");
     async function getDataF1(){
         resultStatus = result = "";
 
@@ -331,7 +331,7 @@
 
     async function driverByPoints() {
     await getDataF1(); // espera a que myData se llene correctamente
-
+    console.log("22JAV");
     const datosFiltrados = myDataF1
         .map(item => ({
             driver_name: item.driver_name,
@@ -364,7 +364,7 @@ async function GotzeValueYears() {
     
 }
 GotzeValueYears().then(data => console.log(data));
-
+console.log("23JAV");
 
 async function trackByStreamCount() {
     await getDataSpotify(); // espera a que myData se llene correctamente
@@ -421,7 +421,7 @@ async function trackByStreamCount() {
       
         
         const resultado = await driverByPoints(); 
-
+        console.log("24JAV");
         const data = resultado.map(item => ({
             name: item.driver_name,
             value: Number(item.points) 
@@ -526,7 +526,7 @@ async function trackByStreamCount() {
       width: '640px',
       modules: 'scorecard'
     });  
-
+    console.log("25JAV");
     ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"]; // CHART CONFIG
     // -----------------------------
     let chartConfig5 = {
