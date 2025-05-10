@@ -9,11 +9,11 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 
-
 </svelte:head>
 
 <script>
-
+    
+    
     import { onMount } from "svelte";
     import { dev } from "$app/environment"; 
 
@@ -32,6 +32,7 @@
     let myData = [];
     let result = "";
     let resultStatus = "";
+    
     
     async function getData(){
         resultStatus = result = "";
@@ -66,8 +67,9 @@
 
     return Object.entries(resultado)
         .map(([location, foreigners]) => ({ location, foreigners }))
-        .sort((a, b) => b.foreigners - a.foreigners); // orden descendente
+        .sort((a, b) => b.foreigners - a.foreigners); 
 }
+
 
 
 async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
@@ -86,10 +88,7 @@ async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
     
 }
     console.log(graduatedByYear());
-
-        
     onMount(async () => {
-
         const resultado = await foreignersByLocation();
         const resultado2 = await graduatedByYear();
 

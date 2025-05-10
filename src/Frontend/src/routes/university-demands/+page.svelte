@@ -69,6 +69,7 @@
             console.log(`Error : Get from ${Api} : ${(error)}`)
         }
     }
+    
 
     //Cada vez que cargue la pagina llama a getUniversityDemands
     onMount(async () => {
@@ -76,6 +77,7 @@
         await getUniversityDemands();
     });
 
+    
     function getLoadInitialData() {
     fetch("/api/v2/university-demands/loadInitialData")
         .then(response => {
@@ -83,6 +85,7 @@
                 console.log("Datos iniciales insertados correctamente");
                 getUniversityDemands(); // <-- Esto recarga la tabla
                 successMessage = "¡Datos iniciales insertados correctamente!";
+                console.log("19");
 
                 // Oculta el mensaje después de unos segundos
                 setTimeout(() => {

@@ -6,6 +6,7 @@ const BASE_API = "/api/v2"; //Con esto lo que hago es crear la URL base de la ap
 
 let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
 
+
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 
 const university_demands = [ 
@@ -74,6 +75,7 @@ const university_demands = [
 
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 function loadBackendJavierV2(app){
+    
     app.get(BASE_API + "/university-demands", (req, res) => {
         let {
             location, degree, academicYear,
@@ -107,7 +109,7 @@ function loadBackendJavierV2(app){
             //Esto es para que si te lo devuelve vacio se convierta en 404 para que en el front no te de error
             if (results.length === 0) {
                 return res.status(404).json({ error: "No se encontraron resultados con esos filtros." });
-            }
+            }            
             
     
             // Paginación
@@ -120,8 +122,10 @@ function loadBackendJavierV2(app){
     
             results.forEach(e => delete e._id); // Limpiar _id para front
             res.json(results);
+            
         });
     });
+    
     
     
     
@@ -141,11 +145,13 @@ function loadBackendJavierV2(app){
                         return response.status(500).json({ error: "Error inserting initial data" });
                     }
                     response.status(201).json({message: "the data was inserted successfully"}); // Devuelve los datos insertados
-                });
+                    
+                    });
             } else {
                 response.status(409).json({ message: "empty the database first to initialize it" });
             }
         });
+        
     });
     
     //POST  
@@ -189,7 +195,7 @@ function loadBackendJavierV2(app){
         res.sendStatus(405);
     });
     
-    // PUT . Modificar un registro existente //Mirar porque no esta bien 
+    // PUT . Modificar un registro existente //Mirar porque no esta bien  
     app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
         const degree = req.params.degree;
         const location = req.params.location;
@@ -206,7 +212,7 @@ function loadBackendJavierV2(app){
                 error: "degree, location and academicYear in body must match URL parameters"
             });
         }
-    
+        
         // Buscar el registro original
         db.findOne({ degree, location, academicYear }, (err, existing) => {
             if (err) {
@@ -245,7 +251,9 @@ function loadBackendJavierV2(app){
     
                     return res.sendStatus(200);
                 }
+                
             );
+            
         });
     });
     
@@ -311,3 +319,4 @@ function loadBackendJavierV2(app){
 }
 
 export {loadBackendJavierV2}
+
