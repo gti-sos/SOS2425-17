@@ -781,12 +781,6 @@ onMount(async () => {
 
 });
 
-
-
-
-
-
-
 Highcharts.chart('container2', {
   chart: {
     type: 'scatter',

@@ -1,5 +1,5 @@
 <svelte:head>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js";></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -62,7 +62,7 @@
 
 <script>
 import { onMount } from "svelte";
-
+console.log("26-AGP")
 let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction";
 let apifurbo = "/furbo-data";
 let apicerveza = "/cerveza-data";
@@ -86,6 +86,7 @@ let resultStatus = "";
 async function getG21DataForChart() {
     try {
         const response = await fetch(apiG21);
+        console.log("27-AGP")
         const json = await response.json();
         return json.data;
     } catch (error) {
@@ -109,11 +110,14 @@ async function drawStackedAreaChart() {
         showInLegend: true,
         dataPoints: years.map(year => {
             const record = data.find(d => d.year === year && d.province === province);
+            console.log("28-AGP")
             return {
                 label: String(year),
                 y: record ? record.total_event : 0
             };
+            
         })
+    
     }));
 
     // Crear el gráfico
@@ -141,7 +145,9 @@ async function drawStackedAreaChart() {
     chart.render();
 }
 onMount(async () => {
+    console.log("29-AGP")
         await drawStackedAreaChart();
+        console.log("30-AGP")
     });
 
 
@@ -168,7 +174,7 @@ onMount(async () => {
 // Función para montar la gráfica
 async function mountG10Chart() {
         const { provincias, totalNacional, totalImportado } = await getG10DataForChart();
-
+console.log("31-AGP")
         // Crear la gráfica de Highcharts
         Highcharts.chart('container', {
             chart: {
@@ -369,6 +375,7 @@ async function getG17DataForBadajoz() {
 
     // Llamar a la función para montar la gráfica al cargar la página
     onMount(async () => {
+        console.log("32-AGP")
         await mountKPIChart();
     });
         
@@ -487,7 +494,9 @@ async function getG12DataForExtremadura() {
 
     // Llamar a la función para montar la gráfica al cargar la página
     onMount(async () => {
+        console.log("33-AGP")
         await mountCanvasJSChart();
+        console.log("34-AGP")
     });
     
 
@@ -527,6 +536,7 @@ async function getG12DataForExtremadura() {
 async function mountPelisChart() {
   const data = await getPelisData();
   const processed = processPelisData(data);
+  console.log("35-AGP")
 
   const chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
@@ -562,11 +572,13 @@ async function getBebidasData() {
   try {
     const response = await fetch(apicerveza);
     if (!response.ok) {
+        console.log("36-AGP")
       throw new Error(`Error al obtener datos de bebidas: ${response.status}`);
     }
     const json = await response.json();
     return json.data;
   } catch (error) {
+    console.log("37-AGP")
     console.error("ERROR al obtener datos de bebidas:", error);
     return [];
   }
@@ -600,6 +612,7 @@ function procesarDatosBebidas(data) {
   const dataSeries = [];
 
   categoriasUnicas.forEach(nombreCategoria => {
+    console.log("38-AGP")
     const puntos = subcatLabels.map(etiqueta => ({
       y: conteos[etiqueta][nombreCategoria] || 0,
       label: etiqueta
@@ -696,9 +709,10 @@ async function montarPieChart() {
 }
 
 onMount(() => {
+    console.log("39-AGP")
   montarPieChart();
 });
-    
+console.log("40-AGP")
    
 </script>
 
