@@ -8,6 +8,12 @@
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 </svelte:head>
+<figure class="highcharts-figure">
+    <div id="chartContainer-eventos" style="height: 370px; width: 100%;"></div>
+    <figcaption>
+        Gráfico de área apilada 100% que representa el número total de eventos por provincia y año.
+    </figcaption>
+</figure>
 
 <figure class="highcharts-figure">
     <div id="container"></div>
@@ -28,13 +34,16 @@
     </p>
 </figure>
 
-<figure class="canvasjs-figure">
-    <div id="container-onepiece" style="height: 500px; width: 100%;"></div>
-    <p class="canvasjs-description">
-      Gráfico de áreas agrupando personajes de One Piece por género y tramos de ID (200 en 200).
-    </p>
-</figure>
-
+<figure style="text-align: center; margin: 2em 0;">
+    <figcaption style="font-size: 1.2em; margin-bottom: 1em;">
+      Partidos ganados por equipo (temporada actual)
+    </figcaption>
+    <div id="container-pie" style="height: 500px; width: 100%; max-width: 800px; margin: auto;"></div>
+  </figure>
+  
+ 
+  
+  
 <figure class="canvasjs-figure">
     <div id="chartContainer" style="height: 500px; width: 100%;"></div>
     <p class="canvasjs-description">
@@ -48,12 +57,6 @@
       Gráfico de barras apiladas horizontales que muestra la frecuencia de cada valor en subcategorías 1, 2 y 3 de bebidas.
     </p>
   </figure>
-  <figure class="canvasjs-figure">
-    <div id="g15PyramidContainer" style="height: 500px; width: 100%;"></div>
-    <p class="canvasjs-description">
-      Pirámide de áreas proporcionales que muestra el porcentaje de uso del suelo en Andalucía: cultivable, pasto, forestal y superficie no agraria.
-    </p>
-  </figure>
   
   
 
@@ -61,13 +64,14 @@
 import { onMount } from "svelte";
 
 let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction";
-let apionepiece = "/onepiece-data";
+let apifurbo = "/furbo-data";
 let apicerveza = "/cerveza-data";
 let apipelis = "/pelis-data";
 let apiG15="https://sos2425-15.onrender.com/ocupied-grand-stats";
 let apiG10="https://sos2425-10.onrender.com/api/v1/registrations-stats";
 let apiG19="https://sos2425-19.onrender.com/api/v2/ownerships-changes-stats/";
 let apiG12="https://sos2425-12.onrender.com/api/v1/annual-consumptions";
+let apiG21="https://sos2425-21.onrender.com/api/v1/cultural-event";
 let mydatag17=[];
 let mydatatiktok = [];
 let mydatalol = [];
@@ -78,6 +82,68 @@ let mydatag19 = [];
 let mydatag12 = [];
 let result = "";
 let resultStatus = "";
+
+async function getG21DataForChart() {
+    try {
+        const response = await fetch(apiG21);
+        const json = await response.json();
+        return json.data;
+    } catch (error) {
+        console.error("Error al obtener datos de G10:", error);
+        return [];
+    }
+}
+async function drawStackedAreaChart() {
+    const data = await getG21DataForChart();
+
+    // Obtener años únicos
+    const years = [...new Set(data.map(item => item.year))].sort();
+
+    // Obtener provincias únicas
+    const provinces = [...new Set(data.map(item => item.province))];
+
+    // Inicializar estructura para acumular datos por provincia y año
+    const provinceSeries = provinces.map(province => ({
+        type: "stackedArea100",
+        name: province.charAt(0).toUpperCase() + province.slice(1),
+        showInLegend: true,
+        dataPoints: years.map(year => {
+            const record = data.find(d => d.year === year && d.province === province);
+            return {
+                label: String(year),
+                y: record ? record.total_event : 0
+            };
+        })
+    }));
+
+    // Crear el gráfico
+    const chart = new CanvasJS.Chart("chartContainer-eventos", {
+        animationEnabled: true,
+        title: {
+            text: "Total de Eventos por Provincia (Gráfico de Área Apilada 100%)"
+        },
+        axisX: {
+            title: "Año"
+        },
+        axisY: {
+            title: "Porcentaje de eventos",
+            suffix: "%"
+        },
+        toolTip: {
+            shared: true
+        },
+        legend: {
+            verticalAlign: "top"
+        },
+        data: provinceSeries
+    });
+
+    chart.render();
+}
+onMount(async () => {
+        await drawStackedAreaChart();
+    });
+
 
     // Función para obtener datos de apiG10
     async function getG10DataForChart() {
@@ -425,110 +491,6 @@ async function getG12DataForExtremadura() {
     });
     
 
-    // Función para obtener los datos de la API One Piece
-    async function getOnePieceData() {
-        try {
-            const response = await fetch(apionepiece, { method: "GET" });
-            if (!response.ok) {
-                throw new Error(`Error al obtener datos de One Piece: ${response.status} ${response.statusText}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error("ERROR al obtener datos de One Piece:", error);
-            return [];
-        }
-    }
-    function processOnePieceData(data) {
-    const step = 200;
-    const minId = 100;
-    const maxId = 1499;
-    const ranges = [];
-
-    for (let start = minId; start <= maxId; start += step) {
-      ranges.push({
-        min: start,
-        max: start + step,
-        label: `${start}-${start + step - 1}`,
-        male: 0,
-        female: 0
-      });
-    }
-
-    data.forEach(character => {
-      const range = ranges.find(r => character.id >= r.min && character.id < r.max);
-      if (range) {
-        if (character.gender === "male") {
-          range.male++;
-        } else if (character.gender === "female") {
-          range.female++;
-        }
-      }
-    });
-
-    return ranges;
-  }
-
-  async function mountOnePieceChart() {
-    const data = await getOnePieceData();
-    const processed = processOnePieceData(data);
-
-    const chart = new CanvasJS.Chart("container-onepiece", {
-  animationEnabled: true,
-  theme: "light2",
-  title: {
-    text: "Distribución de personajes de One Piece por tramo de ID",
-    fontSize: 24,
-  },
-  axisX: {
-    title: "Tramos de ID",
-    labelFontSize: 14,
-    interval: 1,
-  },
-  axisY: {
-    title: "Cantidad de personajes",
-    includeZero: true,
-    labelFontSize: 14,
-  },
-  toolTip: {
-    shared: true
-  },
-  legend: {
-    fontSize: 16,
-    verticalAlign: "bottom"
-  },
-  data: [
-    {
-      type: "stackedArea",
-      name: "Masculino",
-      showInLegend: true,
-      color: "#3A80BA",
-      dataPoints: processed.map(range => ({
-        label: range.label,
-        y: range.male
-      }))
-    },
-    {
-      type: "stackedArea",
-      name: "Femenino",
-      showInLegend: true,
-      color: "#C94C4C",
-      dataPoints: processed.map(range => ({
-        label: range.label,
-        y: range.female
-      }))
-    }
-  ]
-});
-
-
-    chart.render();
-  }
-
-  onMount(async () => {
-        await mountOnePieceChart();
-    });
-
 
     // Función para obtener los datos de la API Películas
     async function getPelisData() {
@@ -659,26 +621,26 @@ async function montarGraficoBebidas() {
   const series = procesarDatosBebidas(data);
 
   const chart = new CanvasJS.Chart("chartContainerBebidas", {
-  animationEnabled: true,
-  title: {
-    text: "Distribución de Valores por Subcategoría"
-  },
-  axisY: {
-    title: "Subcategorías" // No ponemos reversed aquí
-  },
-  axisX: {
-    title: "Cantidad",
-    includeZero: true
-  },
-  toolTip: {
-    shared: true
-  },
-  legend: {
-    verticalAlign: "top"
-  },
-  data: series
-});
-
+    animationEnabled: true,
+    title: {
+      text: "Distribución de Valores por Subcategoría"
+    },
+    axisY: {
+      title: "Subcategorías",
+      reversed: true
+    },
+    axisX: {
+      title: "Cantidad",
+      includeZero: true
+    },
+    toolTip: {
+      shared: true
+    },
+    legend: {
+      verticalAlign: "top"
+    },
+    data: series
+  });
 
   chart.render();
 }
@@ -686,69 +648,58 @@ async function montarGraficoBebidas() {
 onMount(() => {
   montarGraficoBebidas();
 });
-    
-   
-   // Función para obtener datos de apiG15
-   async function getG15DataForChart() {
+
+
+async function getEquiposData() {
   try {
-    const response = await fetch(apiG15);
-    const data = await response.json();
-    return data; 
+    const response = await fetch(apifurbo); // ← Sustituye con tu URL real
+    const datos = await response.json();
+    return datos.data; // ← Todos los equipos
   } catch (error) {
-    console.error("Error al obtener datos de G15:", error);
-    return []; 
+    console.error("Error al obtener datos:", error);
+    return [];
   }
 }
-// Función para montar la gráfica piramidal general de G15
-async function mountG15PyramidChart() {
-    const data = await getG15DataForChart();
 
-    // Calcular totales agregados
-    let totalGround = 0, totalGrass = 0, totalWooded = 0, totalNonAgrarian = 0;
-
-    data.forEach(item => {
-        totalGround += item.ground || 0;
-        totalGrass += item.grass || 0;
-        totalWooded += item.wooded || 0;
-        totalNonAgrarian += item.non_agrarian_surface || 0;
-    });
-
-    const totalSum = totalGround + totalGrass + totalWooded + totalNonAgrarian;
-
-    // Calcular porcentajes
-    const percentages = [
-        { label: "Ground", y: (totalGround / totalSum) * 100 },
-        { label: "Grass", y: (totalGrass / totalSum) * 100 },
-        { label: "Wooded", y: (totalWooded / totalSum) * 100 },
-        { label: "Non Agrarian Surface", y: (totalNonAgrarian / totalSum) * 100 }
-    ];
-
-    // Crear gráfico piramidal
-    const chart = new CanvasJS.Chart("g15PyramidContainer", {
-        animationEnabled: true,
-        title: {
-            text: "Distribución del Uso del Suelo en Andalucía (porcentajes)"
-        },
-        data: [{
-            type: "pyramid",
-            valueRepresents: "area",
-            showInLegend: true,
-            legendText: "{label}",
-            indexLabel: "{label} - {y.toFixed(2)}%",
-            toolTipContent: "<b>{label}:</b> {y.toFixed(2)}%",
-            dataPoints: percentages
-        }]
-    });
-
-    chart.render();
+function procesarPieChart(data) {
+  return data.map(equipo => ({
+    y: parseInt(equipo.pg),
+    indexLabel: equipo.equipo,
+    exploded: false,
+    radius: `${20 + parseInt(equipo.pg)}%`, // Custom radius proporcional a los partidos ganados
+    toolTipContent: `<b>${equipo.equipo}</b>: ${equipo.pg} ganados`
+  }));
 }
 
-  onMount(async () => {
-        await mountG15PyramidChart();
-    });
+async function montarPieChart() {
+  const equipos = await getEquiposData();
+  const dataPoints = procesarPieChart(equipos);
 
+  const chart = new CanvasJS.Chart("container-pie", {
+    animationEnabled: true,
+    title: {
+      text: "Distribución de partidos ganados por equipo",
+      fontSize: 24
+    },
+    data: [{
+      type: "pie",
+      showInLegend: true,
+      legendText: "{indexLabel}",
+      indexLabelFontSize: 14,
+      startAngle: 60,
+      innerRadius: 0,
+      dataPoints: dataPoints
+    }]
+  });
 
+  chart.render();
+}
 
+onMount(() => {
+  montarPieChart();
+});
+    
+   
 </script>
 
 
