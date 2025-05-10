@@ -111,10 +111,10 @@ app.get('/api-spotify', async (req, res) => {
   res.json(data);
 });
 
-app.get('/api-fifa', async (req, res) => {
-  const response = await fetch('https://fifa23-players-data.p.rapidapi.com/list/2', {
+app.get('/api-transfermarket', async (req, res) => {
+  const response = await fetch('https://transfermarket.p.rapidapi.com/players/get-market-value?id=74842&domain=de', {
     headers: {
-      'x-rapidapi-host': 'fifa23-players-data.p.rapidapi.com',
+      'x-rapidapi-host': 'transfermarket.p.rapidapi.com',
       'x-rapidapi-key': 'b2d6a0d8b4msh462405ed946447bp12d6f9jsn0f847fb047e9'
     }
   });
