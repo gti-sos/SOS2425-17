@@ -27,14 +27,14 @@
     ];
   
     //GET DATA
-
+    console.log("22-PAB");
 async function getUniversityAcademicPerformance() {
-
+  console.log("23-PAB");
   try{
       await fetch("/api/v2/university-academic-performance/loadInitialData");
       const response = await fetch("/api/v2/university-academic-performance");
       const json = await response.json();
-      return json  
+      console.log("23-PAB");return json  
   }catch (error){
       console.log("ERROR");
   }
@@ -87,11 +87,11 @@ function dataByIngeniery(data, labels) {
  
   //CALCULA ABANDONO POR CIUDAD (DONUT)
 
-
+  console.log("24-PAB");
     function calculateDropoutRateByLocation(allData) {
       const grouped = {};
 
-  
+      console.log("25-PAB");
       for (const entry of allData) {
         const { location, dropoutRate } = entry;
         if (!grouped[location]) {
@@ -105,12 +105,14 @@ function dataByIngeniery(data, labels) {
         location,
         +(total / count).toFixed(2)
       ]);
+      
     }
-  
+    console.log("26-PAB");
     onMount(async () => {
       data=await getUniversityAcademicPerformance();
       dropoutByLocation = calculateDropoutRateByLocation(data);
       const { promedioIngenierias, promedioOtros } = dataByIngeniery(data,labels);
+      console.log("27-PAB");
 
 
       //CHAR LOL

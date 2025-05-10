@@ -1,6 +1,6 @@
     //API PABLO
 
-
+console.log("6-PAB");
 const university_academic_performance = [
     { degree: "GRADO EN EDUCACIÓN INFANTIL", location: "ALMENDRALEJO", dropoutSecondCourse: 0.0, efficiencyRate: 96.58, dropoutThirdCourse: 0.0, successRate: 99.39, dropoutFirstCourse: 3.33, dropoutsThirdCourse: 0, progressNormalized: 1.0, dropoutsFirstCourse: 3, performanceRate: 97.32, cohortStudents: 9, dropoutsSecondCourse: 0, dropoutRate: 28.57, graduationRate: 50.0, academicYear: "2016-2017" },
     { degree: "GRADO EN EDUCACIÓN PRIMARIA", location: "ALMENDRALEJO", dropoutSecondCourse: 1.43, efficiencyRate: 97.79, dropoutThirdCourse: 4.76, successRate: 98.03, dropoutFirstCourse: 9.52, dropoutsThirdCourse: 1, progressNormalized: 1.0, dropoutsFirstCourse: 2, performanceRate: 95.47, cohortStudents: 21, dropoutsSecondCourse: 3, dropoutRate: 31.58, graduationRate: 47.37, academicYear: "2016-2017" },
@@ -75,11 +75,13 @@ const university_academic_performance = [
     let university_academic_performance_db = new dataStore(); 
     import dataStore from "nedb";
 
+    console.log("7-PAB");
+
 
 
     function loadBackendPabloV2(app){
         
-    
+        console.log("8-PAB");
         //GET TODO
         app.get(BASE_API + "/university-academic-performance", (request, response) => {
             console.log("--------------------------------------------------------------------")
@@ -139,15 +141,16 @@ const university_academic_performance = [
         
                 const cleaned = data.map(({ _id, ...rest }) => rest);
         
-                return response.status(200).json(cleaned);
+                console.log("9-PAB");      return response.status(200).json(cleaned);
             });
+            console.log("10-PAB");
         });
         
 
 
         // GET uno en concreto
 
-        
+        console.log("11-PAB");
         app.get(BASE_API + "/university-academic-performance/:degree/:location/:academicYear", (request, response) => {
             console.log("--------------------------------------------------------------------")
             console.log("NEW GET /university-academic-performance/:degree/:location/:academicYear");
@@ -160,12 +163,12 @@ const university_academic_performance = [
                 { degree: degree, location: location, academicYear: academicYear },
                 (err, demand) => {
                     if (err) {
-                        return response.status(500).json({ error: "Database error" });
+                        console.log("12-PAB");  return response.status(500).json({ error: "Database error" });
                     }
         
                     if (demand) {
                         delete demand._id;
-                        return response.status(200).json(demand);
+                        console.log("13-PAB");return response.status(200).json(demand);
                     } else {
                         return response.sendStatus(404);
                     }
@@ -195,11 +198,12 @@ const university_academic_performance = [
                             return rest;
                         });
         
-                        return response.status(201).json({
+                        console.log("14-PAB"); return response.status(201).json({
                             message: "The data was inserted successfully",
                             data: cleanDocs
                         });
                     });
+                    console.log("15-PAB");
         
                 } else {
                     return response.status(409).json({ message: "empty the database first to initialize it" });
@@ -236,12 +240,13 @@ const university_academic_performance = [
                 if (existingRecord) {
                     return response.status(409).json({ error: "Record already exists" });
                 }
+                console.log("16-PAB");
         
                 university_academic_performance_db.insert(body, (err, newDoc) => {
                     if (err) {
                         return response.status(500).json({ error: "Database error" });
                     }
-                    return response.status(201).json({message: "Created successfully"});
+                    console.log("17-PAB");return response.status(201).json({message: "Created successfully"});
                 });
              });
         });
@@ -293,9 +298,9 @@ const university_academic_performance = [
                         return response.status(500).json({ error: "Database error" });
                     }
                     if (numReplaced === 0) {
-                        return response.sendStatus(404);
+                        console.log("18-PAB"); return response.sendStatus(404);
                     }
-                    return response.status(200).json({ message: "Record updated successfully" });
+                    console.log("19-PAB"); return response.status(200).json({ message: "Record updated successfully" });
                 }
             );
         });
@@ -358,5 +363,6 @@ const university_academic_performance = [
         });
         
     }
-
+    console.log("20-PAB");
     export {loadBackendPabloV2}
+    console.log("21-PAB");

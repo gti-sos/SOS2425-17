@@ -3,6 +3,7 @@
 </svelte:head>
 
 <script>
+    console.log("22-PAB");
     import { Table } from '@sveltestrap/sveltestrap'; 
     import { dev } from '$app/environment';
     import { onMount } from "svelte";
@@ -88,6 +89,7 @@
     // LOAD INITIAL DATA
 
     async function getLoadInitialData() {
+        console.log("23-PAB");
         errorMessage= "";
         successMessage= "";console.log("92")
         stopTimer();
@@ -291,6 +293,7 @@ async function updateUniversityAcademicPerformance() {
 
 //Borro Todo
 async function deleteAll() {
+    console.log("24-PAB");
     successMessage = "";
     errorMessage = "";
     stopTimer();
@@ -301,7 +304,7 @@ async function deleteAll() {
         if (res.status === 200) {
             const responseBody = await res.json(); 
             await(getUniversityAcademicPerformance());  
-            successMessage = "Se han Borrado los registros con éxito." ;
+            console.log("25-PAB");successMessage = "Se han Borrado los registros con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
         } else {
             errorMessage = "No hay datos que borrar."
