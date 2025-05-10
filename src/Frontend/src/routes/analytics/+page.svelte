@@ -186,7 +186,6 @@
         carrera: item.carrera,
         satisfaccion_total: item.satisfaccion_total *10
         }));
-        //console.log(dataAle);
         });   
     }
 
