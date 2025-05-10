@@ -95,7 +95,7 @@
 
         try {
 
-            //Cargo los datos iniciales
+            
             await fetch("/api/v2/university-demands/loadInitialData")
 
             const res = await fetch(API+"/university-demands",{method:"GET"});

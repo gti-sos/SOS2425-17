@@ -34,7 +34,7 @@
   let APIG15 = "https://sos2425-15.onrender.com/api/v1/temperature-stats";
   let APIG20 = "https://sos2425-20.onrender.com/api/v1/accidents-with-animals";
   let APIF1 = "/api-f1";
-  let APIFIFA = "/api-fifa";
+  let APITRANSFERMARKET = "/api-transfermarket";
   let APISPOTY = "/api-spotify";
   let myDatag21 = [];
   let myDatag18 = [];
@@ -43,7 +43,7 @@
   let myDatag20 = [];
   let myDataF1 = [];
   let myData = [];
-  let myDataFifa = [];
+  let myDataTransfer = [];
   let myDataSpoty = [];
   let result = "";
   let resultStatus = "";
@@ -114,8 +114,7 @@
     //console.log(getDataG10());
 
     async function victimsInBadajoz(location = "Badajoz") {
-    await getDataG10(); // espera a que myData se llene correctamente
-
+    await getDataG10(); 
     const total = myDatag10
         .filter(item => item.province === location)
         .map(item => ({
@@ -125,7 +124,7 @@
     return total;
   }
 
-  console.log(victimsInBadajoz());
+  //console.log(victimsInBadajoz());
 
 
     async function getDataG15(){
@@ -175,7 +174,7 @@
     //km_road,anyo,province
 
     async function KmByProvince() {
-    await getDataG20(); // espera a que myData se llene correctamente
+    await getDataG20(); 
 
     const datosFiltrados = myDatag20
         .map(item => ({
@@ -188,14 +187,13 @@
     
     
   }
-  KmByProvince().then(data => console.log(data));
+  //KmByProvince().then(data => console.log(data));
 
     async function getMisDatos(){
         resultStatus = result = "";
 
         try {
 
-            //Cargo los datos iniciales
             await fetch("/api/v2/university-demands/loadInitialData")
 
             const res = await fetch(API,{method:"GET"});
@@ -305,7 +303,7 @@
         }
     }
     
-    console.log(getDataSpotify());
+    //console.log(getDataSpotify());
     
     
     
@@ -314,17 +312,17 @@
 
         try {
 
-            const res = await fetch(APIFIFA,{method:"GET"});
+            const res = await fetch(APITRANSFERMARKET,{method:"GET"});
 
             const data = await res.json();
             result = JSON.stringify(data,null,2);
 
-            myDataFifa = data.result;
+            myDataTransfer = data.marketValueDevelopment;
 
-            //console.log(`Response received:\n${JSON.stringify(myDataFifa,null,2)}`);
+            console.log(`Response received:\n${JSON.stringify(myDataTransfer,null,2)}`);
 
         } catch (error){
-            console.log(`ERROR:  GET from ${APIFIFA}: ${error}`);
+            console.log(`ERROR:  GET from ${APITRANSFERMARKET}: ${error}`);
         }
     }
     
@@ -346,25 +344,26 @@
     
     
 }
-driverByPoints().then(data => console.log(data));
+//driverByPoints().then(data => console.log(data));
 
 
-async function playersByOverall() {
+//marketValueUnformatted,seasonID
+async function GotzeValueYears() {
     await getDataFifa(); // espera a que myData se llene correctamente
 
-    const datosFiltrados = myDataFifa
+    const datosFiltrados = myDataTransfer
         .map(item => ({
-            Name: item.Name,
-            Overall: item.Overall
+          seasonID: item.seasonID,
+          marketValueUnformatted: item.marketValueUnformatted
         }))
-        .sort((a, b) => b.Overall - a.Overall)
+        .sort((a, b) => b.marketValueUnformatted - a.marketValueUnformatted)
         .slice(0, 10);
 
     return datosFiltrados;
     
     
 }
-playersByOverall().then(data => console.log(data));
+GotzeValueYears().then(data => console.log(data));
 
 
 async function trackByStreamCount() {
@@ -419,12 +418,6 @@ async function trackByStreamCount() {
 
       const namesInt22 = dataInte22.map(item => item.name);
       const valuesInt22 = dataInte22.map(item => parseFloat(item.value.replace(',', '.')));
-
-      console.log(namesInt22);
-      console.log(valuesInt22);
-      console.log(namesInt22[0]);
-      console.log([valuesInt22[0]]);
-
       
         
         const resultado = await driverByPoints(); 
@@ -437,19 +430,24 @@ async function trackByStreamCount() {
 
         const names = data.map(item => item.name);
         const values = data.map(item => item.value);
-
         
         
-        const resultado2 = await playersByOverall(); 
+        
+        const resultado2 = await GotzeValueYears(); 
 
         const data2 = resultado2.map(item => ({
-            name: item.Name,
-            value: Number(item.Overall) 
+            name: item.seasonID,
+            value: Number(item.marketValueUnformatted) 
         }));
 
 
         const names2 = data2.map(item => item.name);
         const values2 = data2.map(item => item.value);
+        console.log(names2);
+        console.log(values2);
+        console.log(names2[0]);
+        console.log([values2[0]]);
+
         
     
         const resultado3 = await trackByStreamCount(); 
@@ -700,6 +698,7 @@ async function trackByStreamCount() {
 
     // RENDER CHARTS
     // -----------------------------
+    
     zingchart.render({
       id: 'myChart5',
       data: chartConfig5,
@@ -854,6 +853,8 @@ async function trackByStreamCount() {
       height: '100%',
       width: '100%',
     });
+
+    
     
     
     ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
@@ -867,7 +868,7 @@ async function trackByStreamCount() {
     let chartConfig2 = {
       type: 'bar',
       title: {
-        text: 'Jugadores con mas media Fifa 23',
+        text: 'Los mayores valores de mercado de Mario Gotze',
         align: 'left',
         fontColor: '#555',
         fontFamily: 'Roboto',
@@ -1054,7 +1055,6 @@ async function trackByStreamCount() {
       </thead>
 
       <tbody>
-          <!-- Esto ejecuta tantos tr como contacts haya -->
           {#each myDatag21 as datag21}
               <tr>
                   <td>
@@ -1095,7 +1095,6 @@ async function trackByStreamCount() {
       </thead>
 
       <tbody>
-          <!-- Esto ejecuta tantos tr como contacts haya -->
           {#each myDatag18 as datag18}
               <tr>
                   <td>
