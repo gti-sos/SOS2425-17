@@ -19,14 +19,10 @@ test('Funciona Borra Todo y LoadInitialData', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Borra todo' }).click();
 
-
-  // Espera hasta que no haya filas de datos (con timeout por seguridad)
   await expect(dataRows).toHaveCount(1, { timeout: 5000 });
 
-  // Carga datos iniciales
   await page.getByRole('button', { name: 'Cargar datos iniciales' }).click();
 
-  // Espera hasta que haya 66 filas de datos
   await expect(dataRows).toHaveCount(67, { timeout: 5000 });
 });
 
@@ -40,10 +36,8 @@ test('Error LoadInitialData ya tiene datos', async ({ page }) => {
 
   await expect(dataRows).toHaveCount(67, { timeout: 5000 });
 
-  // Carga datos iniciales
   await page.getByRole('button', { name: 'Cargar datos iniciales' }).click();
 
-  // Espera hasta que haya 66 filas de datos
   await expect(dataRows).toHaveCount(67, { timeout: 5000 });
   const errorMessage = page.locator('.error-message');
   await expect(errorMessage).toHaveText('La página ya contiene datos; para insertar datos nuevos, borre los actuales.');
@@ -296,16 +290,6 @@ test('Error crear dos registros iguales', async ({ page }) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
 test('Funciona Update registro', async ({ page }) => {
 
   const test_degree= "GRADO EN ADMINISTRACIÓN Y DIRECCIÓN DE EMPRESAS"
@@ -444,21 +428,6 @@ test('Error Update faltan campos', async ({ page }) => {
 await expect(errorMessage).toBeVisible();
 await expect(errorMessage).toHaveText('Todos los campos deben estar rellenos.');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 test('Funciona borrar un registro Botón principal y botón en la tabla ', async ({ page }) => {

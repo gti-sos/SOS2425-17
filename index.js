@@ -50,7 +50,7 @@ loadBackendJavierV1(app)
 loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
-
+/*
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
     headers: {
@@ -61,12 +61,12 @@ app.get('/cerveza-data', async (req, res) => {
 
   const data = await response.json();
   res.json(data);
-});
+});*/
 
-app.get('/onepiece-data', async (req, res) => {
-  const response = await fetch('https://one-piece2.p.rapidapi.com/api/get-character-list ', {
+app.get('/furbo-data', async (req, res) => {
+  const response = await fetch('https://api-futbol-espana.p.rapidapi.com/api/liga/espana/tabla ', {
     headers: {
-      'x-rapidapi-host': 'one-piece2.p.rapidapi.com',
+      'x-rapidapi-host': 'api-futbol-espana.p.rapidapi.com',
       'x-rapidapi-key': '832d7a3793msh8bad502e0e83ac7p18cf18jsnf086ce2b9e55'
     }
   });
@@ -75,7 +75,7 @@ app.get('/onepiece-data', async (req, res) => {
   res.json(data);
 });
 
-app.get('/pelis-data', async (req, res) => {
+/*app.get('/pelis-data', async (req, res) => {
   const response = await fetch('https://imdb236.p.rapidapi.com/imdb/lowest-rated-movies', {
     headers: {
       'x-rapidapi-host': 'imdb236.p.rapidapi.com',
@@ -86,6 +86,7 @@ app.get('/pelis-data', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
+*/
 
 
 app.get('/api-f1', async (req, res) => {
