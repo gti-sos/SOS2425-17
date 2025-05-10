@@ -31,7 +31,7 @@
 <figure class="canvasjs-figure">
     <div id="container-onepiece" style="height: 500px; width: 100%;"></div>
     <p class="canvasjs-description">
-      Gráfico de barras horizontales agrupando personajes de One Piece por género y tramos de ID (200 en 200).
+      Gráfico de áreas agrupando personajes de One Piece por género y tramos de ID (200 en 200).
     </p>
 </figure>
 
@@ -46,6 +46,12 @@
     <div id="chartContainerBebidas" style="height: 500px; width: 100%;"></div>
     <p class="canvasjs-description">
       Gráfico de barras apiladas horizontales que muestra la frecuencia de cada valor en subcategorías 1, 2 y 3 de bebidas.
+    </p>
+  </figure>
+  <figure class="canvasjs-figure">
+    <div id="g15PyramidContainer" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Pirámide de áreas proporcionales que muestra el porcentaje de uso del suelo en Andalucía: cultivable, pasto, forestal y superficie no agraria.
     </p>
   </figure>
   
@@ -682,6 +688,67 @@ onMount(() => {
 });
     
    
+   // Función para obtener datos de apiG15
+   async function getG15DataForChart() {
+  try {
+    const response = await fetch(apiG15);
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error al obtener datos de G15:", error);
+    return []; 
+  }
+}
+// Función para montar la gráfica piramidal general de G15
+async function mountG15PyramidChart() {
+    const data = await getG15DataForChart();
+
+    // Calcular totales agregados
+    let totalGround = 0, totalGrass = 0, totalWooded = 0, totalNonAgrarian = 0;
+
+    data.forEach(item => {
+        totalGround += item.ground || 0;
+        totalGrass += item.grass || 0;
+        totalWooded += item.wooded || 0;
+        totalNonAgrarian += item.non_agrarian_surface || 0;
+    });
+
+    const totalSum = totalGround + totalGrass + totalWooded + totalNonAgrarian;
+
+    // Calcular porcentajes
+    const percentages = [
+        { label: "Ground", y: (totalGround / totalSum) * 100 },
+        { label: "Grass", y: (totalGrass / totalSum) * 100 },
+        { label: "Wooded", y: (totalWooded / totalSum) * 100 },
+        { label: "Non Agrarian Surface", y: (totalNonAgrarian / totalSum) * 100 }
+    ];
+
+    // Crear gráfico piramidal
+    const chart = new CanvasJS.Chart("g15PyramidContainer", {
+        animationEnabled: true,
+        title: {
+            text: "Distribución del Uso del Suelo en Andalucía (porcentajes)"
+        },
+        data: [{
+            type: "pyramid",
+            valueRepresents: "area",
+            showInLegend: true,
+            legendText: "{label}",
+            indexLabel: "{label} - {y.toFixed(2)}%",
+            toolTipContent: "<b>{label}:</b> {y.toFixed(2)}%",
+            dataPoints: percentages
+        }]
+    });
+
+    chart.render();
+}
+
+  onMount(async () => {
+        await mountG15PyramidChart();
+    });
+
+
+
 </script>
 
 

@@ -6,10 +6,6 @@ const BASE_API = "/api/v2"; //Con esto lo que hago es crear la URL base de la ap
 
 let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
 
-// https://sos2425-XX.onrender.com/api/v1/FFFFF
-
-//Obtener todos los registros con filtros
-
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 
 const university_demands = [ 

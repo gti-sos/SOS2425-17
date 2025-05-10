@@ -1,6 +1,6 @@
 <svelte:head>
     
-<!--Cargo las bibliotecas de highcharts -->
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/heatmap.js"></script>
 <script src="https://code.highcharts.com/modules/treemap.js"></script>
@@ -29,20 +29,15 @@
      */
     
 
-    //Funcion para sacar los datos 
-
     let myData = [];
     let result = "";
     let resultStatus = "";
     
-
-    //Funcion para sacar los datos 
     async function getData(){
         resultStatus = result = "";
 
         try {
 
-            //Cargo los datos iniciales
             await fetch("/api/v2/university-demands/loadInitialData")
 
             const res = await fetch(API,{method:"GET"});
@@ -60,33 +55,23 @@
 
     //console.log(getData());
 
-    
     async function foreignersByLocation() {
-    await getData(); // espera a que myData se llene correctamente
+    await getData(); 
 
-    const datosFiltrados = myData.map(item => ({
-        location: item.location,
-        foreigners: item.foreigners,
-        degree: item.degree
-    }));
-
-    const resultado = datosFiltrados.reduce((acc, item) => {
-        if (!acc[item.location]) {
-            acc[item.location] = 0;
-        }
-        acc[item.location] += item.foreigners;
+    const resultado = myData.reduce((acc, { location, foreigners }) => {
+        acc[location] = (acc[location] || 0) + foreigners;
         return acc;
     }, {});
+    console.log(resultado);
 
-    const datosOrdenados = Object.entries(resultado)
+    return Object.entries(resultado)
         .map(([location, foreigners]) => ({ location, foreigners }))
         .sort((a, b) => b.foreigners - a.foreigners); // orden descendente
-
-    return datosOrdenados;
 }
 
+
 async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
-    await getData(); // espera a que myData se llene correctamente
+    await getData(); 
 
     const datosFiltrados = myData
         .filter(item => item.degree === degree)
