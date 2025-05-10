@@ -275,18 +275,15 @@ const university_academic_performance = [
             const location = request.params.location;
             const academicYear = request.params.academicYear
             const body = request.body;
-
-            if (body.degree != degree || body.location != location || body.academicYear != academicYear){
-                return response.status(400).json({ error: " degree, location or academicyear cant be changed" })
-            }
-
+            console.log(request.url)
+            console.log(body)
             if ([
                 body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
                 body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
                 body.dropoutsThirdCourse, body.progressNormalized, body.dropoutsFirstCourse, 
                 body.performanceRate, body.cohortStudents, body.dropoutsSecondCourse, 
                 body.dropoutRate, body.graduationRate, body.academicYear
-            ].some(value => value === undefined)) 
+            ].some(value => value === undefined || value === null)) 
 
             {
                 return response.status(400).json({error: "All fields needs a value"});

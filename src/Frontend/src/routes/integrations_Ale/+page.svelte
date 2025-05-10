@@ -28,13 +28,42 @@
     </p>
 </figure>
 
+<figure class="canvasjs-figure">
+    <div id="container-onepiece" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de áreas agrupando personajes de One Piece por género y tramos de ID (200 en 200).
+    </p>
+</figure>
+
+<figure class="canvasjs-figure">
+    <div id="chartContainer" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de línea mostrando cuántas películas se estrenaron cada año, según los datos obtenidos de la API.
+    </p>
+  </figure>
+
+  <figure class="canvasjs-figure">
+    <div id="chartContainerBebidas" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Gráfico de barras apiladas horizontales que muestra la frecuencia de cada valor en subcategorías 1, 2 y 3 de bebidas.
+    </p>
+  </figure>
+  <figure class="canvasjs-figure">
+    <div id="g15PyramidContainer" style="height: 500px; width: 100%;"></div>
+    <p class="canvasjs-description">
+      Pirámide de áreas proporcionales que muestra el porcentaje de uso del suelo en Andalucía: cultivable, pasto, forestal y superficie no agraria.
+    </p>
+  </figure>
+  
+  
+
 <script>
 import { onMount } from "svelte";
 
-let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction"
-let apitiktok = "/tiktok-data";
-let apilol = "/lol-data";
+let apiG17="https://sos2425-17.onrender.com/api/v2/students_satisfaction";
 let apionepiece = "/onepiece-data";
+let apicerveza = "/cerveza-data";
+let apipelis = "/pelis-data";
 let apiG15="https://sos2425-15.onrender.com/ocupied-grand-stats";
 let apiG10="https://sos2425-10.onrender.com/api/v1/registrations-stats";
 let apiG19="https://sos2425-19.onrender.com/api/v2/ownerships-changes-stats/";
@@ -42,7 +71,7 @@ let apiG12="https://sos2425-12.onrender.com/api/v1/annual-consumptions";
 let mydatag17=[];
 let mydatatiktok = [];
 let mydatalol = [];
-let mydataonepiece = [];
+let mydatapelis = [];
 let mydatag15 = [];
 let mydatag10 = [];
 let mydatag19 = [];
@@ -139,6 +168,7 @@ async function mountG10Chart() {
 // Función para obtener y procesar los datos de la API G17
 async function getG17DataForBadajoz() {
     try {
+        await loadInitialDataForG17();
         const response = await fetch(apiG17, { method: "GET" });
         if (!response.ok) {
             throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
@@ -276,9 +306,28 @@ async function getG17DataForBadajoz() {
         await mountKPIChart();
     });
         
+
+    // Función para cargar los datos iniciales de G17
+async function loadInitialDataForG17() {
+    try {
+        
+        const response = await fetch("https://sos2425-17.onrender.com/api/v2/students_satisfaction/loadInitialData", { method: "GET" });
+        if (!response.ok) {
+            throw new Error(`Error al cargar datos iniciales de G17: ${response.status} ${response.statusText}`);
+        }
+        console.log("Datos iniciales de G17 cargados correctamente.");
+    } catch (error) {
+        console.error("ERROR al cargar datos iniciales de G17:", error);
+    }
+}
+
+
     // Función para obtener y procesar los datos de la API G17
     async function getG17DataForExtremadura() {
         try {
+            // Asegurarse de que los datos iniciales estén cargados
+        await loadInitialDataForG17();
+
             const response = await fetch(apiG17, { method: "GET" });
             if (!response.ok) {
                 throw new Error(`Error en la API G17: ${response.status} ${response.statusText}`);
@@ -376,10 +425,330 @@ async function getG12DataForExtremadura() {
     });
     
 
+    // Función para obtener los datos de la API One Piece
+    async function getOnePieceData() {
+        try {
+            const response = await fetch(apionepiece, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error al obtener datos de One Piece: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("ERROR al obtener datos de One Piece:", error);
+            return [];
+        }
+    }
+    function processOnePieceData(data) {
+    const step = 200;
+    const minId = 100;
+    const maxId = 1499;
+    const ranges = [];
+
+    for (let start = minId; start <= maxId; start += step) {
+      ranges.push({
+        min: start,
+        max: start + step,
+        label: `${start}-${start + step - 1}`,
+        male: 0,
+        female: 0
+      });
+    }
+
+    data.forEach(character => {
+      const range = ranges.find(r => character.id >= r.min && character.id < r.max);
+      if (range) {
+        if (character.gender === "male") {
+          range.male++;
+        } else if (character.gender === "female") {
+          range.female++;
+        }
+      }
+    });
+
+    return ranges;
+  }
+
+  async function mountOnePieceChart() {
+    const data = await getOnePieceData();
+    const processed = processOnePieceData(data);
+
+    const chart = new CanvasJS.Chart("container-onepiece", {
+  animationEnabled: true,
+  theme: "light2",
+  title: {
+    text: "Distribución de personajes de One Piece por tramo de ID",
+    fontSize: 24,
+  },
+  axisX: {
+    title: "Tramos de ID",
+    labelFontSize: 14,
+    interval: 1,
+  },
+  axisY: {
+    title: "Cantidad de personajes",
+    includeZero: true,
+    labelFontSize: 14,
+  },
+  toolTip: {
+    shared: true
+  },
+  legend: {
+    fontSize: 16,
+    verticalAlign: "bottom"
+  },
+  data: [
+    {
+      type: "stackedArea",
+      name: "Masculino",
+      showInLegend: true,
+      color: "#3A80BA",
+      dataPoints: processed.map(range => ({
+        label: range.label,
+        y: range.male
+      }))
+    },
+    {
+      type: "stackedArea",
+      name: "Femenino",
+      showInLegend: true,
+      color: "#C94C4C",
+      dataPoints: processed.map(range => ({
+        label: range.label,
+        y: range.female
+      }))
+    }
+  ]
+});
 
 
+    chart.render();
+  }
 
+  onMount(async () => {
+        await mountOnePieceChart();
+    });
+
+
+    // Función para obtener los datos de la API Películas
+    async function getPelisData() {
+        try {
+            const response = await fetch(apipelis, { method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Error al obtener datos de Películas: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("ERROR al obtener datos de Películas:", error);
+            return [];
+        }
+    }
+    function processPelisData(data) {
+  const yearCounts = {};
+
+  data.forEach(peli => {
+    const year = peli.startYear;
+    if (year && !isNaN(year)) {
+      yearCounts[year] = (yearCounts[year] || 0) + 1;
+    }
+  });
+
+  // Convertimos a array de objetos { x: año, y: cantidad }
+  const dataPoints = Object.entries(yearCounts)
+    .map(([year, count]) => ({ x: parseInt(year), y: count }))
+    .sort((a, b) => a.x - b.x); // ordenado por año
+
+  return dataPoints;
+}
+
+async function mountPelisChart() {
+  const data = await getPelisData();
+  const processed = processPelisData(data);
+
+  const chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: "Películas estrenadas por año",
+      fontSize: 24,
+    },
+    axisX: {
+      title: "Año de estreno",
+      labelFontSize: 14,
+    },
+    axisY: {
+      title: "Número de películas",
+      includeZero: true,
+      labelFontSize: 14,
+    },
+    data: [{
+      type: "spline", // Línea suave
+      markerSize: 5,
+      toolTipContent: "Año: {x}<br/>Películas: {y}",
+      dataPoints: processed
+    }]
+  });
+
+  chart.render();
+}
+onMount(async () => {
+  await mountPelisChart();
+});
+
+async function getBebidasData() {
+  try {
+    const response = await fetch(apicerveza);
+    if (!response.ok) {
+      throw new Error(`Error al obtener datos de bebidas: ${response.status}`);
+    }
+    const json = await response.json();
+    return json.data;
+  } catch (error) {
+    console.error("ERROR al obtener datos de bebidas:", error);
+    return [];
+  }
+}
+
+function procesarDatosBebidas(data) {
+  const subcats = ["sub_category_1", "sub_category_2", "sub_category_3"];
+  const subcatLabels = ["Subcategoría 1", "Subcategoría 2", "Subcategoría 3"];
+
+  const conteos = {
+    "Subcategoría 1": {},
+    "Subcategoría 2": {},
+    "Subcategoría 3": {}
+  };
+
+  data.forEach(item => {
+    subcats.forEach((key, index) => {
+      const valor = item[key]?.trim(); // Evita "undefined" y espacios
+      const etiqueta = subcatLabels[index];
+      if (valor) {
+        conteos[etiqueta][valor] = (conteos[etiqueta][valor] || 0) + 1;
+      }
+    });
+  });
+
+  const categoriasUnicas = new Set();
+  Object.values(conteos).forEach(cat => {
+    Object.keys(cat).forEach(nombre => categoriasUnicas.add(nombre));
+  });
+
+  const dataSeries = [];
+
+  categoriasUnicas.forEach(nombreCategoria => {
+    const puntos = subcatLabels.map(etiqueta => ({
+      y: conteos[etiqueta][nombreCategoria] || 0,
+      label: etiqueta
+    }));
+
+    dataSeries.push({
+      type: "stackedBar",
+      name: nombreCategoria,
+      showInLegend: true,
+      dataPoints: puntos
+    });
+  });
+
+  return dataSeries;
+}
+
+async function montarGraficoBebidas() {
+  const data = await getBebidasData();
+  const series = procesarDatosBebidas(data);
+
+  const chart = new CanvasJS.Chart("chartContainerBebidas", {
+  animationEnabled: true,
+  title: {
+    text: "Distribución de Valores por Subcategoría"
+  },
+  axisY: {
+    title: "Subcategorías" // No ponemos reversed aquí
+  },
+  axisX: {
+    title: "Cantidad",
+    includeZero: true
+  },
+  toolTip: {
+    shared: true
+  },
+  legend: {
+    verticalAlign: "top"
+  },
+  data: series
+});
+
+
+  chart.render();
+}
+
+onMount(() => {
+  montarGraficoBebidas();
+});
+    
    
+   // Función para obtener datos de apiG15
+   async function getG15DataForChart() {
+  try {
+    const response = await fetch(apiG15);
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error al obtener datos de G15:", error);
+    return []; 
+  }
+}
+// Función para montar la gráfica piramidal general de G15
+async function mountG15PyramidChart() {
+    const data = await getG15DataForChart();
+
+    // Calcular totales agregados
+    let totalGround = 0, totalGrass = 0, totalWooded = 0, totalNonAgrarian = 0;
+
+    data.forEach(item => {
+        totalGround += item.ground || 0;
+        totalGrass += item.grass || 0;
+        totalWooded += item.wooded || 0;
+        totalNonAgrarian += item.non_agrarian_surface || 0;
+    });
+
+    const totalSum = totalGround + totalGrass + totalWooded + totalNonAgrarian;
+
+    // Calcular porcentajes
+    const percentages = [
+        { label: "Ground", y: (totalGround / totalSum) * 100 },
+        { label: "Grass", y: (totalGrass / totalSum) * 100 },
+        { label: "Wooded", y: (totalWooded / totalSum) * 100 },
+        { label: "Non Agrarian Surface", y: (totalNonAgrarian / totalSum) * 100 }
+    ];
+
+    // Crear gráfico piramidal
+    const chart = new CanvasJS.Chart("g15PyramidContainer", {
+        animationEnabled: true,
+        title: {
+            text: "Distribución del Uso del Suelo en Andalucía (porcentajes)"
+        },
+        data: [{
+            type: "pyramid",
+            valueRepresents: "area",
+            showInLegend: true,
+            legendText: "{label}",
+            indexLabel: "{label} - {y.toFixed(2)}%",
+            toolTipContent: "<b>{label}:</b> {y.toFixed(2)}%",
+            dataPoints: percentages
+        }]
+    });
+
+    chart.render();
+}
+
+  onMount(async () => {
+        await mountG15PyramidChart();
+    });
+
+
+
 </script>
 
 
@@ -464,4 +833,15 @@ async function getG12DataForExtremadura() {
         font-size: 1rem;
         color: #555;
     }
+
+    .canvasjs-figure {
+    max-width: 900px;
+    margin: 2em auto;
+  }
+
+  .canvasjs-description {
+    text-align: center;
+    color: #555;
+  }
+  
 </style>

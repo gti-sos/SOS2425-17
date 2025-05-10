@@ -121,31 +121,34 @@ async function getOne(params = {}) {
     output = "" ;
     errorMessage= "";
     successMessage= "";
-    await stopTimer();
+    stopTimer();
 
-    if (params.degree != null && params.location != null && params.academicYear != null){
-        try {
-            const url=ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear
-            const res = await fetch(url, { method: "GET" });
-            status = res.status;
-            if (status === 404) {
-                errorMessage = "No se encontraron datos con los parámetros especificados.";
-                newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-                }
+    if (params.degree != null && params.location != null && params.academicYear != null) {
+    try {
+        const url = ruta_api + "/" + params.degree + "/" + params.location + "/" + params.academicYear;
+        const res = await fetch(url, { method: "GET" });
+        status = res.status;
+
+        if (status === 404) {
+            errorMessage = "No se encontró ningún registro con los parámetros especificados.";
+            newTimeOut = setTimeout(() => { errorMessage = "" }, 6000);
+        }
+
+        if (status === 200) {
             const data = await res.json();
-            UniversityAcademicPerformance=[data];
+            UniversityAcademicPerformance = [data];
             output = JSON.stringify(data, null, 2);
-            lastSearch=url;
+            lastSearch = url;
             successMessage = "El registro fue filtrado con éxito.";
-            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
+            newTimeOut = setTimeout(() => { errorMessage = "" }, 6000);
         }
-        catch (error) {
-             errorMessage = "Ha ocurrido un error inesperado al filtrar los datos." ;
-            newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-        }
+
+    } catch (error) {
+        errorMessage = "Ha ocurrido un error inesperado al filtrar los datos.";
+        newTimeOut = setTimeout(() => { errorMessage = "" }, 6000);
     }
-    
-    else{
+} else {
+
         try {
             const filteredParams = Object.fromEntries(
             Object.entries(params).filter(([_, value]) => value !== undefined && value !==null));
@@ -154,11 +157,7 @@ async function getOne(params = {}) {
             const res = await fetch(url, { method: "GET" });
             status = res.status;
 
-                if (status === 404) {
-                    errorMessage = "No se encontraron datos con los parámetros especificados." ;
-                    newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
-                } 
-                else if (status === 200){
+                if (status === 200){
                     const data = await res.json();
                     UniversityAcademicPerformance=data;console.log("163")
                     output = JSON.stringify(data, null, 2);
@@ -236,7 +235,7 @@ async function createUniversityAcademicPerformance() {
 async function updateUniversityAcademicPerformance() {
     errorMessage =  "";
     successMessage = "";
-    await stopTimer();
+    stopTimer();
 
     const updatedRecord = {
         degree: UniversityAcademicPerformanceDegree,
@@ -263,14 +262,14 @@ async function updateUniversityAcademicPerformance() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedRecord)
         });
-
+        console.log("HOLAAA", res.status)
         if (res.status === 200) {
             checkSearch();
             successMessage = "Registro actualizado con éxito."; 
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
 
         } else if (res.status === 400) {
-             errorMessage = "El Grado, Localizacion y/o Año Academico debe estar rellenos." ;
+             errorMessage = "Todos los campos deben estar rellenos." ;
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         } else if (res.status === 404) {
              errorMessage = "No existe ningún registro con ese Grado, Ciudad y/o Año Académico." ;
@@ -305,7 +304,7 @@ async function deleteAll() {
             successMessage = "Se han Borrado los registros con éxito." ;
             newTimeOut= setTimeout(() => { successMessage= "" }, 6000);
         } else {
-            errorMessage = "Error borrando los datos."
+            errorMessage = "No hay datos que borrar."
             newTimeOut= setTimeout(() => { errorMessage= "" }, 6000);
         }
 
