@@ -55,7 +55,7 @@ loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
 
-/*
+
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
     headers: {
