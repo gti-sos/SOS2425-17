@@ -144,7 +144,7 @@
         }
     }
     
-    //console.log(getDataG15());
+    console.log(getDataG15());
 
 
     async function getDataG20(){
