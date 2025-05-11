@@ -152,8 +152,7 @@ function loadBackendJavierV2(app){
     
     //POST  
     
-    //El post es para meter nuevos datos a la api 
-    app.post(BASE_API+"/university-demands",(request,response)=>{ //Para hacer un post necesitamos postman
+    app.post(BASE_API+"/university-demands",(request,response)=>{ 
         
         console.log("POST to /university-demands");
         console.log(`<${request.body}>`);
@@ -173,7 +172,6 @@ function loadBackendJavierV2(app){
                 return response.status(409).json({ error: "Record already exists" });
             }
             
-            // Insertar el nuevo registro en la base de datos
             db.insert(body, (err, newDoc) => {
                 if (err) {
                     return response.status(500).json({ error: "Error inserting data" });
@@ -191,14 +189,13 @@ function loadBackendJavierV2(app){
         res.sendStatus(405);
     });
     
-    // PUT . Modificar un registro existente //Mirar porque no esta bien  
+    // PUT   
     app.put(BASE_API + "/university-demands/:degree/:location/:academicYear", (req, res) => {
         const degree = req.params.degree;
         const location = req.params.location;
         const academicYear = req.params.academicYear;
         const body = req.body;
     
-        // Comprobar que los datos clave coincidan
         if (
             body.degree !== degree ||
             body.location !== location ||
@@ -209,7 +206,7 @@ function loadBackendJavierV2(app){
             });
         }
         
-        // Buscar el registro original
+        
         db.findOne({ degree, location, academicYear }, (err, existing) => {
             if (err) {
                 console.error("Error al buscar:", err);
@@ -220,7 +217,6 @@ function loadBackendJavierV2(app){
                 return res.status(404).json({ error: "Record not found" });
             }
     
-            // Verificar si se ha eliminado algún campo que antes existía
             const requiredFields = ["location", "degree", "over45", "spanishFirst", "foreigners", "graduated", "academicYear"];
             const removedFields = requiredFields.filter(field => {
                 return existing[field] !== "" && body[field] === "";
