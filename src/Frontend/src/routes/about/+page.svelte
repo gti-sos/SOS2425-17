@@ -70,9 +70,9 @@
         <h4 class="margen_nombres">Javier Guerrero Pérez</h4>
         
         <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <iframe style="width: 50%; aspect-ratio: 16/9; text-align: center;"  
-        src="https://www.youtube.com/embed/6qnwGhA1laE?si=pqjUnwJWOo6W1rrB" title="YouTube video player" frameborder="0" allow="accelerometer; 
-        autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/Xwh21Gv-ClI?si=PgWra2aO0bFPrmah" 
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
+            gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
 
         <h4 class="margen_nombres">Pablo Aguza Barragán</h4>
