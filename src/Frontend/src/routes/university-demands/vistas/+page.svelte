@@ -110,6 +110,7 @@ graduatedByYear().then(console.log);
         console.log(data2[0].value);
         // @ts-ignore
         Highcharts.chart('container', {
+            
         colorAxis: {
             minColor: '#ffe0e0',  
             maxColor: '#ff0000'   
