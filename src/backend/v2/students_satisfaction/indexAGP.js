@@ -3,6 +3,7 @@ import dataStore from "nedb";
 const BASE_API = "/api/v2";
 let db = new dataStore();
 
+
 const students_satisfaction_data = [
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8.31, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
     { carrera: "GRADO EN EDUCACIÓN INFANTIL", ciudad: "ALMENDRALEJO", satisfaccion_total: 8, sat_estudiantes: 4.89, satisfaccion_pdi: 4.55, año_academico: "2018-2019" },
@@ -84,6 +85,7 @@ function loadBackendAlejandroV2(app) {
 
     // Obtener datos con filtros y paginación
     app.get(BASE_API + "/students_satisfaction", (req, res) => {
+        
         let { carrera, ciudad, satisfaccion_total, sat_estudiantes, satisfaccion_pdi, año_academico, from, to, limit, offset } = req.query;
     
         let query = {};
