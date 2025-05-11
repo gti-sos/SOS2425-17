@@ -190,10 +190,9 @@ onMount(async () => {
         return { provincias: [], totalNacional: [], totalImportado: [] };
     }
 }
-// Función para montar la gráfica
+
 async function mountG10Chart() {
         const { provincias, totalNacional, totalImportado } = await getG10DataForChart();
-        // Crear la gráfica de Highcharts
         Highcharts.chart('container', {
             chart: {
                 type: 'column',
@@ -266,7 +265,7 @@ async function getG17DataForBadajoz() {
         const data = await response.json();
         mydatag17 = data;
 
-        // Filtrar los datos para la provincia "Badajoz" (normalizando el texto)
+
         const badajozData = data.filter(item => item.ciudad?.toUpperCase() === "BADAJOZ");
 
         // Calcular la satisfacción total media

@@ -192,7 +192,7 @@ function loadBackendAlejandroV2(app) {
 
     // Documentación
     app.get(BASE_API + "/students_satisfaction/docs", (_req, res) => {
-        res.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
+        res.redirect("https://documenter.getpostman.com/view/42373237/2sB2jAaSsb");
     });
 }
 
