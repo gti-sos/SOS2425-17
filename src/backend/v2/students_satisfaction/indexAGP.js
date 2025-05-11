@@ -125,7 +125,7 @@ function loadBackendAlejandroV2(app) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
 
-        db.findOne({ carrera: body.carrera, ciudad: body.ciudad }, (err, existing) => {
+        db.findOne({ carrera: body.carrera, ciudad: body.ciudad, año_academico:body.año_academico }, (err, existing) => {
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
 
             db.insert(body, (err, newDoc) => {
@@ -142,15 +142,15 @@ function loadBackendAlejandroV2(app) {
         res.sendStatus(405);
     });
     // Actualizar un registro existente
-    app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-        const { carrera, ciudad } = req.params;
+    app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad/:año_academico", (req, res) => {
+        const { carrera, ciudad, año_academico } = req.params;
         const body = req.body;
 
         if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined || !body.año_academico) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
 
-        db.update({ carrera, ciudad }, { $set: body }, {}, (err, numUpdated) => {
+        db.update({ carrera, ciudad, año_academico }, { $set: body }, {}, (err, numUpdated) => {
             if (numUpdated === 0) return res.status(404).json({ error: "Registro no encontrado." });
             res.sendStatus(200);
         });
@@ -172,10 +172,10 @@ function loadBackendAlejandroV2(app) {
     });
 
     // Eliminar un registro específico
-    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
-        const { carrera, ciudad } = req.params;
+    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad/:año_academico", (req, res) => {
+        const { carrera, ciudad, año_academico } = req.params;
 
-        db.remove({ carrera, ciudad }, {}, (err, numRemoved) => {
+        db.remove({ carrera, ciudad, año_academico }, {}, (err, numRemoved) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (numRemoved === 0) return res.status(404).send("Registro no encontrado.");
             res.sendStatus(200);
