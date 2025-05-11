@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "6292f6da-e345-4bc1-aaad-6faf089cd44f",
-		"name": "API Pablo",
+		"_postman_id": "73f842a2-43dd-4058-9ae2-a10db2e73970",
+		"name": "API Pablo v2",
 		"description": "University-academic-performance API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "43694449",
-		"_collection_link": "https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-6292f6da-e345-4bc1-aaad-6faf089cd44f?action=share&source=collection_link&creator=43694449"
+		"_collection_link": "https://hola11-0443.postman.co/workspace/98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-73f842a2-43dd-4058-9ae2-a10db2e73970?action=share&source=collection_link&creator=43694449"
 	},
 	"item": [
 		{
@@ -28,13 +28,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/loadInitialData",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/loadInitialData",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"loadInitialData"
 					]
@@ -51,7 +51,14 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check if the response is an array\r",
+							"pm.test('Response is an array', function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});//Para ver el resultado de los test te vas a Test Results"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -60,8 +67,11 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"packages": {},
-						"type": "text/javascript"
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -69,14 +79,127 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filtra varios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check if the response is an array\r",
+							"pm.test('Response is an array', function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});//Para ver el resultado de los test te vas a Test Results"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filtra varios entre dos fechas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check if the response is an array\r",
+							"pm.test('Response is an array', function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});//Para ver el resultado de los test te vas a Test Results"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance?location=BADAJOZ&year_small=2016&year_big=2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"university-academic-performance"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "BADAJOZ"
+						},
+						{
+							"key": "year_small",
+							"value": "2016"
+						},
+						{
+							"key": "year_big",
+							"value": "2017"
+						}
 					]
 				}
 			},
@@ -91,7 +214,12 @@
 						"exec": [
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"pm.test('Response is an object', function () {\r",
+							"    pm.expect(response).to.be.an('object');\r",
+							"});//Para ver el resultado de los test te vas a Test Results"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -102,13 +230,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"GRADO EN EDUCACIÓN INFANTIL",
 						"ALMENDRALEJO",
@@ -193,13 +321,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
 					]
 				}
@@ -314,7 +442,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 48.12, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"raw": "{\r\n    \"degree\": \"GRADO PRUEBAS\",\r\n    \"location\": \"MI CASA\",\r\n    \"dropoutFirstCourse\": 15.38,\r\n    \"efficiencyRate\": 76.76,\r\n    \"dropoutSecondCourse\": 6.41,\r\n    \"successRate\": 66.34,\r\n    \"dropoutThirdCourse\": 46.15,\r\n    \"dropoutsThirdCourse\": 5,\r\n    \"progressNormalized\": 1.00,\r\n    \"dropoutsFirstCourse\": 36,\r\n    \"performanceRate\": 48.12,\r\n    \"cohortStudents\": 77,\r\n    \"dropoutsSecondCourse\": 12,\r\n    \"dropoutRate\": 61.84,\r\n    \"graduationRate\": 92.11,\r\n    \"academicYear\": \"2018-2019\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -322,13 +450,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
 					]
 				}
@@ -356,7 +484,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": " { \"degree\": \"GRADO EN EDUCACIÓN INFANTIL\", \"location\": \"ALMENDRALEJO\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 6.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 6, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2016-2017\" }",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 48.12, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 2, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -364,17 +492,17 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO PRUEBAS/MI CASA/2018-2019",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
-						"GRADO EN EDUCACIÓN INFANTIL",
-						"ALMENDRALEJO",
-						"2016-2017"
+						"GRADO PRUEBAS",
+						"MI CASA",
+						"2018-2019"
 					]
 				}
 			},
@@ -401,7 +529,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36, \"performanceRate\": 40.19, \"cohortStudents\": 77, \"dropoutsSecondCourse\": 12, \"dropoutRate\": 61.84, \"graduationRate\": 92.11, \"academicYear\": \"2018-2019\" }",
+					"raw": " { \"degree\": \"GRADO PRUEBAS\", \"location\": \"MI CASA\", \"dropoutFirstCourse\": 15.38, \"efficiencyRate\": 76.76, \"dropoutSecondCourse\": 6.41, \"successRate\": 66.34, \"dropoutThirdCourse\": 46.15, \"dropoutsThirdCourse\": 5, \"progressNormalized\": 1.00, \"dropoutsFirstCourse\": 36 }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -409,13 +537,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016-2017",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"GRADO EN EDUCACIÓN INFANTIL",
 						"ALMENDRALEJO",
@@ -454,13 +582,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016ww",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2016ww",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"GRADO EN EDUCACIÓN INFANTIL",
 						"ALMENDRALEJO",
@@ -499,13 +627,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
 					]
 				}
@@ -541,53 +669,17 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN PRIMARIA/CÁCERES/2018-2019",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN EDUCACIÓN PRIMARIA/CÁCERES/2018-2019",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"GRADO EN EDUCACIÓN PRIMARIA",
 						"CÁCERES",
 						"2018-2019"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Error Borra Uno No existe",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status is 404\", function () {\r",
-							"    pm.response.to.have.status(404);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN ENCUENTRAME ESTA/ALMENDRALEJO/2055",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"university-academic-performance",
-						"GRADO EN ENCUENTRAME ESTA",
-						"ALMENDRALEJO",
-						"2055"
 					]
 				}
 			},
@@ -613,13 +705,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2017-2018",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN EDUCACIÓN INFANTIL/ALMENDRALEJO/2017-2018",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance",
 						"GRADO EN EDUCACIÓN INFANTIL",
 						"ALMENDRALEJO",
@@ -649,13 +741,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
 					]
 				}
@@ -682,14 +774,50 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/api/v1/university-academic-performance",
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"university-academic-performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Error Borra Uno No existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/v2/university-academic-performance/GRADO EN ENCUENTRAME ESTA/ALMENDRALEJO/2055",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"university-academic-performance",
+						"GRADO EN ENCUENTRAME ESTA",
+						"ALMENDRALEJO",
+						"2055"
 					]
 				}
 			},
