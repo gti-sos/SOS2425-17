@@ -543,28 +543,39 @@ async function mountPelisChart() {
   const data = await getPelisData();
   const processed = processPelisData(data);
 
+  // Datos para el gráfico de dispersión (scatter)
+  const scatterData = processed.map(item => ({
+    x: item.x, // Año de estreno
+    y: item.y  // Número de películas
+  }));
+
   const chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     exportEnabled: true,
     title: {
-      text: "Películas estrenadas por año",
+      text: "Películas estrenadas por año (Gráfico de Dispersión)",
       fontSize: 24,
     },
     axisX: {
       title: "Año de estreno",
       labelFontSize: 14,
+      interval: 10, // Mostrar los años de 10 en 10
     },
     axisY: {
       title: "Número de películas",
       includeZero: true,
       labelFontSize: 14,
     },
-    data: [{
-      type: "spline", // Línea suave
-      markerSize: 5,
-      toolTipContent: "Año: {x}<br/>Películas: {y}",
-      dataPoints: processed
-    }]
+    data: [
+      {
+        type: "scatter",
+        name: "Películas estrenadas",
+        showInLegend: true,
+        toolTipContent: "Año: {x}<br/>Películas: {y}",
+        markerSize: 10, // Tamaño de los puntos
+        dataPoints: scatterData
+      }
+    ]
   });
 
   chart.render();
