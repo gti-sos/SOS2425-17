@@ -1,10 +1,10 @@
 //API JAVIER 
 
 
-import dataStore from "nedb"; //Esto es para importar la base de datos ndb que es un paquete que te descargas con node
-const BASE_API = "/api/v2"; //Con esto lo que hago es crear la URL base de la api y digo que para encontrar la api pongas esa direccion 
+import dataStore from "nedb"; 
+const BASE_API = "/api/v2"; 
 
-let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
+let db = new dataStore(); 
 
 
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
