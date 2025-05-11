@@ -47,20 +47,20 @@
         <ul>
             <li>
                 <strong>Javier Javier Guerrero Pérez : </strong>
-                <a href="https://sos2425-17.onrender.com/api/v1/university-demands/docs" style="color:#4CAF50">API V1</a> |
-                <a href="https://sos2425-17.onrender.com/api/v2/university-demands/docs" style="color:#4CAF50">API V2</a>
+                <a href="https://sos2425-17.onrender.com/api/v1/university-demands" style="color:#4CAF50">API V1</a> |
+                <a href="https://sos2425-17.onrender.com/api/v2/university-demands" style="color:#4CAF50">API V2</a>
                 <br>
             </li>
             <li>
                 <strong>Alejandro Gaona Penco</strong>
-                <a href="https://sos2425-17.onrender.com/api/v1/students_satisfaction/docs" style="color:#4CAF50">API V1</a> |
-                <a href="https://sos2425-17.onrender.com/api/v2/students_satisfaction/docs" style="color:#4CAF50">API V2</a>
+                <a href="https://sos2425-17.onrender.com/api/v1/students_satisfaction" style="color:#4CAF50">API V1</a> |
+                <a href="https://sos2425-17.onrender.com/api/v2/students_satisfaction" style="color:#4CAF50">API V2</a>
                 <br>
             </li>
             <li>
                 <strong>Pablo Aguza Barragán</strong>
-                <a href="https://sos2425-17.onrender.com/api/v1/university-academic-performance/docs" style="color:#4CAF50">API V1</a> |
-                <a href="https://sos2425-17.onrender.com/api/v2/university-academic-performance/docs" style="color:#4CAF50">API V2</a>
+                <a href="https://sos2425-17.onrender.com/api/v1/university-academic-performance" style="color:#4CAF50">API V1</a> |
+                <a href="https://sos2425-17.onrender.com/api/v2/university-academic-performance" style="color:#4CAF50">API V2</a>
                 <br>
             </li>
         </ul>
