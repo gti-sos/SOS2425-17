@@ -18,7 +18,7 @@
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
 
-        let universityData = [];
+    let universityData = [];
     let result = "";
     let resultStatus = "";
     let newUniversityLocation;

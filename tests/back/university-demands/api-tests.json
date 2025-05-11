@@ -3,7 +3,7 @@
 		"_postman_id": "632ee2ee-6046-4673-ab69-e79b75668cda",
 		"name": "API Javier",
 		"description": "This is the api of university-demands",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "42357894",
 		"_collection_link": "https://hola11-0443.postman.co/workspace/98f36551-bff9-46fa-bbc4-f34779133190/collection/42357894-632ee2ee-6046-4673-ab69-e79b75668cda?action=share&source=collection_link&creator=42357894"
 	},
@@ -45,7 +45,18 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/loadInitialData"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/loadInitialData",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"loadInitialData"
+					]
+				}
 			},
 			"response": []
 		},
@@ -56,7 +67,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"//Para ver el resultado de los test te vas a Test Results\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check if the response is an array\r",
+							"pm.test('Response is an array', function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});//Para ver el resultado de los test te vas a Test Results\r",
 							"\r",
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -83,7 +99,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -94,7 +120,10 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"//Para ver el resultado de los test te vas a Test Results\r",
+							"const response = pm.response.json();\r",
+							"pm.test('Response is an object', function () {\r",
+							"    pm.expect(response).to.be.an('object');\r",
+							"});//Para ver el resultado de los test te vas a Test Results\r",
 							"\r",
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -124,7 +153,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -135,7 +177,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"//Para ver el resultado de los test te vas a Test Results\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Response is an array', function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});//Para ver el resultado de los test te vas a Test Results\r",
 							"\r",
 							"pm.test(\"Status is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -222,7 +268,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Enfermería/Huelva/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Enfermería/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Enfermería",
+						"Huelva",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -259,7 +318,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -297,7 +366,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -335,7 +414,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -373,7 +462,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Ingeniería Electrónica y Automática/Badajoz/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Ingeniería Electrónica y Automática/Badajoz/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Ingeniería Electrónica y Automática",
+						"Badajoz",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -411,7 +513,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Almendralejo/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Pera",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -449,7 +564,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Huelva/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Pera/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Pera",
+						"Huelva",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -487,7 +615,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -525,7 +666,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Almendralejo/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Almendralejo",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -563,7 +717,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -601,7 +765,20 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Huelva/2016-2017"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands/Educación Infantil/Huelva/2016-2017",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands",
+						"Educación Infantil",
+						"Huelva",
+						"2016-2017"
+					]
+				}
 			},
 			"response": []
 		},
@@ -639,7 +816,17 @@
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/api/v1/university-demands"
+				"url": {
+					"raw": "{{BASE_URL}}/api/v1/university-demands",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"university-demands"
+					]
+				}
 			},
 			"response": []
 		}
