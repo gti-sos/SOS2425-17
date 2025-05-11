@@ -1,7 +1,6 @@
 console.log("Init script");
 console.log("Se recuerda que han sido eliminados los DeprecationWarning");
 
-console.log("1");
 
 process.removeAllListeners('warning');
 process.on('warning', (warning) => {
@@ -31,7 +30,6 @@ app.options('*', (req, res) => {
     res.sendStatus(200);
 });
 
-console.log("2");
 
 import { loadBackendPabloV1 } from "./src/backend/v1/university-academic-performance/index.js";
 import { loadBackendPabloV2 } from "./src/backend/v2/university-academic-performance/index.js";
@@ -40,7 +38,6 @@ import { loadBackendJavierV2 } from "./src/backend/v2/university-demands/index.j
 import { loadBackendAlejandro } from "./src/backend/v1/students_satisfaction/indexAGP.js";
 import { loadBackendAlejandroV2 } from "./src/backend/v2/students_satisfaction/indexAGP.js";
 
-console.log("3");
 
 //En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
@@ -49,15 +46,13 @@ import {handler} from "./src/Frontend/build/handler.js"
 //comentario para probar
 app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
 
-console.log("4");
 loadBackendPabloV1(app)
 loadBackendPabloV2(app)
 loadBackendJavierV1(app) 
 loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
-console.log("5");
-/*
+
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
     headers: {
@@ -68,7 +63,7 @@ app.get('/cerveza-data', async (req, res) => {
 
   const data = await response.json();
   res.json(data);
-});*/
+});
 
 app.get('/furbo-data', async (req, res) => {
   const response = await fetch('https://api-futbol-espana.p.rapidapi.com/api/liga/espana/tabla ', {
@@ -82,7 +77,7 @@ app.get('/furbo-data', async (req, res) => {
   res.json(data);
 });
 
-/*app.get('/pelis-data', async (req, res) => {
+app.get('/pelis-data', async (req, res) => {
   const response = await fetch('https://imdb236.p.rapidapi.com/imdb/lowest-rated-movies', {
     headers: {
       'x-rapidapi-host': 'imdb236.p.rapidapi.com',
@@ -93,7 +88,7 @@ app.get('/furbo-data', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-*/
+
 
 
 app.get('/api-f1', async (req, res) => {
