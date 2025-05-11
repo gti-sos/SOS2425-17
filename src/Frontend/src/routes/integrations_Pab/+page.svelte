@@ -45,24 +45,32 @@
   <div id="chart-container" style="width: 600px; height: 450px;display: inline-block;"></div> 
 </div>
 
-  <div class="chart-wrapper" style="text-align: center;">
-  <h3 style="margin: 0;">Tasa de graduación y desempleo por año en extremadura</h3>
-  <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bar Chart  -- (INTEGRADA)</p>
-<canvas id="barChart" style="width: 300px; height: 300px;display: inline-block;"></canvas>
-  </div>
+<div class="chart-wrapper" style="text-align: center;">
+  <h3 style="margin: 0;">Tasa de graduación y desempleo por año en Extremadura</h3>
+  <p style="margin: 5px 0 10px; color: gray;">Angular Charts: Bar Chart -- (INTEGRADA)</p>
+
+  <div id="chart-container" style="width: 600px; height: 450px;display: inline-block;"></div> 
+<div style="width: 600px; height: 450px; display: inline-block; margin: 0 auto;">
+  <canvas id="barChart"></canvas>
+</div>
+</div>
 
 
   <div class="chart-wrapper" style="text-align: center;">
     <h3 style="margin: 0;">Top 5 carreteras más multadas</h3>
     <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Polar Chart</p>
-    <canvas id="polarChart" style="width: 300px; height: 300px;display: inline-block;" ></canvas>
+<div style="width: 600px; height: 450px; display: inline-block; margin: 0 auto;">
+  <canvas id="polarChart"></canvas>
+</div>
 
     </div>  
 
     <div class="chart-wrapper" style="text-align: center;">
       <h3 style="margin: 0;">Consumo de electricidad ralacionado con Tasa de abandono por año en extremadura </h3>
       <p style="margin: 5px 0 10px; color: gray;">Angular Charts:Bubble --(INTEGRADA)</p>
-      <canvas id="bubbleChart" style="width: 300px; height: 300px;display: inline-block;"></canvas>
+<div style="width: 600px; height: 450px; display: inline-block; margin: 0 auto;">
+  <canvas id="bubbleChart"></canvas>
+</div>
   
       </div>  
 
@@ -651,7 +659,7 @@ onMount(async () => {
     console.log("DATOS COMBINADOS integración 2 G12 ",combineDropoutAndConsumption(getDropoutRateByYear(data_pab),getTotalConsumptionByYearForExtremadura(data_AnnualConsumptions)))
     data_IntegracionBubbleG15=combineDropoutAndConsumption(getDropoutRateByYear(data_pab),getTotalConsumptionByYearForExtremadura(data_AnnualConsumptions))
 
-/*
+
     
     data_Sofascore=await getSofascore();
     console.log("INTERNET SOFASCORE ",data_Sofascore)
@@ -667,7 +675,7 @@ onMount(async () => {
     console.log("DATA DONUT ANIME",data_DonutAnime)
     const colorsForDonut = generateColors(data_DonutAnime.length);
     
-*/
+
 
 
     Highcharts.chart('container', {
@@ -824,7 +832,7 @@ Highcharts.chart('container2', {
 });
 
 
-/*
+
 new window.Morris.Bar({
   element: "chart2",
   data: data_DamageTypeChart, 
@@ -848,7 +856,7 @@ new Morris.Donut({
 
 
 drawChart();
-*/
+
 
 const ctx = document.getElementById('barChart').getContext('2d');
 charts_Bar = new Chart(ctx, {

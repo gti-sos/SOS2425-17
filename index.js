@@ -54,8 +54,6 @@ loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
-
-/*
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
     headers: {
@@ -93,7 +91,7 @@ app.get('/pelis-data', async (req, res) => {
 });
 
 
-*/
+
 app.get('/api-f1', async (req, res) => {
   const response = await fetch('https://f1-live-motorsport-data.p.rapidapi.com/drivers/standings/2020', {
     headers: {
@@ -129,7 +127,7 @@ app.get('/api-transfermarket', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-/*
+
 
 app.get('/api-sofascore', async (req, res) => {
   const response = await fetch('https://sofascore.p.rapidapi.com/players/get-all-statistics?playerId=155997', {
@@ -168,7 +166,7 @@ app.get('/api-pokemon-unite', async (req, res) => {
   res.json(data);
 });
 
-*/
+
 app.use(handler);
 
 app.listen(Port,()=>{
