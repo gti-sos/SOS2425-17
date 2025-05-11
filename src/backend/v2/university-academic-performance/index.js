@@ -275,8 +275,6 @@ const university_academic_performance = [
             const location = request.params.location;
             const academicYear = request.params.academicYear
             const body = request.body;
-            console.log(request.url)
-            console.log(body)
             if ([
                 body.degree, body.location, body.dropoutFirstCourse, body.efficiencyRate, 
                 body.dropoutSecondCourse, body.successRate, body.dropoutThirdCourse, 
@@ -309,15 +307,12 @@ const university_academic_performance = [
         
             university_academic_performance_db.remove({}, { multi: true }, (err, numRemoved) => {
                 if (err) {
-                    console.log("1")
                     return response.status(500).json({ error: "Database error" });
                 }
         
                 if (numRemoved === 0) {
-                    console.log("2")
                     return response.status(409).json({ error: "Database is empty, nothing to delete" });
                 }
-                console.log("3")
                 return response.status(200).json({ message: `${numRemoved} records deleted successfully` });
             });
         });

@@ -323,7 +323,6 @@ async function deleteOne(degree, location, academicYear){
         status = "";
         errorMessage= "";
         successMessage= "";
-        console.log(degree, location, academicYear)
         stopTimer();
         
         try {
