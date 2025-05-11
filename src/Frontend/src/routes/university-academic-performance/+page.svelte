@@ -323,6 +323,7 @@ async function deleteOne(degree, location, academicYear){
         status = "";
         errorMessage= "";
         successMessage= "";
+        console.log(degree, location, academicYear)
         stopTimer();
         
         try {
@@ -564,7 +565,7 @@ async function deleteOne(degree, location, academicYear){
         <input placeholder="Localización" bind:value={deleteLocation} />
         <input placeholder="Año académico" bind:value={deleteAcademiYear} />
 
-        <button class="btn-green" on:click={() => {deleteOne(deleteDegree, deleteLocation, deleteAcademiYear)
+        <button class="btn-red" on:click={() => {deleteOne(deleteDegree, deleteLocation, deleteAcademiYear)
         showDeleteForm=false;    
         }}>
             Borrar Uno
