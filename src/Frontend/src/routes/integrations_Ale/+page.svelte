@@ -148,7 +148,7 @@ async function drawStackedAreaChart() {
         },
         axisX: {
             title: "Año",
-            interval: 1 // Mostrar todos los años
+            interval: 1 
         },
         axisY: {
             title: "Porcentaje de eventos",
@@ -272,10 +272,10 @@ async function getG17DataForBadajoz() {
         const totalSatisfaccion = badajozData.reduce((sum, item) => sum + (item.satisfaccion_total || 0), 0);
         const mediaSatisfaccion = badajozData.length > 0 ? totalSatisfaccion / badajozData.length : 0;
 
-        return mediaSatisfaccion.toFixed(2); // Devolver la media con 2 decimales
+        return mediaSatisfaccion.toFixed(2);
     } catch (error) {
         console.error(`ERROR al obtener datos de la API G17: ${error}`);
-        return 0; // Devolver 0 si hay un error
+        return 0; 
     }
 }
 
@@ -296,7 +296,7 @@ async function getG17DataForBadajoz() {
             return badajozData ? badajozData.bus : 0;
         } catch (error) {
             console.error(`ERROR al obtener datos de la API G19: ${error}`);
-            return 0; // Devolver 0 si hay un error
+            return 0; 
         }
     }
 
@@ -363,7 +363,7 @@ async function getG17DataForBadajoz() {
         plotOptions: {
             solidgauge: {
                 dataLabels: {
-                    enabled: false // Desactiva el número en el centro
+                    enabled: false 
                 },
                 linecap: 'round',
                 stickyTracking: false
@@ -414,7 +414,6 @@ async function loadInitialDataForG17() {
     // Función para obtener y procesar los datos de la API G17
     async function getG17DataForExtremadura() {
         try {
-            // Asegurarse de que los datos iniciales estén cargados
         await loadInitialDataForG17();
 
             const response = await fetch(apiG17, { method: "GET" });
@@ -424,20 +423,17 @@ async function loadInitialDataForG17() {
             const data = await response.json();
             mydatag17 = data;
 
-            // Filtrar los datos para el año académico 2017-2018
             const data2017_2018 = data.filter(item => item.año_academico === "2017-2018");
 
-             // Calcular la satisfacción media de los estudiantes
         const totalSatisfaccion = data2017_2018.reduce((sum, item) => sum + item.sat_estudiantes, 0);
         const mediaSatisfaccion = data2017_2018.length > 0 ? totalSatisfaccion / data2017_2018.length : 0;
 
-        // Convertir la satisfacción media en porcentaje (escala de 0 a 100)
         const mediaSatisfaccionPorcentaje = (mediaSatisfaccion / 10) * 100;
 
-        return mediaSatisfaccionPorcentaje.toFixed(2); // Devolver el porcentaje con 2 decimales
+        return mediaSatisfaccionPorcentaje.toFixed(2); 
     } catch (error) {
         console.error(`ERROR al obtener datos de la API G17: ${error}`);
-        return 0; // Devolver 0 si hay un error
+        return 0; 
     }
 }
 // Función para obtener y procesar los datos de la API G12
@@ -450,28 +446,24 @@ async function getG12DataForExtremadura() {
             const data = await response.json();
             mydatag12 = data;
 
-            // Filtrar los datos para Extremadura y el año 2018
             const extremaduraData = data.find(item => item.aacc === "Extremadura" && item.year === 2018);
 
-            // Calcular el porcentaje de consumo de electricidad
             if (extremaduraData) {
                 const totalConsumption = extremaduraData.total_consumption;
                 const electricityPercentage = (extremaduraData.electricity / totalConsumption) * 100;
-                return electricityPercentage.toFixed(2); // Devolver el porcentaje con 2 decimales
+                return electricityPercentage.toFixed(2); 
             }
 
-            return 0; // Devolver 0 si no hay datos
+            return 0; 
         } catch (error) {
             console.error(`ERROR al obtener datos de la API G12: ${error}`);
-            return 0; // Devolver 0 si hay un error
+            return 0;
         }
     }
-        // Función para montar la gráfica de CanvasJS
     async function mountCanvasJSChart() {
         const mediaSatisfaccion = await getG17DataForExtremadura();
         const electricityPercentage = await getG12DataForExtremadura();
 
-        // Crear la gráfica de CanvasJS
         const chart = new CanvasJS.Chart("container-canvasjs", {
             animationEnabled: true,
             title: {
@@ -551,28 +543,39 @@ async function mountPelisChart() {
   const data = await getPelisData();
   const processed = processPelisData(data);
 
+  // Datos para el gráfico de dispersión (scatter)
+  const scatterData = processed.map(item => ({
+    x: item.x, // Año de estreno
+    y: item.y  // Número de películas
+  }));
+
   const chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     exportEnabled: true,
     title: {
-      text: "Películas estrenadas por año",
+      text: "Películas estrenadas por año (Gráfico de Dispersión)",
       fontSize: 24,
     },
     axisX: {
       title: "Año de estreno",
       labelFontSize: 14,
+      interval: 10, // Mostrar los años de 10 en 10
     },
     axisY: {
       title: "Número de películas",
       includeZero: true,
       labelFontSize: 14,
     },
-    data: [{
-      type: "spline", // Línea suave
-      markerSize: 5,
-      toolTipContent: "Año: {x}<br/>Películas: {y}",
-      dataPoints: processed
-    }]
+    data: [
+      {
+        type: "scatter",
+        name: "Películas estrenadas",
+        showInLegend: true,
+        toolTipContent: "Año: {x}<br/>Películas: {y}",
+        markerSize: 10, // Tamaño de los puntos
+        dataPoints: scatterData
+      }
+    ]
   });
 
   chart.render();
@@ -607,7 +610,7 @@ function procesarDatosBebidas(data) {
 
   data.forEach(item => {
     subcats.forEach((key, index) => {
-      const valor = item[key]?.trim(); // Evita "undefined" y espacios
+      const valor = item[key]?.trim(); 
       const etiqueta = subcatLabels[index];
       if (valor) {
         conteos[etiqueta][valor] = (conteos[etiqueta][valor] || 0) + 1;
