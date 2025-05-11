@@ -7,11 +7,10 @@
 
     import {dev} from '$app/environment';
     let Devel_HOST = "http://localhost:16078";
-    console.log("26JAV");
+    
 
     let Api = "/api/v2/university-demands";
 
-    //Para que funcione todo si estas en modod desarrollo
     if (dev){
         Api = Devel_HOST + Api;
     }
@@ -19,8 +18,7 @@
     import {onMount} from "svelte";
     import {Button,Table } from '@sveltestrap/sveltestrap';
 
-    //Importo el componente de bootstrap para que me haga la tabla
-    let universityData = [];
+        let universityData = [];
     let result = "";
     let resultStatus = "";
     let newUniversityLocation;
@@ -31,14 +29,12 @@
     let newUniversitygraduated;
     let newUniversityAcademicYear;
 
-    let showFilterForm = false; // Para mostrar/ocultar el formulario
+    let showFilterForm = false; 
     let showCreateForm = false;
     let showUpdateForm = false;
     let successMessage = "";
     let errorMessage = "";
 
-
-    // Campos del filtro (diferente de los de creación)
     let filterLocation = "";
     let filterDegree = "";
     let filterOver45 = "";
@@ -52,15 +48,10 @@
 
 
     async function getUniversityDemands() {
-        //Para que siempre que llamemos a la funcion esos campos esten vacios
         resultStatus = result = "";
-        //Esta funcion lo que hace es que recorre la api con un get y mete los datos en res
-        //Se hace await por el async 
-        
         try{
 
-            const res  = await fetch(Api,{method: "GET"});console.log("27JAV");
-            //Para manda el resultado res en json y lo mete en data
+            const res  = await fetch(Api,{method: "GET"});
             const data = await res.json();
             result = JSON.stringify(data,null,2);
             universityData = data;
@@ -70,10 +61,7 @@
         }
     }
     
-
-    //Cada vez que cargue la pagina llama a getUniversityDemands
     onMount(async () => {
-        //Cuando se carga la pagina se llama a la funcion getUniversityDemands
         await getUniversityDemands();
     });
 
@@ -85,26 +73,24 @@
                 console.log("Datos iniciales insertados correctamente");
                 getUniversityDemands(); // <-- Esto recarga la tabla
                 successMessage = "¡Datos iniciales insertados correctamente!";
-                console.log("19");
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
             } else if (response.status === 409) {
                 console.log("La base de datos ya tiene datos. Elimínalos primero.");
                 errorMessage = "¡La base de datos ya tiene datos! . Elimínalos primero.";
-                // Oculta el mensaje después de unos segundos
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
-                console.log("28JAV");
+                
             } 
             
             else {
                 console.log("Error al insertar los datos");
                 errorMessage = "Error al insertar los datos";
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -114,13 +100,12 @@
         .catch(error => {
             console.error("Error:", error);
             errorMessage = "Error al cargar los datos iniciales";
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
         });
 }
-//Filtrar por un dato 
 //http://localhost:16078/api/v2/university-demands?from=2017-2018&to=2018-2019
 async function getUniversityEspecifico(params = {}) {
     resultStatus = result = "";
@@ -129,7 +114,7 @@ async function getUniversityEspecifico(params = {}) {
         //Lo que hago es que llamo a la direccion /university-demands?campo = valor 
         const url = `${Api}?${queryString}`;
         const res = await fetch(url, { method: "GET" });
-        console.log("29JAV");
+        
         const status = res.status;
         resultStatus = status;
 
@@ -143,7 +128,7 @@ async function getUniversityEspecifico(params = {}) {
             } 
 
         const data = await res.json();
-        console.log("30JAV");
+        
         result = JSON.stringify(data, null, 2);
         universityData = data;
         console.log(`Response received:\n${result}`);
@@ -151,7 +136,7 @@ async function getUniversityEspecifico(params = {}) {
         console.log(`Error: GET from ${Api} - ${error}`);
         errorMessage = "Error al obtener los datos.";
 
-        // Oculta el mensaje después de unos segundos
+        
         setTimeout(() => {
             errorMessage = "";
         }, 3000);
@@ -175,7 +160,6 @@ function applyFilters() {
     showFilterForm = false; // Oculta el formulario tras aplicar
 }
 
-//Con esto vacio los campos de crear y actualizar 
 function clearFilters() {
     newUniversityLocation = "";
     newUniversityDegree = "";
@@ -187,7 +171,6 @@ function clearFilters() {
     resultStatus = "";
 }
 
-//Con esto lo que hago esque vacio los campos del formulario de filtro
 function clearFilterFields() {
     filterLocation = "";
     filterDegree = "";
@@ -200,8 +183,6 @@ function clearFilterFields() {
     toYear = "";
 }
 
-//Con esto lo que hago es que dejo todos los campos de ambos formularios vacios y hago un get para que se actualize la tabla
-//con los campos vacios
 function resetFilters() {
     clearFilters();
     clearFilterFields();
@@ -213,7 +194,7 @@ function resetFilters() {
     async function createUniversityDemands(){
         resultStatus = result = "";
         try {
-            console.log("31JAV");
+            
             const res = await fetch(Api,{
                 method:"POST",
                 headers:{
@@ -229,7 +210,7 @@ function resetFilters() {
                     academicYear: newUniversityAcademicYear         })
             });
   
-            const status = await res.status;console.log("32JAV");
+            const status = await res.status;
             resultStatus = status;
             if(status == 201){
                 console.log(`Demand created`);
@@ -239,7 +220,7 @@ function resetFilters() {
 
                 successMessage = "¡Demanda creada con éxito!";
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
@@ -248,7 +229,7 @@ function resetFilters() {
             else if(status == 409){
                 console.log(`ERROR creating demand: status received\n${status}`);
                 errorMessage = "¡Esta demanda ya existe!";
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -257,7 +238,7 @@ function resetFilters() {
                 console.log(`ERROR creating demand: status received\n${status}`);
                 errorMessage = "¡Tienes que rellenar todos los campos!";
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -266,7 +247,7 @@ function resetFilters() {
                 console.log(`ERROR creating demand: status received\n${status}`);
                 errorMessage = "¡Error al crear la demanda!";
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -277,10 +258,9 @@ function resetFilters() {
             console.log(`ERROR:  GET from ${Api}: ${error}`);
         }
 
-        console.log("33JAV");
+        
     }
 
-    //Put en el front
     async function updateUniversityDemand() {
     resultStatus = result = "";
     try {
@@ -333,7 +313,7 @@ function resetFilters() {
         errorMessage = "Error de red al actualizar.";
     }
 }
-console.log("34JAV");
+
 function openEditForm(universityD) {
     newUniversityLocation = universityD.location;
     newUniversityDegree = universityD.degree;
@@ -346,15 +326,9 @@ function openEditForm(universityD) {
     showUpdateForm = true;
 }
 
-
-
-    //Borro en funcion del nombre
     async function deleteDemands(degree, location, academicYear){
         resultStatus = result = "";
         try {
-            //Basicamente lo que llamo es a api/v1/university-demands/degree/location/academicYear que es donde tengo el 
-            //delete especifico
-            
 
             console.log("Intentando borrar URL:", Api + "/" + degree + "/" + location + "/" + academicYear);
 
@@ -369,14 +343,14 @@ function openEditForm(universityD) {
                 getUniversityDemands(); // más lógico que recargar los datos con loadInitialData
                 successMessage = "¡Demanda borrada con éxito!";
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
             } else {
                 console.error(`ERROR deleting demand: status ${status} - response: ${Text}`);
                 errorMessage = "Error al eliminar los datos";
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -390,12 +364,10 @@ function openEditForm(universityD) {
 
     }
 
-    //Borro Todo
     async function deleteAllDemands(){
         resultStatus = result = "";
         try {
             
-            //Hago un delete en api/avi/univertity-demands
             const res = await fetch(Api, {method: "DELETE"});
             
             const status = res.status;
@@ -403,17 +375,17 @@ function openEditForm(universityD) {
 
             if (status === 200) {
                 console.log(`All demands deleted`);
-                getUniversityDemands(); // más lógico que recargar los datos con loadInitialData
+                getUniversityDemands(); 
                 successMessage = "¡Demandas borradas con éxito!";
 
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
             } else {
                 console.error(`ERROR deleting demands`);
                 errorMessage = "Error al borrar todos los datos";
-                // Oculta el mensaje después de unos segundos
+                
                 setTimeout(() => {
                     errorMessage = "";
                 }, 3000);
@@ -427,7 +399,7 @@ function openEditForm(universityD) {
     
 </script>
 
-<!-- Mensajes de exito o error -->
+
 {#if successMessage}
     <div class="success-message">{successMessage}</div>
 {/if}
@@ -461,7 +433,6 @@ function openEditForm(universityD) {
             <th>Año academico</th>
         </tr>
         
-        <!-- Esto ejecuta tantos tr como contacts haya -->
         {#each universityData as universityD}
         <tr>
             <td>
@@ -495,8 +466,7 @@ function openEditForm(universityD) {
     </tbody>
 </Table>
 
-<!-- -->
-<!-- Si pulso el boton que llama a showFilterForm -->
+
 {#if showFilterForm}
     <div class="filter-overlay" on:click={() => showFilterForm = false}>
         <div class="filter-form" on:click|stopPropagation>
@@ -595,7 +565,6 @@ function openEditForm(universityD) {
 
 
             <div class="filter-buttons">
-                <!--Para que ejecuto la funcion createContatcs al pulsar el boton -->
                 <Button color="primary" on:click={createUniversityDemands}>Crear</Button>
                 <Button color="danger" on:click={clearFilters}>Borrar Campos</Button>
                 <Button on:click={() => showCreateForm = false}>Cerrar</Button>
@@ -662,7 +631,7 @@ function openEditForm(universityD) {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+        background-color: rgba(0, 0, 0, 0.4); 
         display: flex;
         justify-content: center;
         align-items: center;
@@ -671,19 +640,19 @@ function openEditForm(universityD) {
 
     .filter-form {
     background-color: #fff;
-    padding: 0.4rem 0.8rem;         /* Menos espacio dentro del cuadro */
+    padding: 0.4rem 0.8rem;         
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;                   /* Menos espacio entre elementos */
+    gap: 0.2rem;                   
     width: 85%;
-    max-width: 400px;              /* Más estrecho */
-    font-size: 0.85rem;            /* Tamaño de texto más pequeño */
+    max-width: 400px;              
+    font-size: 0.85rem;            
 }
 
 .filter-form input {
-    padding: 0.2rem 0.4rem;        /* Inputs más bajos y angostos */
+    padding: 0.2rem 0.4rem;        
     font-size: 0.85rem;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -691,7 +660,7 @@ function openEditForm(universityD) {
 }
 
 .filter-form h5 {
-    font-size: 1rem;               /* Título más pequeño */
+    font-size: 1rem;               
     margin-bottom: 0.5rem;
     text-align: center;
 }
@@ -705,9 +674,9 @@ function openEditForm(universityD) {
 }
 
 .form-group label {
-    font-weight: bold;       /* Hace el texto más fuerte */
-    margin-right: 0.5rem;    /* Espacio entre el label y el input */
-    width: 45%;              /* Ancho fijo del label */
+    font-weight: bold;       
+    margin-right: 0.5rem;    
+    width: 45%;              
 }
 
 .form-group input {
@@ -727,7 +696,7 @@ function openEditForm(universityD) {
 }
 
 .filter-buttons button {
-    font-size: 0.8rem;             /* Botones más pequeños */
+    font-size: 0.8rem;             
     padding: 0.3rem 0.6rem;
 }
 

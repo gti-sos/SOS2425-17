@@ -1,8 +1,6 @@
 console.log("Init script");
 console.log("Se recuerda que han sido eliminados los DeprecationWarning");
 
-console.log("1");
-
 process.removeAllListeners('warning');
 process.on('warning', (warning) => {
   if (warning.name === 'DeprecationWarning') {
@@ -17,11 +15,11 @@ process.on('warning', (warning) => {
 
 import express from "express"; 
 import cors from "cors";
-const app = express(); //para llamar al framework express
-const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
+const app = express(); 
+const Port = process.env.PORT || 16078;  
 
 
-app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
+app.use(express.json()); 
 app.use(cors());
 
 app.options('*', (req, res) => {
@@ -31,7 +29,6 @@ app.options('*', (req, res) => {
     res.sendStatus(200);
 });
 
-console.log("2");
 
 import { loadBackendPabloV1 } from "./src/backend/v1/university-academic-performance/index.js";
 import { loadBackendPabloV2 } from "./src/backend/v2/university-academic-performance/index.js";
@@ -40,23 +37,20 @@ import { loadBackendJavierV2 } from "./src/backend/v2/university-demands/index.j
 import { loadBackendAlejandro } from "./src/backend/v1/students_satisfaction/indexAGP.js";
 import { loadBackendAlejandroV2 } from "./src/backend/v2/students_satisfaction/indexAGP.js";
 
-console.log("3");
-
-//En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
 
 import {handler} from "./src/Frontend/build/handler.js"
 
 //comentario para probar
-app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
+app.use("/about",express.static("./public/Readme.html"));
 
-console.log("4");
+
 loadBackendPabloV1(app)
 loadBackendPabloV2(app)
 loadBackendJavierV1(app) 
 loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
-console.log("5");
+
 /*
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
@@ -175,4 +169,4 @@ app.use(handler);
 
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
-}); //Esto es para usar el framework en ese puerto (poner un puerto alto)
+}); 

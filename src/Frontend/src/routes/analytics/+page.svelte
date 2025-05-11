@@ -131,8 +131,6 @@
         resultStatus = result = "";
 
         try {
-
-            //Cargo los datos iniciales
             await fetch("/api/v2/students_satisfaction/loadInitialData")
 
             const res = await fetch(API+"/students_satisfaction",{method:"GET"});

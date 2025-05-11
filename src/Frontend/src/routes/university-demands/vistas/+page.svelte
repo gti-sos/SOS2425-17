@@ -20,9 +20,13 @@
     let DEVEL_HOST = "http://localhost:16078";
 
     let API = "/api/v2/university-demands";
+    let API_LOAD = "/api/v2/university-demands/loadInitialData";
 
-    if(dev)
+    if (dev) {
         API = DEVEL_HOST + API;
+        API_LOAD = DEVEL_HOST + API_LOAD;
+    }
+
 
     /**
      * @type {never[]}
@@ -32,33 +36,27 @@
     let myData = [];
     let result = "";
     let resultStatus = "";
-    
+
     
     async function getData(){
         resultStatus = result = "";
-
         try {
-
-            await fetch("/api/v2/university-demands/loadInitialData")
-            console.log("35JAV");
             const res = await fetch(API,{method:"GET"});
 
             const data = await res.json();
             result = JSON.stringify(data,null,2);
 
             myData = data;
-            //console.log(`Response received:\n${JSON.stringify(myData,null,2)}`);
+            console.log(`Response received:\n${JSON.stringify(myData,null,2)}`);
 
         } catch (error){
             console.log(`ERROR:  GET from ${API}: ${error}`);
         }
     }
 
-    //console.log(getData());
+    console.log(getData());
 
-    async function foreignersByLocation() {
-    await getData(); 
-    console.log("36JAV");
+    async function foreignersByLocation() { 
     const resultado = myData.reduce((acc, { location, foreigners }) => {
         acc[location] = (acc[location] || 0) + foreigners;
         return acc;
@@ -70,11 +68,9 @@
         .sort((a, b) => b.foreigners - a.foreigners); 
 }
 
-
+foreignersByLocation().then(console.log);
 
 async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
-    await getData(); 
-
     const datosFiltrados = myData
         .filter(item => item.degree === degree)
         .map(item => ({
@@ -83,12 +79,16 @@ async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
         }))
         .sort((a, b) => parseInt(a.academicYear.slice(0, 4)) - parseInt(b.academicYear.slice(0, 4)));
 
-    return datosFiltrados;
-    
-    
+    return datosFiltrados;  
 }
-    console.log(graduatedByYear());
+
+graduatedByYear().then(console.log);
+
     onMount(async () => {
+
+        await fetch(API_LOAD); 
+        await getData();
+
         const resultado = await foreignersByLocation();
         const resultado2 = await graduatedByYear();
 
@@ -254,7 +254,6 @@ async function graduatedByYear(degree = "GRADO EN PODOLOGÍA") {
     });
 
     });
-    console.log("37JAV");
 </script>
 
 <style>
