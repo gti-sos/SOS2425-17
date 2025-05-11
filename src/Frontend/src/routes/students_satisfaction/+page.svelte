@@ -150,8 +150,8 @@ function applyFilters() {
 
     console.log("Parámetros enviados:", params);
 
-    getSatisfactionEspecifico(params); // Llamar a la función para obtener los datos filtrados
-    showFilterForm = false; // Cerrar el formulario de filtros
+    getSatisfactionEspecifico(params); 
+    showFilterForm = false; 
 }
 
 
@@ -421,7 +421,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <th>Satisfacción Total</th>
             <th>Satisfacción Estudiantes</th>
             <th>Satisfacción PDI</th>
-            <th>Año Académico</th> <!-- Nueva columna -->
+            <th>Año Académico</th> 
         </tr>
         {#each satisfactionData as universityD}
         <tr>
@@ -430,7 +430,7 @@ async function deleteStudentsSatisfaction(carrera, ciudad) {
             <td>{universityD.satisfaccion_total}</td>
             <td>{universityD.sat_estudiantes}</td>
             <td>{universityD.satisfaccion_pdi}</td>
-            <td>{universityD.año_academico}</td> <!-- Mostrar el nuevo campo -->
+            <td>{universityD.año_academico}</td> 
             <td>
                 <Button color="danger" on:click={() => {deleteStudentsSatisfaction(universityD.carrera, universityD.ciudad)}}>Borrar</Button>
                 <Button color="warning" on:click={() => openEditForm(universityD)}>Editar</Button>

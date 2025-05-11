@@ -99,8 +99,8 @@ function loadBackendAlejandroV2(app) {
         // Filtro por rango de satisfacción total (from y to)
         if (from || to) {
             query.satisfaccion_total = {};
-            if (from) query.satisfaccion_total.$gte = Number(from); // Mayor o igual a "from"
-            if (to) query.satisfaccion_total.$lte = Number(to); // Menor o igual a "to"
+            if (from) query.satisfaccion_total.$gte = Number(from); 
+            if (to) query.satisfaccion_total.$lte = Number(to); 
         }
     
         // Buscar y ordenar por satisfacción total
@@ -112,7 +112,7 @@ function loadBackendAlejandroV2(app) {
             if (offset) results = results.slice(Number(offset));
             if (limit) results = results.slice(0, Number(limit));
     
-            results.forEach(r => delete r._id); // Eliminar el campo _id
+            results.forEach(r => delete r._id); 
             res.json(results);
         });
     });
