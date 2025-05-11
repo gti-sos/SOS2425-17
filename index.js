@@ -93,7 +93,7 @@ app.get('/pelis-data', async (req, res) => {
 });
 
 
-*/
+
 app.get('/api-f1', async (req, res) => {
   const response = await fetch('https://f1-live-motorsport-data.p.rapidapi.com/drivers/standings/2020', {
     headers: {
