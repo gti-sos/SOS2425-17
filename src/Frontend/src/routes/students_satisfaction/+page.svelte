@@ -62,7 +62,6 @@ if (dev) {
     }
     onMount(async () => {
         await getStudentsSatisfaction();
-        console.log("15-AGP")
     });
 
 
@@ -71,7 +70,6 @@ if (dev) {
         fetch(`${Api}/loadInitialData`)
         .then(response => {
             if (response.status === 201) {
-                console.log("16-AGP")
                 console.log("Datos iniciales insertados correctamente");
                 getStudentsSatisfaction(); 
                 successMessage = "¡Datos iniciales insertados correctamente!";
@@ -119,7 +117,6 @@ async function getSatisfactionEspecifico(params = {}) {
         const res = await fetch(url, { method: "GET" });
         const status = res.status;
         resultStatus = status.toString();
-        console.log("18-AGP")
 
 
         const data = await res.json();
@@ -184,7 +181,6 @@ function clearFilterFields() {
 
 function resetFilters() {
     clearFilters();
-    console.log("19-AGP")
     clearFilterFields();
     getStudentsSatisfaction(); 
 }
@@ -195,7 +191,6 @@ function resetFilters() {
 async function createStudentsSatisfaction() {
     resultStatus = result = "";
     try {
-        console.log("20-AGP")
         const res = await fetch(Api, {
             method: "POST",
             headers: {
@@ -210,7 +205,6 @@ async function createStudentsSatisfaction() {
                 año_academico: newAñoAcademico // Nuevo campo
             })
         });
-        console.log("21-AGP")
         const status = res.status;
         resultStatus = status.toString();
         if (status == 201) {
@@ -243,7 +237,6 @@ async function createStudentsSatisfaction() {
     } catch (error) {
         console.log(`ERROR:  GET from ${Api}: ${error}`);
     }
-    console.log("22-AGP")
 }
     async function updateUniversityDemand() {
     resultStatus = result = "";
@@ -268,8 +261,6 @@ async function createStudentsSatisfaction() {
             },
             body: JSON.stringify(updatedData)
         });
-
-        console.log("23-AGP")
         const status = res.status;
         resultStatus = status.toString();
 

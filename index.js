@@ -1,6 +1,7 @@
 console.log("Init script");
 console.log("Se recuerda que han sido eliminados los DeprecationWarning");
 
+
 process.removeAllListeners('warning');
 process.on('warning', (warning) => {
   if (warning.name === 'DeprecationWarning') {
@@ -38,6 +39,8 @@ import { loadBackendAlejandro } from "./src/backend/v1/students_satisfaction/ind
 import { loadBackendAlejandroV2 } from "./src/backend/v2/students_satisfaction/indexAGP.js";
 
 
+//En express siempre se pone "/" que es la ruta y la segunda opcion es el callback
+
 import {handler} from "./src/Frontend/build/handler.js"
 
 //comentario para probar
@@ -51,6 +54,7 @@ loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
+
 /*
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
@@ -62,7 +66,7 @@ app.get('/cerveza-data', async (req, res) => {
 
   const data = await response.json();
   res.json(data);
-});*/
+});
 
 app.get('/furbo-data', async (req, res) => {
   const response = await fetch('https://api-futbol-espana.p.rapidapi.com/api/liga/espana/tabla ', {
@@ -76,7 +80,7 @@ app.get('/furbo-data', async (req, res) => {
   res.json(data);
 });
 
-/*app.get('/pelis-data', async (req, res) => {
+app.get('/pelis-data', async (req, res) => {
   const response = await fetch('https://imdb236.p.rapidapi.com/imdb/lowest-rated-movies', {
     headers: {
       'x-rapidapi-host': 'imdb236.p.rapidapi.com',
@@ -87,7 +91,7 @@ app.get('/furbo-data', async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
-*/
+
 
 
 app.get('/api-f1', async (req, res) => {
