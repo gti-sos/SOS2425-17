@@ -16,11 +16,11 @@ process.on('warning', (warning) => {
 
 import express from "express"; 
 import cors from "cors";
-const app = express(); //para llamar al framework express
-const Port = process.env.PORT || 16078; //Esto es para que si se ejecuta en la pagina web(la primera) que coja ese port y 
+const app = express(); 
+const Port = process.env.PORT || 16078;  
 
 
-app.use(express.json()); //esto es para que todo lo que coja de express lo ponga como json
+app.use(express.json()); 
 app.use(cors());
 
 app.options('*', (req, res) => {
@@ -44,7 +44,8 @@ import { loadBackendAlejandroV2 } from "./src/backend/v2/students_satisfaction/i
 import {handler} from "./src/Frontend/build/handler.js"
 
 //comentario para probar
-app.use("/about",express.static("./public/Readme.html")); //Esto es para que ponga el html  ya que coje la carpeta static
+app.use("/about",express.static("./public/Readme.html"));
+
 
 loadBackendPabloV1(app)
 loadBackendPabloV2(app)
@@ -53,6 +54,8 @@ loadBackendJavierV2(app)
 loadBackendAlejandro(app)
 loadBackendAlejandroV2(app)
 
+
+/*
 app.get('/cerveza-data', async (req, res) => {
   const response = await fetch('https://beer9.p.rapidapi.com/?brewery=Berkshire%20brewing%20company', {
     headers: {
@@ -170,4 +173,4 @@ app.use(handler);
 
 app.listen(Port,()=>{
     console.log(`Server Running on Port ${Port}`);
-}); //Esto es para usar el framework en ese puerto (poner un puerto alto)
+}); 

@@ -6,7 +6,6 @@ const BASE_API = "/api/v2"; //Con esto lo que hago es crear la URL base de la ap
 
 let db = new dataStore(); //Esto es para inicializar dataStore que sirve para incializar bases de datos
 
-console.log("6");
 
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 
@@ -76,7 +75,7 @@ const university_demands = [
 
 //location,degree,over45,spanishFirst,foreigners,graduated,academicYear
 function loadBackendJavierV2(app){
-    console.log("7JAV");
+    
 
     app.get(BASE_API + "/university-demands", (req, res) => {
         let {
@@ -94,7 +93,7 @@ function loadBackendJavierV2(app){
         if (spanishFirst) query.spanishFirst = Number(spanishFirst);
         if (foreigners) query.foreigners = Number(foreigners);
         if (graduated) query.graduated = Number(graduated);
-        console.log("8JAV");
+        
         // Filtro por rango de años
         if (from || to) {
             query.academicYear = {};
@@ -113,7 +112,7 @@ function loadBackendJavierV2(app){
                 return res.status(404).json({ error: "No se encontraron resultados con esos filtros." });
             }            
             
-            console.log("9JAV");
+            
             // Paginación
             if (offset !== undefined) {
                 results = results.slice(Number(offset));
@@ -127,8 +126,6 @@ function loadBackendJavierV2(app){
             
         });
     });
-    
-    
     
     
     //Cargar datos iniciales
@@ -153,7 +150,7 @@ function loadBackendJavierV2(app){
                 response.status(409).json({ message: "empty the database first to initialize it" });
             }
         });
-        console.log("10JAV");
+        
     });
     
     //POST  
@@ -178,7 +175,7 @@ function loadBackendJavierV2(app){
             if (existingRecord) {
                 return response.status(409).json({ error: "Record already exists" });
             }
-            console.log("11JAV");
+            
             // Insertar el nuevo registro en la base de datos
             db.insert(body, (err, newDoc) => {
                 if (err) {
@@ -192,7 +189,7 @@ function loadBackendJavierV2(app){
 
     
     //Post ERROR 405
-    console.log("12JAV");
+    
     app.post(BASE_API + "/university-demands/:degree/:location/:academicYear",(req,res)=>{    
         res.sendStatus(405);
     });
@@ -258,7 +255,7 @@ function loadBackendJavierV2(app){
             
         });
     });
-    console.log("13JAV");
+    
     
     
     //FALLO DE PUT a todos los datos
@@ -285,7 +282,7 @@ function loadBackendJavierV2(app){
                 }
             }
         });
-        console.log("14JAV");
+        
     });
     
     // Eliminar un registro existente
@@ -321,4 +318,4 @@ function loadBackendJavierV2(app){
 }
 
 export {loadBackendJavierV2}
-console.log("15JAV");
+
