@@ -99,8 +99,8 @@ function loadBackendAlejandroV2(app) {
         // Filtro por rango de satisfacción total (from y to)
         if (from || to) {
             query.satisfaccion_total = {};
-            if (from) query.satisfaccion_total.$gte = Number(from); 
-            if (to) query.satisfaccion_total.$lte = Number(to); 
+            if (from) query.satisfaccion_total.$gte = Number(from); // Mayor o igual a "from"
+            if (to) query.satisfaccion_total.$lte = Number(to); // Menor o igual a "to"
         }
     
         // Buscar y ordenar por satisfacción total
@@ -125,7 +125,7 @@ function loadBackendAlejandroV2(app) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
 
-        db.findOne({ carrera: body.carrera, ciudad: body.ciudad, año_academico:body.año_academico }, (err, existing) => {
+        db.findOne({ carrera: body.carrera, ciudad: body.ciudad }, (err, existing) => {
             if (existing) return res.status(409).json({ error: "El registro ya existe." });
 
             db.insert(body, (err, newDoc) => {
@@ -142,15 +142,15 @@ function loadBackendAlejandroV2(app) {
         res.sendStatus(405);
     });
     // Actualizar un registro existente
-    app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad/:año_academico", (req, res) => {
-        const { carrera, ciudad, año_academico } = req.params;
+    app.put(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
+        const { carrera, ciudad } = req.params;
         const body = req.body;
 
         if (!body.carrera || !body.ciudad || body.satisfaccion_total === undefined || body.sat_estudiantes === undefined || body.satisfaccion_pdi === undefined || !body.año_academico) {
             return res.status(400).json({ error: "Faltan campos obligatorios." });
         }
 
-        db.update({ carrera, ciudad, año_academico }, { $set: body }, {}, (err, numUpdated) => {
+        db.update({ carrera, ciudad }, { $set: body }, {}, (err, numUpdated) => {
             if (numUpdated === 0) return res.status(404).json({ error: "Registro no encontrado." });
             res.sendStatus(200);
         });
@@ -172,17 +172,17 @@ function loadBackendAlejandroV2(app) {
     });
 
     // Eliminar un registro específico
-    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad/:año_academico", (req, res) => {
-        const { carrera, ciudad, año_academico } = req.params;
+    app.delete(BASE_API + "/students_satisfaction/:carrera/:ciudad", (req, res) => {
+        const { carrera, ciudad } = req.params;
 
-        db.remove({ carrera, ciudad, año_academico }, {}, (err, numRemoved) => {
+        db.remove({ carrera, ciudad }, {}, (err, numRemoved) => {
             if (err) return res.status(500).send("Error en la base de datos.");
             if (numRemoved === 0) return res.status(404).send("Registro no encontrado.");
             res.sendStatus(200);
         });
     });
 
-    // Inspeccionar datos en la base de datos 
+    // Inspeccionar datos en la base de datos (Solución 1)
     app.get(BASE_API + "/students_satisfaction/debug", (req, res) => {
         db.find({}, (err, docs) => {
             if (err) return res.status(500).send("Error al consultar la base de datos.");
@@ -195,4 +195,5 @@ function loadBackendAlejandroV2(app) {
         res.redirect("https://documenter.getpostman.com/view/42373237/2sB2cUBicY");
     });
 }
+
 export { loadBackendAlejandroV2 };
