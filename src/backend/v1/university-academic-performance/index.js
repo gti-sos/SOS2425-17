@@ -332,7 +332,7 @@ const university_academic_performance = [
             console.log("--------------------------------------------------------------------")
             console.log("NEW GET /university-academic-performance/docs")
 
-           return response.redirect("https://documenter.getpostman.com/view/43694449/2sB2jAa7hN");
+           return response.redirect("https://documenter.getpostman.com/view/43694449/2sB2cUBica");
         });
         
     }

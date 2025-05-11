@@ -354,7 +354,7 @@ const university_academic_performance = [
             console.log("--------------------------------------------------------------------")
             console.log("NEW GET /university-academic-performance/docs")
 
-           return response.redirect("https://hola11-0443.postman.co/workspace/SOS2425-17~98f36551-bff9-46fa-bbc4-f34779133190/collection/43694449-73f842a2-43dd-4058-9ae2-a10db2e73970?action=share&creator=43694449&active-environment=42357894-ad250035-edf0-4614-bf07-d7f8e32cebdc");
+           return response.redirect("https://documenter.getpostman.com/view/43694449/2sB2jAa7hN");
         });
         
     }
