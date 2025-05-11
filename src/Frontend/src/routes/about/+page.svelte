@@ -86,9 +86,9 @@
         <h4 class="margen_nombres">Alejandro Gaona Penco</h4>
 
         <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/N7zDqjuHm-4?si=G25hKeIL61Xuwpe7" 
-            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
-            gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/nMWwrbPVrFI?si=Y_s_Ovyn970esp-Q"
+             title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;
+              clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
 
         <style>
